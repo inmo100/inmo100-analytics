@@ -1,0 +1,17 @@
+{% extends 'reto/base.html' %}
+{% block content %}
+
+{% if form.errors %}
+<div class="alert alert-warning" role="alert">
+    There was an error with your form
+  </div>
+{% endif %}
+<div class="shadow p-4 mb-5 bg-body rounded">
+    <form action="{% url 'register_user' %}" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        
+        <input type="submit" value="Submit" class="btn btn-secondary">
+    </form>
+</div>
+{% endblock %}
