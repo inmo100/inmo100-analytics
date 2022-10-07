@@ -1,4 +1,3 @@
-
 <div align="center">
   <img src="https://i.imgur.com/LlMAnak.jpg" alt="logo" width="200" height="auto" />
   <h1>INMO100 Analytics</h1>
@@ -123,6 +122,7 @@ To run this project, you will need to add the following environment variables to
 
 `SECRET_KEY`
 
+<<<<<<< HEAD
 `DATABASE_URL=""`
 
 `DATABASE_USERNAME=""`
@@ -132,6 +132,13 @@ To run this project, you will need to add the following environment variables to
 `DATABASE_HOST=""`
 
 `DATABASE_PORT=""`
+=======
+`DATABASE_URL`
+
+`DATABASE_USERNAME`
+
+`DATABASE_PASSWORD`
+>>>>>>> develop
 
 
 <!-- Getting Started -->
