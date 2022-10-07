@@ -1,143 +1,45 @@
-from tkinter import CASCADE
 from django.db import models
+from django.utils.translation import gettext_lazy as _
+from datetime import datetime 
+from core.models import BaseModel, AbstractModel
+from project.models import Project
 
-class Desarrolladora(models.Model):
-    name = models.TextField()
-    description = models.TextField()
-    image = models.TextField()
-    web_page = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+class Finishing(BaseModel):
+    description = models.TextField(verbose_name=_("Description"))
 
-    def __str__(self):
-        return self.name
+class PropertyType(BaseModel):
+    description = models.TextField(verbose_name=_("Description"))
 
-class Estado(models.Model):
-    name = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+class Equipment(BaseModel):
+    class EquipmentType(models.TextChoices):
+        interior = "INT", _("Interior")
+        exterior = "EXT", _("Exterior")
 
-    def __str__(self):
-        return self.name
+    type = models.CharField(verbose_name=_("Type"), choices=EquipmentType.choices, default=EquipmentType.interior)
 
-class Segmentos(models.Model):
-    name = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+class Segment(BaseModel): 
+    description = models.TextField(verbose_name=_("Description"))
 
-    def __str__(self):
-        return self.name
+class Prototype(BaseModel):
+    project = models.ForeignKey(Project, on_delete=models.PROTECT)
+    segment = models.ForeignKey(Segment, on_delete=models.PROTECT)
+    propertyType = models.ForeignKey(PropertyType, on_delete=models.PROTECT)
+    equipments = models.ManyToManyField(Equipment)
+    finishings = models.ManyToManyField(Finishing)
 
-class Acabado(models.Model):
-    name = models.TextField()
-    description = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    price = models.IntegerField(verbose_name=_("Price"))
+    total_units = models.IntegerField(verbose_name=_("Total units"))
+    sold_units = models.IntegerField(verbose_name=_("Sold units"))
+    m2_terrain = models.FloatField(verbose_name=("Terrain in square meters"))
+    m2_constructed = models.FloatField(verbose_name=("Constructed area in square meters"))
+    m2_habitable = models.FloatField(verbose_name=("Habiable area in square meters"))
 
-    def __str__(self):
-        return self.name
-
-class Equipamiento(models.Model):
-    name = models.TextField()
-    type = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return self.name
-
-
-class Tipo_Inmueble(models.Model):
-    name = models.TextField()
-    description = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return self.name
-
-
-class Municipio(models.Model):
-    id_estado = models.ForeignKey(Estado, on_delete=models.CASCADE) 
-    name = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return self.name
-
-class Colonia(models.Model):
-    id_municipio = models.ForeignKey(Municipio, on_delete=models.CASCADE) 
-    name = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return self.name  
-
-class Zona(models.Model):
-    id_municipio = models.ForeignKey(Municipio, on_delete = models.CASCADE)
-    name = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return self.name 
-
-class Proyecto(models.Model):
-    id_desarrolladora = models.ForeignKey(Desarrolladora, on_delete=models.CASCADE)
-    id_colonia = models.ForeignKey(Colonia, on_delete=models.CASCADE)
-    id_zona = models.ForeignKey(Zona, on_delete=models.CASCADE)
-    name = models.TextField()
-    initial_date = models.DateTimeField()
-    latitud = models.TextField()
-    longitude = models.TextField()
-    url_image = models.TextField()
-    url_logo = models.TextField()
-    phone = models.TextField()   
-    address = models.TextField()
-    csv = models.TextField()
-    pdf_brochure = models.TextField()
-    webpage_url = models.TextField()
-    social_media = models.TextField()
-    description = models.TextField()
-    category = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return self.name
-
-class Amenidades(models.Model):
-    id_proyecto = models.ForeignKey(Proyecto, on_delete=models.CASCADE)
-    ##id_amenidad = models.ForeignKey(????, on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-class Prototipo(models.Model):
-    id_proyecto = models.ForeignKey(Proyecto, on_delete = models.CASCADE)
-    ##id_categoria = models.ForeignKey(Categoria, on_delete = models.CASCADE)
-    name = models.TextField()
-    price = models.IntegerField()
-    total_units = models.IntegerField() 
-    sold_units = models.IntegerField()
-    m2_terrain = models.IntegerField()
-    m2_constructed = models.IntegerField()
-    m2_habitable = models.IntegerField()
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return self.name 
-
-class Transaccion(models.Model):
-    id_prototipo = models.ForeignKey(Prototipo, on_delete = models.CASCADE) 
-    date = models.DateTimeField()
-    type = models.TextField()
-    monto = models.IntegerField()
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return self.type 
-
+class Transaction(AbstractModel):
+    class TransactionType(models.TextChoices):
+        sell = "S", _("Sell")
+        devolution = "D", _("Devolution")
+    
+    prototype = models.ForeignKey(Prototype, on_delete=models.PROTECT)
+    type = models.CharField(verbose_name=_("Type"), choices=TransactionType.choices, default=TransactionType.sell)
+    date = models.DateField(verbose_name=_("Date"), default=datetime.now)
+    quantity = models.IntegerField(verbose_name=_("Quantity"))
