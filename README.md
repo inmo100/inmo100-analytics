@@ -109,12 +109,11 @@
 <!-- Color Reference -->
 ### :art: Color Reference
 
-| Color             | Hex                                                                |
-| ----------------- | ------------------------------------------------------------------ |
-| Primary Color | ![#222831](https://via.placeholder.com/10/222831?text=+) #222831 |
-| Secondary Color | ![#393E46](https://via.placeholder.com/10/393E46?text=+) #393E46 |
-| Accent Color | ![#00ADB5](https://via.placeholder.com/10/00ADB5?text=+) #00ADB5 |
-| Text Color | ![#EEEEEE](https://via.placeholder.com/10/EEEEEE?text=+) #EEEEEE |
+| Color | HEX |
+| --------------| ------------------------------------------------------------------ |
+| Pantone 279 C  |  #418FDE|
+| Pantone Cool Gray 8 C | #888B8D |
+
 
 
 <!-- Env Variables -->
@@ -189,8 +188,6 @@ To deploy this project run
 ## :eyes: Usage
 
 Django is a monolithic system:
-
-
 
 
 ```!
