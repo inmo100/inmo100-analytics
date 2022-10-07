@@ -123,6 +123,16 @@ To run this project, you will need to add the following environment variables to
 
 `SECRET_KEY`
 
+`DATABASE_URL=""`
+
+`DATABASE_USERNAME=""`
+
+`DATABASE_PASSWORD=""`
+
+`DATABASE_HOST=""`
+
+`DATABASE_PORT=""`
+
 
 <!-- Getting Started -->
 ## 	:toolbox: Getting Started
