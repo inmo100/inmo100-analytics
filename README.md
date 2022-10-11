@@ -120,15 +120,14 @@
 
 To run this project, you will need to add the following environment variables to your .env file
 
-`DEVELOPMENT_MODE=True` En caso de trabajo local.
+SECRET_KEY=
+DATABASE_NAME=
+DATABASE_USERNAME=
+DATABASE_PASSWORD=
+DATABASE_LOCAL=
+DEVELOPMENT_MODE=
 
-`SECRET_KEY`
-
-`DATABASE_NAME`
-
-`DATABASE_USERNAME`
-
-`DATABASE_PASSWORD`
+.env file has to be inside /inmoanalytics folder
 
 
 <!-- Getting Started -->
@@ -171,7 +170,7 @@ Go to the project directory
 Install dependencies
 
 ```bash
-  pip install
+  pip install -r requirements.txt
 ```
 
 Start the server
