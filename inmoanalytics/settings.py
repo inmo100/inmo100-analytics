@@ -28,6 +28,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env('SECRET_KEY')
+# SECRET_KEY = 'django-insecure-%f1v34t0ncc=%9vodsq$mm96=jzdm*9!a+j@#)m(=60g4-eoao'
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DEBUG", "False") == "True"
@@ -61,7 +63,7 @@ ROOT_URLCONF = 'inmoanalytics.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [ BASE_DIR / "templates", ],
+        'DIRS': [ BASE_DIR / "templates" ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -88,6 +90,17 @@ DATABASES = {
         'PASSWORD': env('DATABASE_PASSWORD'),
     }
 }
+
+""" DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'dummyapp',
+        'USER': 'postgres',
+        'PASSWORD': 'sofo',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    }
+} """
 
 
 # Password validation
@@ -126,7 +139,7 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
-STATICFILES_DIRS = BASE_DIR / "static"
+# STATICFILES_DIRS = BASE_DIR / "static"
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # Default primary key field type
