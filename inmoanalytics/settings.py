@@ -61,7 +61,7 @@ ROOT_URLCONF = 'inmoanalytics.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [ BASE_DIR / "templates", ],
+        'DIRS': [ str(BASE_DIR / "templates"), ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -83,7 +83,7 @@ WSGI_APPLICATION = 'inmoanalytics.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': BASE_DIR / env('DATABASE_NAME'),
+        'NAME': str(BASE_DIR / env('DATABASE_NAME')),
         'USER': env('DATABASE_USERNAME'),
         'PASSWORD': env('DATABASE_PASSWORD'),
     }
@@ -125,8 +125,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = "/static/"
-STATIC_ROOT = BASE_DIR / "staticfiles"
-STATICFILES_DIRS = BASE_DIR / "static"
+STATIC_ROOT = str(BASE_DIR / "staticfiles")
+STATICFILES_DIRS = str(BASE_DIR / "static"),
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # Default primary key field type
