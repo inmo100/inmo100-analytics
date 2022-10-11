@@ -79,7 +79,7 @@ WSGI_APPLICATION = 'inmoanalytics.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': str(BASE_DIR / env('DATABASE_NAME')),
+        'NAME': env('DATABASE_NAME'),
         'USER': env('DATABASE_USERNAME'),
         'PASSWORD': env('DATABASE_PASSWORD'),
     }
