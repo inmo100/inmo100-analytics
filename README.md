@@ -121,10 +121,15 @@
 To run this project, you will need to add the following environment variables to your .env file
 
 SECRET_KEY=
+
 DATABASE_NAME=
+
 DATABASE_USERNAME=
+
 DATABASE_PASSWORD=
+
 DATABASE_LOCAL=
+
 DEVELOPMENT_MODE=
 
 .env file has to be inside /inmoanalytics folder
