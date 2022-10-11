@@ -83,8 +83,12 @@ WSGI_APPLICATION = 'inmoanalytics.wsgi.application'
 
 
 if os.getenv("DEVELOPMENT_MODE", "False") == "True":
-    DATABASE_NAME = env("DATABASE_NAME")
-    DATABASE_NAME = str(BASE_DIR / DATABASE_NAME)
+    if os.getenv("DATABASE_LOCAL", "True") == "False":
+        DATABASE_NAME = env("DATABASE_NAME")
+    else:
+        DATABASE_NAME = env("DATABASE_NAME")
+        DATABASE_NAME = str(BASE_DIR / DATABASE_NAME)
+    
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
