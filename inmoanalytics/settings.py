@@ -9,11 +9,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 from pathlib import Path
 import os
-import sys
-import dj_database_url
 import environ
-
-from django.core.management.utils import get_random_secret_key
 
 # Initialize the environment variables
 env = environ.Env()
@@ -80,10 +76,15 @@ WSGI_APPLICATION = 'inmoanalytics.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
+DATABASE_NAME = env("DATABASE_NAME")
+
+if (env("DATABASE_LOCAL") == "True"):
+    DATABASE_NAME = str(BASE_DIR / DATABASE_NAME)
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': str(BASE_DIR / env('DATABASE_NAME')),
+        'NAME': DATABASE_NAME,
         'USER': env('DATABASE_USERNAME'),
         'PASSWORD': env('DATABASE_PASSWORD'),
     }
@@ -126,7 +127,11 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 STATIC_ROOT = str(BASE_DIR / "staticfiles")
+<<<<<<< HEAD
 STATICFILES_DIRS = str(BASE_DIR / "static"),
+=======
+STATICFILES_DIRS = [str(BASE_DIR / "static"),]
+>>>>>>> develop
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # Default primary key field type
