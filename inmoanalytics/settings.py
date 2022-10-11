@@ -81,9 +81,9 @@ WSGI_APPLICATION = 'inmoanalytics.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
-DATABASE_NAME = env("DATABASE_NAME")
 
 if os.getenv("DEVELOPMENT_MODE", "False") == "True":
+    DATABASE_NAME = env("DATABASE_NAME")
     DATABASE_NAME = str(BASE_DIR / DATABASE_NAME)
     DATABASES = {
         'default': {
