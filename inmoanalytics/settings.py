@@ -88,7 +88,6 @@ if os.getenv("DEVELOPMENT_MODE", "False") == "True":
     else:
         DATABASE_NAME = env("DATABASE_NAME")
         DATABASE_NAME = str(BASE_DIR / DATABASE_NAME)
-    
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
