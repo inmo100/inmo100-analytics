@@ -9,10 +9,11 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 from pathlib import Path
 import os
+import environ
 import sys
 import dj_database_url
-import environ
 
+from urllib.parse import urlparse
 from django.core.management.utils import get_random_secret_key
 
 # Initialize the environment variables
@@ -27,9 +28,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env('SECRET_KEY')
-# SECRET_KEY = 'django-insecure-%f1v34t0ncc=%9vodsq$mm96=jzdm*9!a+j@#)m(=60g4-eoao'
-
+SECRET_KEY = os.getenv("SECRET_KEY", get_random_secret_key())
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DEBUG", "False") == "True"
@@ -63,7 +62,7 @@ ROOT_URLCONF = 'inmoanalytics.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [ BASE_DIR / "templates" ],
+        'DIRS': [ str(BASE_DIR / "templates"), ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -82,26 +81,25 @@ WSGI_APPLICATION = 'inmoanalytics.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': BASE_DIR / env('DATABASE_NAME'),
-        'USER': env('DATABASE_USERNAME'),
-        'PASSWORD': env('DATABASE_PASSWORD'),
-    }
-}
 
-""" DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'dummyapp',
-        'USER': 'postgres',
-        'PASSWORD': 'sofo',
-        'HOST': 'localhost',
-        'PORT': '5432',
+if os.getenv("DEVELOPMENT_MODE", "False") == "True":
+    DATABASE_NAME = env("DATABASE_NAME")
+    DATABASE_NAME = str(BASE_DIR / DATABASE_NAME)
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': DATABASE_NAME,
+            'USER': env('DATABASE_USERNAME'),
+            'PASSWORD': env('DATABASE_PASSWORD'),
+        }
     }
-} """
 
+elif len(sys.argv) > 0 and sys.argv[1] != 'collectstatic':
+    if os.getenv("DATABASE_URL", None) is None:
+        raise Exception("DATABASE_URL environment variable not defined")
+    DATABASES = {
+        "default": dj_database_url.parse(os.environ.get("DATABASE_URL")),
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -137,10 +135,13 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
+
 STATIC_URL = "/static/"
-STATIC_ROOT = BASE_DIR / "staticfiles"
-# STATICFILES_DIRS = BASE_DIR / "static"
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field

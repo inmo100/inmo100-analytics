@@ -120,25 +120,15 @@
 
 To run this project, you will need to add the following environment variables to your .env file
 
+`DEVELOPMENT_MODE=True` En caso de trabajo local.
+
 `SECRET_KEY`
 
-<<<<<<< HEAD
-`DATABASE_URL=""`
-
-`DATABASE_USERNAME=""`
-
-`DATABASE_PASSWORD=""`
-
-`DATABASE_HOST=""`
-
-`DATABASE_PORT=""`
-=======
-`DATABASE_URL`
+`DATABASE_NAME`
 
 `DATABASE_USERNAME`
 
 `DATABASE_PASSWORD`
->>>>>>> develop
 
 
 <!-- Getting Started -->
