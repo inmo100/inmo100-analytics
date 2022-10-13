@@ -1,3 +1,4 @@
+from email.policy import default
 from msvcrt import open_osfhandle
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -26,3 +27,4 @@ class Project(BaseModel):
   phone = models.CharField(verbose_name=_("Phone"))
   brochure = models.FileField(verbose_name=_("Brochure"))
   social_networks = models.JSONField(verbose_name=_("Social networks"))
+  levels = models.SmallIntegerField(verbose_name=("Niveles"), default=1)
