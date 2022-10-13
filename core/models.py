@@ -1,4 +1,3 @@
-from unittest.util import _MAX_LENGTH
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -13,7 +12,7 @@ class AbstractModel(models.Model):
 
 # Base model adds name to application models and its getter to avoid redundancy
 class BaseModel(AbstractModel):
-  name = models.TextField(verbose_name=_("Name"), max_length=512)
+  name = models.TextField(verbose_name=_("Name"))
   
   def __str__(self):
       return self.name

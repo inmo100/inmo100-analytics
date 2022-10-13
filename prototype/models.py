@@ -50,6 +50,7 @@ class Prototype(BaseModel):
     m2_terrain = models.FloatField(verbose_name=("Terrain in square meters"))
     m2_constructed = models.FloatField(verbose_name=("Constructed area in square meters"))
     m2_habitable = models.FloatField(verbose_name=("Habiable area in square meters"))
+    floors = models.SmallIntegerField(verbose_name=("Pisos"), default=1)
 
 # Handles prototype sales
 class Transaction(AbstractModel):# Transactions only need abstract model

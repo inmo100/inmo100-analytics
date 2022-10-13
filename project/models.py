@@ -25,3 +25,4 @@ class Project(BaseModel):
   phone = models.CharField(verbose_name=_("Phone"), max_length=100)
   brochure = models.FileField(verbose_name=_("Brochure"))
   social_networks = models.JSONField(verbose_name=_("Social networks"))
+  levels = models.SmallIntegerField(verbose_name=("Niveles"), default=1)
