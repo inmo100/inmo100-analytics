@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
 from .forms import RegisterUserForm
+from .models import Prototype, Project
 
 # Create your views here.
 def login_user(request):
@@ -41,3 +42,15 @@ def register_user(request):
         form = RegisterUserForm()
 
     return render(request, 'authenticate/register.html', {'form':form, })
+
+def is_valid_queryparam(param):
+    return param != '' and param is not None
+
+def filter_view(request):
+    qs = Prototype.objects.all().count()
+    total_units_query=Prototype.objects.raw('SELECT total_units FROM prototype_prototype')
+    sold_units_query=Prototype.objects.raw('SELECT sold_units FROM prototype_prototype')
+    
+    
+
+    
