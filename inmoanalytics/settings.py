@@ -38,17 +38,16 @@ ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost").split("
 # Application definition
 
 INSTALLED_APPS = [
+    'core.apps.CoreConfig',
+    'location.apps.LocationConfig',
+    'prototype.apps.PrototypeConfig',
+    'project.apps.ProjectConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'project',
-    'core',
-    'location',
-    'prototype',
-    'inmoanalytics',
 ]
 
 MIDDLEWARE = [
@@ -88,8 +87,11 @@ WSGI_APPLICATION = 'inmoanalytics.wsgi.application'
 
 
 if os.getenv("DEVELOPMENT_MODE", "False") == "True":
-    DATABASE_NAME = env("DATABASE_NAME")
-    DATABASE_NAME = str(BASE_DIR / DATABASE_NAME)
+    if os.getenv("DATABASE_LOCAL", "True") == "False":
+        DATABASE_NAME = env("DATABASE_NAME")
+    else:
+        DATABASE_NAME = env("DATABASE_NAME")
+        DATABASE_NAME = str(BASE_DIR / DATABASE_NAME)
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -130,7 +132,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = "America/Mexico_City"
 
 USE_I18N = True
 
@@ -152,3 +154,10 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+MEDIA_ROOT =  os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+
+SESSION_COOKIE_AGE = 3600 #session ends after n seconds
+SESSION_SAVE_EVERY_REQUEST = True#with every GET request the session timer resets to n
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True#when browser is closed session ends

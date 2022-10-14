@@ -1,0 +1,17 @@
+{% extends 'core/base.html' %}
+{% block content %}
+<center>
+<h1>Login</h1>
+{% if form.errors %}
+    <div class="alert alert-warning" role="alert">
+      There was an error with your form
+    </div>
+{% endif %}
+<form action="{% url 'login' %}" method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Submit" class="btn btn-secondary">
+</form>
+<br/><br/>
+</center>
+{% endblock %}
