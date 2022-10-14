@@ -13,9 +13,8 @@ import json
 class DeveloperView(ListView):
     template_name = 'home_desarrolladora.html'
     model = Developer
+    queryset: Developer.objects.all()
     context_object_name = 'list_developers'
-    def get(self, request, *args, **kwargs):
-        return render(request, self.template_name)
 
 class CreateDeveloper(TemplateView):
     template_name = 'form_desarrolladora.html'
