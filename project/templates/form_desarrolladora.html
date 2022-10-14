@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %} Agregar Desarrolladora {% endblock title %}
+{% block content %}
+<div class="mt-3">
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="mb-3">
+          <label for="name" class="form-label">Nombre</label>
+          <input type="text" class="form-control" id="name" placeholder="Nombre de Desarrolladora" name="name">
+        </div>
+        <div class="mb-3">
+          <label for="description" class="form-label">Descripción</label>
+          <textarea class="form-control" id="description" rows="3" name="description"></textarea>
+        </div>
+        <label for="image" class="form-label">Imagen</label>
+        <input class="form-control" type="file" id="image" name="image">
+        <label for="ig" class="form-label">Página web</label>
+        <input type="text" class="form-control" id="ig" placeholder="www.desarrolladora.com" name="pagina_web">
+        <label for="ig" class="form-label">Instagram</label>
+        <input type="text" class="form-control" id="ig" placeholder="@usuario" name="instagram">
+        <button type="submit" class="btn btn-success">Success</button>
+    </form>
+</div>
+{% endblock content %}

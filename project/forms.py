@@ -8,6 +8,9 @@ class DeveloperForm(ModelForm):
         fields = ('name','description', 'image')
 
 
+class IMG_Form(forms.Form):
+    image = forms.FileField()
+
 
 class ProjectForm(ModelForm):
     class Meta:

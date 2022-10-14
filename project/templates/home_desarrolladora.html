@@ -1,16 +1,7 @@
 {% extends 'base.html' %}
-{% block title %} Importación CSV {% endblock title %}
+{% block title %} Desarrolladora {% endblock title %}
 {% block content %}
 <div class="mt-3">
-    <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{form.as_p}}
-        <label for="wp" class="form-label">Página Web</label>
-        <input type="text" class="form-control" id="wp" placeholder="ejemplo.com">
-        <label for="ig" class="form-label">Instagram</label>
-        <input type="text" class="form-control" id="ig" placeholder="@ejemplo">
-        <button type="submit" class="btn btn-success">Guardar</button>
-        </div>
-    </form>
+    <h3>Desarrolladora</h3>
 </div>
 {% endblock content %}
