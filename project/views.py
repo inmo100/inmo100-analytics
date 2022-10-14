@@ -1,15 +1,21 @@
 from django.http import HttpResponse
 from pipes import Template
 from django.shortcuts import render
-from django.views.generic import TemplateView, CreateView
+from django.views.generic import TemplateView, CreateView, ListView
 from .forms import *
 from django.shortcuts import redirect
 # Create your views here.
+from .models import *
+import json
 
 #Función para guardar los datos de la desarrolladora
 
-class DeveloperView(TemplateView):
+class DeveloperView(ListView):
     template_name = 'home_desarrolladora.html'
+    model = Developer
+    context_object_name = 'list_developers'
+    def get(self, request, *args, **kwargs):
+        return render(request, self.template_name)
 
 class CreateDeveloper(TemplateView):
     template_name = 'form_desarrolladora.html'
@@ -22,7 +28,14 @@ class CreateDeveloper(TemplateView):
          developer.name = request.POST['name']
          developer.description = request.POST['description']
          developer.image = request.FILES['image']
-         networks = {"twitter": "twitter", "facebook": "facebook"}
+         ig = request.POST['ig']
+         wp = request.POST['wp']
+         arr = {}
+         if(ig!=None):
+            arr['instagram'] = ig
+         if(wp!=None):
+            arr['pagina_web'] = wp
+         networks = json.dumps(arr)
          developer.social_networks = networks
          developer.save()
          return render(request,self.template_name)
