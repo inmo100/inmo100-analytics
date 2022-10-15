@@ -41,5 +41,8 @@ class CreateDeveloper(TemplateView):
 
 
 
-class ProjectView(TemplateView):
+class ProjectView(ListView):
     template_name = 'home_proyecto.html'
+    model = Project
+    queryset: Developer.objects.all()
+    context_object_name = 'list_projects'
