@@ -14,4 +14,5 @@ class IMG_Form(forms.Form):
 
 class ProjectForm(ModelForm):
     class Meta:
+        model = Project
         fields = ('description', 'image', 'logo', 'initial_date', 'longitude', 'latitud', 'address', 'phone', 'brochure', 'social_networks')

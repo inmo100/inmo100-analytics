@@ -40,6 +40,11 @@ class CreateDeveloper(TemplateView):
          return render(request,self.template_name)
 
 
+class CreateProject(CreateView):
+    template_name = 'form_proyectos.html'
+    model = Project
+    form_class = ProjectForm
+    success_url = '/proyectos'
 
 class ProjectView(ListView):
     template_name = 'home_proyecto.html'
