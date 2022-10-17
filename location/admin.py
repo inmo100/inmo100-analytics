@@ -6,6 +6,6 @@ from location.models import *
 # Register your models here.
 
 admin.site.register(State)
-admin.site.register(Zone)
+admin.site.register(Corridor)
 admin.site.register(Municipality)
 admin.site.register(Colony)
