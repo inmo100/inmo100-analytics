@@ -10,30 +10,27 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 from pathlib import Path
 import os
 import environ
-import sys
-import dj_database_url
-
-from urllib.parse import urlparse
-from django.core.management.utils import get_random_secret_key
-
-# Initialize the environment variables
-env = environ.Env()
-environ.Env.read_env()
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Initialize the environment variables
+env = environ.Env(
+    DEBUG=(bool, False)
+)
+
+environ.Env.read_env(str(BASE_DIR / '.env'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv("SECRET_KEY", get_random_secret_key())
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv("DEBUG", "False") == "True"
+DEBUG = env('DEBUG')
 
-ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
+ALLOWED_HOSTS = "127.0.0.1,localhost".split(",")
 
 # Application definition
 
@@ -86,27 +83,10 @@ WSGI_APPLICATION = 'inmoanalytics.wsgi.application'
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
 
-if os.getenv("DEVELOPMENT_MODE", "False") == "True":
-    if os.getenv("DATABASE_LOCAL", "True") == "False":
-        DATABASE_NAME = env("DATABASE_NAME")
-    else:
-        DATABASE_NAME = env("DATABASE_NAME")
-        DATABASE_NAME = str(BASE_DIR / DATABASE_NAME)
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': DATABASE_NAME,
-            'USER': env('DATABASE_USERNAME'),
-            'PASSWORD': env('DATABASE_PASSWORD'),
-        }
-    }
 
-elif len(sys.argv) > 0 and sys.argv[1] != 'collectstatic':
-    if os.getenv("DATABASE_URL", None) is None:
-        raise Exception("DATABASE_URL environment variable not defined")
-    DATABASES = {
-        "default": dj_database_url.parse(os.environ.get("DATABASE_URL")),
-    }
+DATABASES = {
+    'default': env.db(),
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -152,7 +132,6 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_ROOT =  os.path.join(BASE_DIR, 'media')
