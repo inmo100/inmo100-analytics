@@ -4,14 +4,6 @@
 <div class="mt-3">
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
-        {{segment_field}}
-        {{Prueba}}
-        <select class="form-select" aria-label="Default select example" name="segment_field">
-            <option disabled selected>Selecciona un segmento</option>
-            {% for segment in list_segment%}
-            <option value="{{segment.id}}">{{segment.name}}</option>
-            {% endfor %}
-          </select>
         <div class="mb-3">
             <label for="formFile" class="form-label">CSV</label>
             <input class="form-control" type="file" id="formFile" name="csv">
