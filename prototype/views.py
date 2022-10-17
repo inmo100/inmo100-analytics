@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from pipes import Template
-from django.shortcuts import render
-from django.views.generic import TemplateView, CreateView, ListView
+from django.shortcuts import render, get_object_or_404
+from django.views.generic import TemplateView, CreateView, ListView, DetailView
 from .forms import *
 from django.shortcuts import redirect
 # Create your views here.
@@ -47,6 +47,7 @@ def guardar_datos_csv(arr,sf,pf):
         prototipo.m2_terrain = i[4]
         prototipo.m2_constructed = i[5]
         prototipo.m2_habitable = i[6]
+        prototipo.floors = i[7]
         prototipo.save()
 
 def handle_uploaded_file(f,sf,pf):  
@@ -73,6 +74,26 @@ class CreatePrototype(ListView):
         project_field = request.POST['project_field']
         if csv_import.is_valid():
                 handle_uploaded_file(request.FILES['csv'],segment_field,project_field)
-                return render(request,self.template_name,context={'Prueba':'Se pudo'})
+                return render(request,'prototype_uploaded.html', context={'project_id': self.kwargs['id']})
         else:
             return render(request,self.template_name,context={'Prueba':'No se pudo'})
+
+
+class PrototypeView(ListView):
+    template_name = 'table.html'
+    model = Prototype
+    def get(self,request,*args,**kwargs):
+        return render(request,self.template_name,context={
+            'list_prototype':Prototype.objects.all(),
+            'project_id':self.kwargs['id']
+            })
+
+#class PrototypeView():
+"""def prototype_detail(request, pk):
+    prototypes = Prototype.objects.all()
+    
+    context ={
+        'prototypes': prototypes,
+        'pk':pk
+    }
+    return render(request,'table.html' , context)"""

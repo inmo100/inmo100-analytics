@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from pipes import Template
 from django.shortcuts import render
-from django.views.generic import TemplateView, CreateView, ListView
+from django.views.generic import TemplateView, CreateView, ListView, DetailView
 from .forms import *
 from django.shortcuts import redirect
 # Create your views here.
@@ -51,3 +51,7 @@ class ProjectView(ListView):
     model = Project
     queryset: Developer.objects.all()
     context_object_name = 'list_projects'
+
+
+class ProjectDetail(DetailView):
+    model = Project

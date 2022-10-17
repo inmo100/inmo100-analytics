@@ -3,4 +3,5 @@ from . import views
 
 urlpatterns = [
     path('add/<id>',views.CreatePrototype.as_view(),name='add_prototype'),
+    path('detail/<id>', views.PrototypeView.as_view(), name='prototype-detail'),
 ]
