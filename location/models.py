@@ -5,13 +5,13 @@ class State(BaseModel):
   # nothing here because base model already has name
   pass
 
-class Zone(BaseModel):
+class Corridor(BaseModel):
   # nothing here because base model already has name
   pass
 
 class Municipality(BaseModel):
   state_field = models.ForeignKey(State, on_delete = models.PROTECT)
-  zones = models.ManyToManyField(Zone)
+  corridors = models.ManyToManyField(Corridor)
 
 class Colony(BaseModel):
   municipality_field = models.ForeignKey(Municipality, on_delete = models.PROTECT)
