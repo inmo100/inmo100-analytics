@@ -37,7 +37,6 @@ def filter_view(request, project_id = 0):
     #     qs = qs.raw('SELECT (SUM(total_units) -  SUM(sold_units)) FROM prototype_prototype')
 
     print(project_id)
-
     if is_valid_queryparam(project_id):
         query &= Q(project_field=project_id)
 
