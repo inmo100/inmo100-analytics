@@ -80,10 +80,10 @@
 
         <div class="row">
           <ul>
-            {% for journal in queryset %}
+            {% for filter in queryset %}
               <li>
-                {{ journal.title }}
-                <span>Author: {{ journal.author.name }}</span>
+                {{ filter.title }}
+                <span>Precio: {{ filter.prototype.price }}</span>
                 <span>
                   {% for category in journal.categories.all %}
                     {{ category }}
