@@ -9,29 +9,6 @@ from .models import *
 import pandas as pd
 from os import remove
 
-"""class CreateDeveloper(TemplateView):
-    template_name = 'form_prototipo.html'
-    def get(self, request, *args, **kwargs):
-        project_id = self.kwargs['id']
-        return render(request, self.template_name,context={'prueba':project_id})
-
-    def post(self, request, *args, **kwargs):
-        return render(request, self.template_name)"""
-
-
-"""class CreateDeveloper(CreateView):
-    template_name = 'form_prototipo.html'
-    model = Project
-    form_class = PrototypeForm
-    def get(self,request,*args,**kwargs):
-
-    def post(self,request,*args,**kwargs):
-        project_field = self.kwargs['id']
-        segment_field = request.POST['segment_field']
-        project_field = request.POST['project_field']
-        return render(request,self.template_name,context={'project_field':project_field})"""
-
-
 
 def guardar_datos_csv(arr,sf,pf):
     segment = Segment.objects.get(id=sf)
@@ -88,12 +65,3 @@ class PrototypeView(ListView):
             'project_id':self.kwargs['id']
             })
 
-#class PrototypeView():
-"""def prototype_detail(request, pk):
-    prototypes = Prototype.objects.all()
-    
-    context ={
-        'prototypes': prototypes,
-        'pk':pk
-    }
-    return render(request,'table.html' , context)"""
