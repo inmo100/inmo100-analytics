@@ -13,9 +13,12 @@ from os import remove
 def guardar_datos_csv(arr,pf):
     project = Project.objects.get(id=pf)
     for i in arr:
-        segment = Segment.objects.get(nombre=i[i])
-        prototipo.segment_field = segment
+        if(i[8] == 'null'):
+            segment = Segment.objects.get(name='No existe')    
+        else:
+            segment = Segment.objects.get(name=i[8])
         prototipo = Prototype()
+        prototipo.segment_field = segment
         prototipo.project_field = project
         prototipo.name = i[0]
         prototipo.price = i[1]
@@ -27,14 +30,14 @@ def guardar_datos_csv(arr,pf):
         prototipo.floors = i[7]
         prototipo.save()
 
-def handle_uploaded_file(f,sf,pf):  
+def handle_uploaded_file(f,pf):  
     with open('static/'+f.name, 'wb+') as destination:  
         for chunk in f.chunks():  
             destination.write(chunk)
     valores = pd.read_csv('static/'+f.name)
     valores = valores.fillna("null")
     valores = valores.values.tolist()
-    guardar_datos_csv(valores,sf,pf)
+    guardar_datos_csv(valores,pf)
     remove('static/'+f.name)
 
 class CreatePrototype(ListView):
@@ -50,7 +53,7 @@ class CreatePrototype(ListView):
         segment_field = request.POST['segment_field']
         project_field = request.POST['project_field']
         if csv_import.is_valid():
-                handle_uploaded_file(request.FILES['csv'],segment_field,project_field)
+                handle_uploaded_file(request.FILES['csv'],project_field)
                 return render(request,'prototype_uploaded.html', context={'project_id': self.kwargs['id']})
         else:
             return render(request,self.template_name,context={'Prueba':'No se pudo'})
