@@ -10,12 +10,12 @@ import pandas as pd
 from os import remove
 
 
-def guardar_datos_csv(arr,sf,pf):
-    segment = Segment.objects.get(id=sf)
+def guardar_datos_csv(arr,pf):
     project = Project.objects.get(id=pf)
     for i in arr:
-        prototipo = Prototype()
+        segment = Segment.objects.get(nombre=i[i])
         prototipo.segment_field = segment
+        prototipo = Prototype()
         prototipo.project_field = project
         prototipo.name = i[0]
         prototipo.price = i[1]
