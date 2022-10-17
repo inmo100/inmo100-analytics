@@ -4,6 +4,9 @@ from datetime import datetime
 from core.models import BaseModel, AbstractModel
 from project.models import Project
 
+class FinishingType(BaseModel):
+    pass
+
 class Finishing(BaseModel): # Acabados en el MER
     description = models.TextField(verbose_name=_("Description"))
 

@@ -50,11 +50,10 @@ class CreatePrototype(ListView):
             })
     def post(self,request,*args,**kwargs):
         csv_import = CSV_Form(request.POST, request.FILES)
-        segment_field = request.POST['segment_field']
         project_field = request.POST['project_field']
         if csv_import.is_valid():
                 handle_uploaded_file(request.FILES['csv'],project_field)
-                return render(request,'prototype_uploaded.html', context={'project_id': self.kwargs['id']})
+                return render(request,'prototype_uploaded.html', context={'project_id': project_field})
         else:
             return render(request,self.template_name,context={'Prueba':'No se pudo'})
 
