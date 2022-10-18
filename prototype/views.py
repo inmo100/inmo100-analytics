@@ -9,6 +9,9 @@ from .models import *
 import pandas as pd
 from os import remove
 
+def delete_prototypes(pf):
+    project_prototypes = Prototype.objects.filter(project_field = pf)
+    project_prototypes.delete()
 
 def guardar_datos_csv(arr,pf):
     project = Project.objects.get(id=pf)
@@ -30,14 +33,18 @@ def guardar_datos_csv(arr,pf):
         prototipo.floors = i[7]
         prototipo.save()
 
-def handle_uploaded_file(f,pf):  
+def handle_uploaded_file(f,pf,action):  
     with open('static/'+f.name, 'wb+') as destination:  
         for chunk in f.chunks():  
             destination.write(chunk)
     valores = pd.read_csv('static/'+f.name)
     valores = valores.fillna("null")
     valores = valores.values.tolist()
-    guardar_datos_csv(valores,pf)
+    if(action=='c'):
+        guardar_datos_csv(valores,pf)
+    elif(action=='u'):
+        delete_prototypes(pf)
+        guardar_datos_csv(valores,pf)
     remove('static/'+f.name)
 
 class CreatePrototype(ListView):
@@ -52,7 +59,7 @@ class CreatePrototype(ListView):
         csv_import = CSV_Form(request.POST, request.FILES)
         project_field = request.POST['project_field']
         if csv_import.is_valid():
-                handle_uploaded_file(request.FILES['csv'],project_field)
+                handle_uploaded_file(request.FILES['csv'],project_field,'c')
                 return render(request,'prototype_uploaded.html', context={'project_id': project_field})
         else:
             return render(request,self.template_name,context={'Prueba':'No se pudo'})
@@ -66,4 +73,15 @@ class PrototypeView(ListView):
             'list_prototype':Prototype.objects.all(),
             'project_id':self.kwargs['id']
             })
+class UpdatePrototype(ListView):
+    template_name = 'form_prototipo.html'
+    model = Segment
+    def post(self,request,*args,**kwargs):
+        csv_import = CSV_Form(request.POST, request.FILES)
+        project_field = request.POST['project_field']
+        if csv_import.is_valid():
+                handle_uploaded_file(request.FILES['csv'],project_field,'u')
+                return render(request,'prototype_uploaded.html', context={'project_id': project_field})
+        else:
+            return render(request,self.template_name,context={'Prueba':'No se pudo'})
 
