@@ -1,17 +1,29 @@
-{% extends 'core/base.html' %}
+{% extends 'base.html' %}
+{% load static %}
+{% block css %} 
+<link rel="stylesheet" href="{% static 'css/pages/login.css' %}" />
+{% endblock css %}
 {% block content %}
-<center>
-<h1>Login</h1>
-{% if form.errors %}
-    <div class="alert alert-warning" role="alert">
-      There was an error with your form
+<main class="login">
+  <div class="container-wide">
+    <div class="login_image">
+      <img src="{% static 'img/login/hero.jpg' %}" alt="" class="login_image">
     </div>
-{% endif %}
-<form action="{% url 'login' %}" method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Submit" class="btn btn-secondary">
-</form>
-<br/><br/>
-</center>
-{% endblock %}
+    <div class="login_content">
+      <h1 class="h1">Iniciar sesión</h1>
+      <form action="{% url 'login' %}" method="post">
+        {% csrf_token %}
+        {% for field in login_form %}
+        <div class="form-block {{ field.field.widget.input_type }}">
+          <label for="{{field.id_for_label}}" class="body2"> 
+            {{field.label}}
+          </label>
+          {{field}}
+        </div>
+        {% endfor %}
+        <button type="submit" class="btn-primary">Entrar</button>
+      </form>
+    </div>
+  </div>
+</main>
+{% endblock content %}

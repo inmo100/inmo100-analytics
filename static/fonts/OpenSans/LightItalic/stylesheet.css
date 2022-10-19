@@ -1,0 +1,13 @@
+@font-face {
+    font-family: 'Open Sans';
+    src: url('OpenSans-LightItalic.eot');
+    src: url('OpenSans-LightItalic.eot?#iefix') format('embedded-opentype'),
+        url('OpenSans-LightItalic.woff2') format('woff2'),
+        url('OpenSans-LightItalic.woff') format('woff'),
+        url('OpenSans-LightItalic.ttf') format('truetype'),
+        url('OpenSans-LightItalic.svg#OpenSans-LightItalic') format('svg');
+    font-weight: 300;
+    font-style: italic;
+    font-display: swap;
+}
+

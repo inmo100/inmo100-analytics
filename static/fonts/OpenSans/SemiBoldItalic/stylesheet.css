@@ -1,0 +1,13 @@
+@font-face {
+    font-family: 'Open Sans';
+    src: url('OpenSans-SemiBoldItalic.eot');
+    src: url('OpenSans-SemiBoldItalic.eot?#iefix') format('embedded-opentype'),
+        url('OpenSans-SemiBoldItalic.woff2') format('woff2'),
+        url('OpenSans-SemiBoldItalic.woff') format('woff'),
+        url('OpenSans-SemiBoldItalic.ttf') format('truetype'),
+        url('OpenSans-SemiBoldItalic.svg#OpenSans-SemiBoldItalic') format('svg');
+    font-weight: 600;
+    font-style: italic;
+    font-display: swap;
+}
+

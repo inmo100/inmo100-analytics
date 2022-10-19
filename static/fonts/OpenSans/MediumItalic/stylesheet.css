@@ -1,0 +1,13 @@
+@font-face {
+    font-family: 'Open Sans';
+    src: url('OpenSans-MediumItalic.eot');
+    src: url('OpenSans-MediumItalic.eot?#iefix') format('embedded-opentype'),
+        url('OpenSans-MediumItalic.woff2') format('woff2'),
+        url('OpenSans-MediumItalic.woff') format('woff'),
+        url('OpenSans-MediumItalic.ttf') format('truetype'),
+        url('OpenSans-MediumItalic.svg#OpenSans-MediumItalic') format('svg');
+    font-weight: 500;
+    font-style: italic;
+    font-display: swap;
+}
+
