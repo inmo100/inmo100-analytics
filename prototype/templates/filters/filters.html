@@ -9,102 +9,59 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Filters</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
 </head>
 <body>
-    <main role="main" class="container">
-        <form method="GET" action=".">
-            <div class="form-row">
-                <div class="form-group">
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="totalUnits" name="totalUnits">
-                    <label class="form-check-label" for="totalUnits">
-                      Unidades totales
-                    </label>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="soldUnits" name="soldUnits">
-                    <label class="form-check-label" for="totalUnits">
-                      Unidades vendidas
-                    </label>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="stock" name="stock">
-                    <label class="form-check-label" for="stock">
-                      Inventario
-                    </label>
-                  </div>
-                </div>
-                <div class="form-group col-md-2 col-lg-2">
-                  <label for="viewCountMin">Precio Mínimo</label>
-                  <input type="number" min=0 class="form-control" id="priceMin" placeholder="0" name="priceMin">
-                </div>
-                <div class="form-group col-md-2 col-lg-2">
-                  <label for="viewCountMax">Precio Máximo</label>
-                  <input type="number" min=0 class="form-control" id="priceMax" placeholder="0" name="priceMax">
-                </div>
-                <div class="form-group col-md-2 col-lg-2">
-                  <label for="viewCountMin">Terreno(m2) Mínimo</label>
-                  <input type="number" min=0 class="form-control" id="m2TerrainMin" placeholder="0" name="m2TerrainMin">
-                </div>
-                <div class="form-group col-md-2 col-lg-2">
-                  <label for="viewCountMax">Terreno(m2) Máximo</label>
-                  <input type="number" min=0 class="form-control" id="m2TerrainMax" placeholder="0" name="m2TerrainMax">
-                </div>
-                <div class="form-group col-md-2 col-lg-2">
-                  <label for="viewCountMin">Terreno Construído(m2) Mínimo</label>
-                  <input type="number" min=0 class="form-control" id="m2ConstructedMin" placeholder="0" name="m2ConstructedMin">
-                </div>
-                <div class="form-group col-md-2 col-lg-2">
-                  <label for="viewCountMax">Terreno Construído(m2) Máximo</label>
-                  <input type="number" min=0 class="form-control" id="m2ConstructedMax" placeholder="0" name="m2ConstructedMax">
-                </div>
-                <div class="form-group col-md-2 col-lg-2">
-                  <label for="viewCountMin">Terreno Habitable(m2) Mínimo</label>
-                  <input type="number" min=0 class="form-control" id="m2HabitableMin" placeholder="0" name="m2HabitableMin">
-                </div>
-                <div class="form-group col-md-2 col-lg-2">
-                  <label for="viewCountMax">Terreno Habitable(m2) Máximo</label>
-                  <input type="number" min=0 class="form-control" id="m2HabitableMax" placeholder="0" name="m2HabitableMax">
-                </div>
-            </div>
-            <button type="submit" class="btn btn-primary">Buscar</button>
-        </form>
+     {% comment %} {% if args is not None%}
+    {% for arg in args %}
+    <p>{{arg}}</p>
+    {% endfor %}
+    {% else %}
+    <p>Esta Vacio</p>
+    {% endif %} {% endcomment %}
+    <form >
+    {% for developer in developers %}
+    <div class="form-check" method>
+        <input class="form-check-input" type="checkbox" value="{{ developer.id }}" id="developer" name="developer">
+        <label class="form-check-label" for="flexCheckDefault">
+            {{ developer }}
+            {{ developer.basemodel_ptr_id }}
+        </label>
+    </div>
+    {% endfor %}
+    <button type="submit" class="btn btn-primary">Buscar</button>
+    </form> 
 
-        <hr />
+    <hr />
 
-        <div class="row">
-          <ul>
-            {% for filter in queryset %}
-              <li>
-                {{ filter.title }}
-                <span>Precio: {{ filter.prototype.price }}</span>
-                <span>
-                  {% for category in journal.categories.all %}
-                    {{ category }}
-                  {% endfor %}
-                </span>
-                <span>Publish date: {{ journal.publish_date }}</span>
-                <span>View count: {{ journal.views }}</span>
-                <span>Reviewed: {{ journal.reviewed }}</span>
-              </li>
-              <hr />
-            {% endfor %}
-          </ul>
-        </div>
-  
-      </main>
-  
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>  
+    <div class="row">
+      <ul>
+        {% for project in projects %}
+          <li>
+            {{ project.name }}
+            <span>Descripción: {{ project.description }}</span>
+          </li>
+          <hr />
+        {% endfor %}
+      </ul>
+    </div> 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+
+    {% comment %} <select class="select" multiple>
+        {% for developer in developers %}
+        <option value="{{ developer.id }}">{{ developer }} {{ developer.basemodel_ptr_id }}</option>
+        {% endfor %}
+    </select>
+    <label class="form-label select-label">Example label</label>
+      
+      
+      {% comment %} <form>
+        {{ form }}
+        <button type="submit" class="btn btn-primary">Buscar</button>
+      </form> {% endcomment %}
+
 </body>
 </html>
-
 
 {% endblock %}

@@ -7,6 +7,7 @@ from django.shortcuts import redirect
 # Create your views here.
 from .models import *
 import json
+from django.db.models import Q, Count
 
 #Función para guardar los datos de la desarrolladora
 
@@ -55,3 +56,70 @@ class ProjectView(ListView):
 
 class ProjectDetail(DetailView):
     model = Project
+
+
+class FilterView(ListView):
+    template_name = 'filters/filters.html'
+    model = Developer
+    # def get(self,request,*args,**kwargs):
+    #     developers = Developer.objects.all()
+    #     # developers = Developer.objects.filter(query)
+    #     return render(request,self.template_name,context={
+    #         'developers': developers,
+    #         'args':kwargs
+    #         })
+    form_class = DeveloperForm
+
+    def get(self, request):
+        form = self.form_class()
+        context = {
+            'form': form,
+        }
+        return render(request, self.template_name, context)
+
+    def post(self, request):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            developer = Developer()
+            developer.pk = request.POST['pk']
+            form.save()
+        else:
+            context = {
+            'form': form,
+            }
+            return render(request, self.template_name, context)
+
+
+def is_valid_queryparam(param):
+    return param != '' and param is not None
+
+def filter_view(request):
+    query = Developer.objects.all()
+    developers_check = request.GET.get('developers')
+    
+    query = Q()
+
+    developers = Developer.objects.filter(query)
+
+    context = {
+        'developers': developers,
+    }
+
+    if request.GET.keys():
+        if request.method == "GET":
+            ids = []
+            for key, value in request.GET.lists():
+                ids.append(value)
+            num = ids[0]
+            ids_list = len(num)
+            arr_ids = []
+            for i in range(ids_list):
+                arr_ids.insert(0,ids[0][i])   
+            arr = [int(item) for item in arr_ids]
+            projects=Project.objects.filter(developer_field__in=arr) 
+            context = {
+                'developers': developers,
+                'projects' : projects
+            } 
+            return render(request, 'filters/filters.html', context)
+    return render(request, 'filters/filters.html', context)

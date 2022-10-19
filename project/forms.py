@@ -1,11 +1,15 @@
+from dataclasses import field
 from django import forms
 from django.forms import ModelForm
 from .models import Project, Developer
 
-class DeveloperForm(ModelForm):
+class DeveloperForm(forms.ModelForm ):
+    choice = forms.ModelChoiceField(
+        widget=forms.CheckboxSelectMultiple,
+        queryset=Developer.objects.all())
     class Meta:
         model = Developer
-        fields = ('name','description', 'image')
+        fields = ('hidden',)
 
 
 class IMG_Form(forms.Form):
