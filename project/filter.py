@@ -1,0 +1,45 @@
+import django_filters
+from .models import Developer
+from django.forms import NumberInput
+from django_filters.widgets import DateRangeWidget
+
+
+class ProjectFilter(django_filters.FilterSet):
+    initial_date = django_filters.DateFromToRangeFilter(
+        field_name='initial_date',
+        label='Fecha de Inicio',
+        widget=DateRangeWidget(attrs={'type': 'date'}))
+
+    description = django_filters.CharFilter(
+        field_name='description',
+        label='Descripción',
+        lookup_expr='icontains')
+
+    latitude = django_filters.NumericRangeFilter(
+        field_name='latitud',
+        label='Latitud',
+        widget=NumberInput(attrs={'type': 'number', 'step': "0.1"}))
+
+    longitude = django_filters.NumericRangeFilter(
+        field_name='longitude',
+        label='Longitud',
+        widget=NumberInput(attrs={'type': 'number', 'step': "0.1"}))
+
+    address = django_filters.CharFilter(
+        field_name='address',
+        label='Dirección',
+        lookup_expr='icontains')
+
+    phone = django_filters.CharFilter(
+        field_name='phone',
+        label='Teléfono',
+        lookup_expr='icontains')
+
+    levels = django_filters.NumericRangeFilter(
+        field_name='levels',
+        label='Niveles',
+        widget=NumberInput(attrs={'type': 'number', 'min': '1', 'max': '10'}))
+
+    developer = django_filters.ModelMultipleChoiceFilter(
+        field_name='developer_field',
+        queryset=Developer.objects.all())

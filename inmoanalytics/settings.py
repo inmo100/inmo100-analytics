@@ -36,6 +36,7 @@ ALLOWED_HOSTS = "127.0.0.1,localhost".split(",")
 
 INSTALLED_APPS = [
     'core.apps.CoreConfig',
+    'crispy_forms',
     'location.apps.LocationConfig',
     'prototype.apps.PrototypeConfig',
     'project.apps.ProjectConfig',
@@ -46,6 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_seed',
+    'django_filters',
 ]
 
 MIDDLEWARE = [

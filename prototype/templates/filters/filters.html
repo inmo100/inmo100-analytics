@@ -1,5 +1,5 @@
 {% extends 'filters/base.html' %} 
-
+{% load crispy_forms_tags %}
 {% block content %}
 
 <!DOCTYPE html>
@@ -11,44 +11,52 @@
     <title>Filters</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 </head>
 <body>
-     {% comment %} {% if args is not None%}
-    {% for arg in args %}
-    <p>{{arg}}</p>
-    {% endfor %}
-    {% else %}
-    <p>Esta Vacio</p>
-    {% endif %} {% endcomment %}
-    <form >
+    <!-- <form >
     {% for developer in developers %}
-    <div class="form-check" method>
+      <li class="dropdown-item">
+
+      <div class="form-check" method>
         <input class="form-check-input" type="checkbox" value="{{ developer.id }}" id="developer" name="developer">
         <label class="form-check-label" for="flexCheckDefault">
-            {{ developer }}
-            {{ developer.basemodel_ptr_id }}
+          {{ developer }}
+          {{ developer.basemodel_ptr_id }}
         </label>
-    </div>
-    {% endfor %}
-    <button type="submit" class="btn btn-primary">Buscar</button>
-    </form> 
+      </div>
+      {% endfor %}
 
+    <button type="submit" class="btn btn-primary">Buscar</button>
+    </form>  -->
+
+    <form method="get">
+      {{ projects_filter.form|crispy }}
+      <button class="btn btn-sm btn-danger" type="submit">Filter</button>
+    </form>
     <hr />
 
     <div class="row">
       <ul>
-        {% for project in projects %}
+        {% for project in projects_filter.qs %}
           <li>
             {{ project.name }}
             <span>Descripción: {{ project.description }}</span>
+            <span>Fecha Inicial: {{ project.initial_date }}</span>
+            <span>Latitud: {{ project.latitud }}</span>
+            <span>Longitud: {{ project.longitude }}</span>
+            <span>Dirección: {{ project.address }}</span>
+            <span>Telefono: {{ project.phone }}</span>
+            <span>Brochure: {{ project.brochure }}</span>
           </li>
           <hr />
         {% endfor %}
       </ul>
     </div> 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
-    {% comment %} <select class="select" multiple>
+    <!-- {% comment %} <select class="select" multiple>
         {% for developer in developers %}
         <option value="{{ developer.id }}">{{ developer }} {{ developer.basemodel_ptr_id }}</option>
         {% endfor %}
@@ -59,7 +67,7 @@
       {% comment %} <form>
         {{ form }}
         <button type="submit" class="btn btn-primary">Buscar</button>
-      </form> {% endcomment %}
+      </form> {% endcomment %} -->
 
 </body>
 </html>
