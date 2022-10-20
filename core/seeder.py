@@ -67,24 +67,18 @@ for equipment_name in equipment_names:
         'type': lambda x: random.choice(equipment_type)
     })
 
-'''
 municipalities = ['Queretaro', 'Marques', 'Corregidora']
 
 for municipality in municipalities:
     seeder.add_entity(Municipality, 1, {
         'name': municipality,
-        'state_field': ,
-        'corridors': 1,
     })
-'''
-'''
+
 colonies = ['Juriquilla', 'Zibata', 'Milenio III', 'Cañadas del Lago', 'Balcones Coloniales', 'Vista', 'Punta Esmeralda', 'La Porta ', 'Refugio', 'Loma Dorada', 'San José El Alto', 'Salitre', 'Cumbres del Lago, Juriquilla', 'Centro Sur', 'Mercurio', 'San Jerónimo', 'Campanario', 'Lomas del Campanario Norte', 'Jardines de la Hacienda', 'Miradores', 'Vista Hermosa', 'Mirador', 'Vista Real', 'Bellavista', 'Lomas de Juriquilla', 'Venceremos', 'Cruz de Fuego', 'Real del Bosque']
 
 for colony in colonies:
     seeder.add_entity(Colony, 1, {
         'name': colony,
-        'municipality_field': 1
     })
-'''
 
 inserted_pks = seeder.execute()
