@@ -81,4 +81,11 @@ for colony in colonies:
         'name': colony,
     })
 
+proyects = ['Inspira L&A (T1-T3)', 'Paseo Pitahaya (T1)', 'Amuralle - Aragón', 'Argu IV', 'Zaniah II', 'Paseo San Junípero', 'Massaro II', 'Sabbia']
+
+for proyect in proyects:
+    seeder.add_entity(Project, 1, {
+        'name': proyect,
+    })
+
 inserted_pks = seeder.execute()
