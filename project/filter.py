@@ -1,7 +1,7 @@
 import django_filters
-from .models import Developer
+from .models import Developer, Project
 from django.forms import NumberInput
-from django_filters.widgets import DateRangeWidget
+from django_filters.widgets import DateRangeWidget, RangeWidget
 
 
 class ProjectFilter(django_filters.FilterSet):
@@ -15,15 +15,15 @@ class ProjectFilter(django_filters.FilterSet):
         label='Descripción',
         lookup_expr='icontains')
 
-    latitude = django_filters.NumericRangeFilter(
+    latitude = django_filters.RangeFilter(
         field_name='latitud',
         label='Latitud',
-        widget=NumberInput(attrs={'type': 'number', 'step': "0.1"}))
+        widget=RangeWidget(attrs={'type': 'number', 'step': "0.1"}))
 
-    longitude = django_filters.NumericRangeFilter(
+    longitude = django_filters.RangeFilter(
         field_name='longitude',
         label='Longitud',
-        widget=NumberInput(attrs={'type': 'number', 'step': "0.1"}))
+        widget=RangeWidget(attrs={'type': 'number', 'step': "0.1"}))
 
     address = django_filters.CharFilter(
         field_name='address',
@@ -42,4 +42,10 @@ class ProjectFilter(django_filters.FilterSet):
 
     developer = django_filters.ModelMultipleChoiceFilter(
         field_name='developer_field',
+        label='Desarrolladora',
         queryset=Developer.objects.all())
+
+    name = django_filters.ModelMultipleChoiceFilter(
+        field_name='name',
+        label='Proyecto',
+        queryset=Project.objects.all())
