@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block title %} Prototipo exitoso {% endblock title %}
+{% block navbar %}
+{% endblock navbar %}
+{% block content %}
+<div class="container">
+
+    <!--     <div class="row my-2 mx-0 justify-content-md-center" data-aos="fade-bottom"> -->
+            <div class="card my-3 mx-3 shadow-lg">      
+                <div class="card-body">
+                    <h2 class="card-title text-center">El archivo csv se ha importado correctamente</h2><br><br>
+                </div>
+                <div class="text-center">
+                    <a class="btn btn-danger" href="{% url 'projects' %}">
+                        Regresar
+                    </a>
+                    <a href="/prototipos/detail/{{project_id}}" class="btn btn-success"> Ver archivo csv </a>
+{% comment %}                         <a href="{% url 'prototype-detail' project.pk%}" class="btn btn-success"">
+                        Ver archivo csv
+                    </a> {% endcomment %}
+                </div><br><br>
+            </div>
+    <!--     </div> -->
+    </div>
+{% endblock content %}

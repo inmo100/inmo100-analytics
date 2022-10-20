@@ -4,6 +4,9 @@ from datetime import datetime
 from core.models import BaseModel, AbstractModel
 from project.models import Project
 
+class FinishingType(BaseModel):
+    pass
+
 class Finishing(BaseModel): # Acabados en el MER
     description = models.TextField(verbose_name=_("Description"))
 
@@ -40,17 +43,17 @@ class Segment(BaseModel):
 class Prototype(BaseModel):
     project_field = models.ForeignKey(Project, on_delete=models.PROTECT)
     segment_field = models.ForeignKey(Segment, on_delete=models.PROTECT)
-    propertyType = models.ForeignKey(PropertyType, on_delete=models.PROTECT)
-    equipments = models.ManyToManyField(Equipment)# add new entity to handle relation quantities between prototype and equipment
-    finishings = models.ManyToManyField(Finishing)
+    propertyType = models.ForeignKey(PropertyType, on_delete=models.PROTECT,null=True)
+    equipments = models.ManyToManyField(Equipment,null=True)# add new entity to handle relation quantities between prototype and equipment
+    finishings = models.ManyToManyField(Finishing,null=True)
 
-    price = models.IntegerField(verbose_name=_("Price"))
-    total_units = models.IntegerField(verbose_name=_("Total units"))
-    sold_units = models.IntegerField(verbose_name=_("Sold units"))
-    m2_terrain = models.FloatField(verbose_name=("Terrain in square meters"))
-    m2_constructed = models.FloatField(verbose_name=("Constructed area in square meters"))
-    m2_habitable = models.FloatField(verbose_name=("Habiable area in square meters"))
-    floors = models.SmallIntegerField(verbose_name=("Pisos"), default=1)
+    price = models.IntegerField(verbose_name=_("Price"),null=True)
+    total_units = models.IntegerField(verbose_name=_("Total units"),null=True)
+    sold_units = models.IntegerField(verbose_name=_("Sold units"),null=True)
+    m2_terrain = models.FloatField(verbose_name=("Terrain in square meters"),null=True)
+    m2_constructed = models.FloatField(verbose_name=("Constructed area in square meters"),null=True)
+    m2_habitable = models.FloatField(verbose_name=("Habiable area in square meters"),null=True)
+    floors = models.SmallIntegerField(verbose_name=("Pisos"), default=1,null=True)
 
 # Handles prototype sales
 class Transaction(AbstractModel):# Transactions only need abstract model

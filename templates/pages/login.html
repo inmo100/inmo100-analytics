@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block css %} 
+<link rel="stylesheet" href="{% static 'css/pages/login.css' %}" />
+{% endblock css %}
+{% block content %}
+<main class="login">
+  <div class="container-wide">
+    <div class="login_image">
+      <img src="{% static 'img/login/hero.jpg' %}" alt="" class="login_image">
+    </div>
+    <div class="login_content">
+      <h1 class="h1">Iniciar sesión</h1>
+      <form action="{% url 'login' %}" method="post">
+        {% csrf_token %}
+        {% for field in login_form %}
+        <div class="form-block {{ field.field.widget.input_type }}">
+          <label for="{{field.id_for_label}}" class="body2"> 
+            {{field.label}}
+          </label>
+          {{field}}
+        </div>
+        {% endfor %}
+        <button type="submit" class="btn-primary">Entrar</button>
+      </form>
+    </div>
+  </div>
+</main>
+{% endblock content %}
