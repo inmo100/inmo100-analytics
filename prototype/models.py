@@ -40,13 +40,12 @@ class Equipment(BaseModel):
         exterior = "EXT", _("Exterior")# enum for exterior equipment
 
     type = models.CharField(verbose_name=_("Type"), choices=EquipmentType.choices, default=EquipmentType.interior, max_length=100)
-    # add new entity to handle relation quantities between prototype and equipment
 
 class Prototype(BaseModel):
     project_field = models.ForeignKey(Project, on_delete=models.PROTECT)
     segment_field = models.ForeignKey(Segment, on_delete=models.PROTECT)
     propertyType = models.ForeignKey(PropertyType, on_delete=models.PROTECT,null=True)
-    equipments = models.ManyToManyField(Equipment, through='EquipmentQuantity', null=True)# add new entity to handle relation quantities between prototype and equipment
+    equipments = models.ManyToManyField(Equipment, through='EquipmentQuantity', null=True)
     finishings = models.ManyToManyField(Finishing,null=True)
 
     price = models.IntegerField(verbose_name=_("Price"),null=True)
