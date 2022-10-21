@@ -7,98 +7,30 @@
 <div class="mt-3">
     <h3>Proyectos</h3>
     {% for project in list_projects %}
-    <div class="card" style="width: 20rem;">
-      <img src="/media/{{project.logo}}" class="card-img-top" alt="...">
-      <div class="card-body">
-        <h5 class="card-title">{{project.name}}</h5>
-        <p class="card-text">{{project.description}}</p>
-        <p class="card-text">{{project.colony_field}}</p>
-        <p class="card-text">{{project.developer_field}}</p>
-        <p class="card-text">{{project.initial_date}}</p>
-        <p class="card-text">{{project.latitude}}</p>
-        <p class="card-text">{{project.longitude}}</p>
-        <p class="card-text">{{project.address}}</p>
-        <p class="card-text">{{project.phone}}</p>
-        <p class="card-text">{{project.brochure}}</p>
-        <p class="card-text">{{project.social_networks}}</p>
-        <!-- Button trigger modal -->
-        <span>
-          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Agregar Prototipos</button>
-        </span>
-        <br>
-        <span>
-          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#prototype_edit">Editar Prototipos</button>
-        </span>
-
-        <!-- Modal CreatePrototypes-->
-        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Agregar Prototipo</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <div class="modal-body">
-                <div class="mt-3">
-                  <form method="POST" enctype="multipart/form-data" action="../prototipos/add/">
-                      {% csrf_token %}
-                      <div class="mb-3">
-                          <label for="formFile" class="form-label">CSV</label>
-                          <input class="form-control" type="file" id="formFile" name="csv">
-                          <input type="text" id="project_field" name="project_field" hidden value="{{project.id}}">
-                        </div>
-                      <div>
-                        <a class="btn btn-primary" href="/static/plantilla_prototipo.csv" download="plantilla_prototipo.csv">
-                          Descargar Plantilla
-                        </a>
-                        <button type="submit" class="btn btn-success">Guardar CSV</button>
-                      </div>
-                  </form>
-              </div>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="modal fade" id="prototype_edit" tabindex="-1" aria-labelledby="prototype_edit" aria-hidden="true">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="prototype_edit">Editar Prototipo</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <div class="modal-body">
-                <div class="mt-3">
-                  <form method="POST" enctype="multipart/form-data" action="../prototipos/update/">
-                      {% csrf_token %}
-                      <div class="mb-3">
-                          <label for="formFile" class="form-label">CSV</label>
-                          <input class="form-control" type="file" id="formFile" name="csv">
-                          <input type="text" id="project_field" name="project_field" hidden value="{{project.id}}">
-                        </div>
-                      <div>
-                        <a class="btn btn-primary" href="/static/plantilla_prototipo.csv" download="plantilla_prototipo.csv">
-                          Descargar Plantilla
-                        </a>
-                        <button type="submit" class="btn btn-success">Guardar CSV</button>
-                      </div>
-                  </form>
-              </div>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      
-        
-      </div>
-    </div>
+    <table>
+      <thead>
+      <tr>
+        <th>Logo</th> <th>Nombre</th> <th>Descripción</th> <th>Colonia</th> <th>Desarrolladora</th> <th>Fecha Inicial</th> <th>Latitud</th> <th>Longitud</th> <th>Dirección</th> <th>Celular</th> <th>Brochure</th> <th>Redes Sociales</th> <th>Acciones</th>
+      </tr>
+      </thead>
+      <tbody>
+        <td><img src="/media/{{project.logo}}" height="20rm"></td>
+        <td>{{project.name}}</td>
+        <td>{{project.description}}</td>
+        <td>{{project.colony_field}}</td>
+        <td>{{project.developer_field}}</td>
+        <td>{{project.initial_date}}</td>
+        <td>{{project.latitud}}</td>
+        <td>{{project.longitude}}</td>
+        <td>{{project.address}}</td>
+        <td>{{project.phone}}</td>
+        <td><a href="/media/{{project.brochure}}">{{project.name}} brochure</a></td>
+        <td>{{project.social_networks}}</td>
+        <td><a href="/prototipos/add/{{project.id}}" class="btn-primary" style="height: 30rm">CSV</a></td>
+        <td><a href="/prototipos/update/{{project.id}}" class="btn-terciary" style="height: 30rm">Edit CSV</a></td>
+      </tr>
+      </tbody>
+    </table>
     {% endfor %}
 </div>
 {% endblock content %}

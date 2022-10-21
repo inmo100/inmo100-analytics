@@ -29,7 +29,13 @@ class CreateDeveloper(TemplateView):
          developer.image = request.FILES['image']
          ig = request.POST['ig']
          wp = request.POST['wp']
+         fb = request.POST['fb']
+         yb = request.POST['yb']
          arr = {}
+         if(yb!=None):
+            arr['youtube'] = yb
+         if(fb!=None):
+            arr['facebook'] = fb
          if(ig!=None):
             arr['instagram'] = ig
          if(wp!=None):

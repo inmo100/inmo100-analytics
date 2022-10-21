@@ -74,8 +74,12 @@ class PrototypeView(ListView):
             'project_id':self.kwargs['id']
             })
 class UpdatePrototype(ListView):
-    template_name = 'form_prototipo.html'
+    template_name = 'update_prototypes.html'
     model = Segment
+    def get(self,request,*args,**kwargs):
+        return render(request,self.template_name,context={
+            'id':self.kwargs['id']
+            })
     def post(self,request,*args,**kwargs):
         csv_import = CSV_Form(request.POST, request.FILES)
         project_field = request.POST['project_field']
