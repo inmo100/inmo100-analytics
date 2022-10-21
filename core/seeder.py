@@ -1,5 +1,5 @@
 from django_seed import Seed
-from prototype.models import Finishing, PropertyType, Equipment, Segment, Prototype, Transaction
+from prototype.models import Finishing, PropertyType, Equipment, Segment, Prototype, Transaction, FinishingType
 from project.models import Amenity, Developer, Project
 from location.models import State, Corridor, Municipality, Colony
 import pandas as pd
@@ -65,6 +65,23 @@ for equipment_name in equipment_names:
     seeder.add_entity(Equipment, 1, {
         'name': equipment_name,
         'type': lambda x: random.choice(equipment_type)
+    })
+
+#no dependencies
+'''
+finishingTypes = ['Sistema Constructivo', 'Pisos', 'Muros', 'Cancelería Ventanas', 'Cubierta Cocina', 'Carpintería']
+
+for finishingType in finishingTypes:
+    seeder.add_entity(FinishingType, 1, {
+        'name': finishingType
+    })
+'''
+#no dependencies
+finishings = ['BLOCK', 'TABIQUE', 'PORCELANATO', 'CERAMICO', 'YESO', 'PASTA', 'ALUMINIO', 'GRANITO', 'PANEL FIBRA']
+
+for finishing in finishings:
+    seeder.add_entity(Finishing, 1, {
+        'name': finishing
     })
 
 municipalities = ['Queretaro', 'Marques', 'Corregidora']

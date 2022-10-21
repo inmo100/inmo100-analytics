@@ -6,9 +6,6 @@ from datetime import datetime
 from core.models import BaseModel, AbstractModel
 from project.models import Project
 
-class FinishingType(BaseModel):
-    pass
-
 class Finishing(BaseModel): # Acabados en el MER
     description = models.TextField(verbose_name=_("Description"))
 
@@ -46,7 +43,7 @@ class Prototype(BaseModel):
     segment_field = models.ForeignKey(Segment, on_delete=models.PROTECT)
     propertyType = models.ForeignKey(PropertyType, on_delete=models.PROTECT,null=True)
     equipments = models.ManyToManyField(Equipment, through='EquipmentQuantity', null=True)
-    finishings = models.ManyToManyField(Finishing,null=True)
+    finishings = models.ManyToManyField(Finishing,through='FinishingType', null=True)
 
     price = models.IntegerField(verbose_name=_("Price"),null=True)
     total_units = models.IntegerField(verbose_name=_("Total units"),null=True)
@@ -60,6 +57,21 @@ class EquipmentQuantity(AbstractModel):
     equipment = models.ForeignKey(Equipment, on_delete=models.PROTECT)
     prototype = models.ForeignKey(Prototype, on_delete=models.PROTECT)
     quantity = models.IntegerField(verbose_name=("Equipment quantity per prototype"),null=True)
+
+class FinishingType(AbstractModel):
+    finishing = models.ForeignKey(Finishing, on_delete=models.PROTECT)
+    prototype = models.ForeignKey(Prototype, on_delete=models.PROTECT)
+
+    class Types(models.TextChoices):
+        # Choice menu
+        sistemaConstructivo = "SC", _("Sistema Constructivo")
+        pisos = "P", _("Pisos")
+        muros = "M", _("Muros")
+        canceleriaVentanas = "CV", _("Cancelería Ventanas")
+        cubiertaCocina = "CC", _("Cubierta Cocina")
+        carpinteria = "C", _("Carpintería")
+    
+    type = models.CharField(verbose_name=_("Types"), choices=Types.choices, default=Types.pisos, max_length=100)
 
 # Handles prototype sales
 class Transaction(AbstractModel):# Transactions only need abstract model
