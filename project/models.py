@@ -8,7 +8,7 @@ class Amenity(BaseModel):
 
 class Developer(BaseModel):
   description = models.TextField(verbose_name=_("Description"))
-  image = models.ImageField(verbose_name=_("Image"))
+  image = models.ImageField(verbose_name=_("Image"), null=True, blank=True)
   social_networks = models.JSONField(verbose_name=_("Social networks"))
 
 class Project(BaseModel):
