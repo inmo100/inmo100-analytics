@@ -1,3 +1,5 @@
+from enum import unique
+from lib2to3.pytree import Base
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from datetime import datetime 
@@ -21,6 +23,9 @@ class PropertyType(BaseModel):
     '''
     description = models.TextField(verbose_name=_("Description"))
 
+class Segment(BaseModel): 
+    description = models.TextField(verbose_name=_("Description"))
+
 class Equipment(BaseModel):
     '''
     Refers to:
@@ -35,16 +40,12 @@ class Equipment(BaseModel):
         exterior = "EXT", _("Exterior")# enum for exterior equipment
 
     type = models.CharField(verbose_name=_("Type"), choices=EquipmentType.choices, default=EquipmentType.interior, max_length=100)
-    # add new entity to handle relation quantities between prototype and equipment
-
-class Segment(BaseModel): 
-    description = models.TextField(verbose_name=_("Description"))
 
 class Prototype(BaseModel):
     project_field = models.ForeignKey(Project, on_delete=models.PROTECT)
     segment_field = models.ForeignKey(Segment, on_delete=models.PROTECT)
     propertyType = models.ForeignKey(PropertyType, on_delete=models.PROTECT,null=True)
-    equipments = models.ManyToManyField(Equipment,null=True)# add new entity to handle relation quantities between prototype and equipment
+    equipments = models.ManyToManyField(Equipment, through='EquipmentQuantity', null=True)
     finishings = models.ManyToManyField(Finishing,null=True)
 
     price = models.IntegerField(verbose_name=_("Price"),null=True)
@@ -54,6 +55,11 @@ class Prototype(BaseModel):
     m2_constructed = models.FloatField(verbose_name=("Constructed area in square meters"),null=True)
     m2_habitable = models.FloatField(verbose_name=("Habiable area in square meters"),null=True)
     floors = models.SmallIntegerField(verbose_name=("Pisos"), default=1,null=True)
+
+class EquipmentQuantity(AbstractModel):
+    equipment = models.ForeignKey(Equipment, on_delete=models.PROTECT)
+    prototype = models.ForeignKey(Prototype, on_delete=models.PROTECT)
+    quantity = models.IntegerField(verbose_name=("Equipment quantity per prototype"),null=True)
 
 # Handles prototype sales
 class Transaction(AbstractModel):# Transactions only need abstract model
