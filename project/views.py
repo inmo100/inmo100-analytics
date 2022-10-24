@@ -53,7 +53,7 @@ class CreateProject(CreateView):
     success_url = '/proyectos'
 
 class ProjectView(ListView):
-    template_name = 'home_proyecto.html'
+    template_name = 'pages/projects_home.html'
     model = Project
     queryset: Developer.objects.all()
     context_object_name = 'list_projects'
