@@ -145,6 +145,27 @@ body {
 }
 
 
+/* Text colors */
+.text-primary {
+  color: var(--color-primary);
+}
+
+.text-secondary {
+  color: var(--color-secondary);
+}
+
+.text-tertiary {
+  color: var(--color-tertiary)l;
+}
+
+.text-accent {
+  color: var(--color-accent);
+}
+
+.text-bg {
+  color: var(--color-bg);
+}
+
 /* Buttons */
 [class^="btn"] {
   border-radius: var(--radius-medium);
@@ -185,6 +206,30 @@ body {
   background-color: transparent;
 }
 
+/* Text buttons */
+.text-btn {
+  position: relative;
+}
+
+.text-btn::before {
+  content: "";
+  background-color: currentColor;
+  width: 0%;
+  height: 2px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  transition: width var(--timing-small) ease;
+}
+
+.text-btn:hover::before {
+  width: 100%;
+}
+
+.text-btn::after {
+  content: "\279E";
+  margin-left: 0.25rem;
+}
 
 /* Form components */
 .form-block {
