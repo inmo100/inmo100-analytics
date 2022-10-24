@@ -4,6 +4,12 @@
   width: 100%;
   column-gap: 2rem;
   row-gap: 2.5rem;
+  flex-direction: row;
+}
+
+.projects-container {
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .project-card {

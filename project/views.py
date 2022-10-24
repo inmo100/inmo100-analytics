@@ -29,7 +29,13 @@ class CreateDeveloper(TemplateView):
          developer.image = request.FILES['image']
          ig = request.POST['ig']
          wp = request.POST['wp']
+         fb = request.POST['fb']
+         yb = request.POST['yb']
          arr = {}
+         if(yb!=None):
+            arr['youtube'] = yb
+         if(fb!=None):
+            arr['facebook'] = fb
          if(ig!=None):
             arr['instagram'] = ig
          if(wp!=None):
@@ -47,7 +53,7 @@ class CreateProject(CreateView):
     success_url = '/proyectos'
 
 class ProjectView(ListView):
-    template_name = 'home_proyecto.html'
+    template_name = 'pages/projects_home.html'
     model = Project
     queryset: Developer.objects.all()
     context_object_name = 'list_projects'
