@@ -58,12 +58,11 @@ class CreatePrototype(ListView):
             return render(request,self.template_name,context={'Prueba':'No se pudo'})
 
 
-class PrototypeView(ListView):
+class PrototypesListView(ListView):
     template_name = 'pages/prototypes.html'
     model = Prototype
     def get(self, request, *args,**kwargs):
         return render(request,self.template_name,context={
-            'prototype_list':Prototype.objects.all(),
-            # 'project_id':self.kwargs['id']
+            'prototype_list': Prototype.objects.all(),
         })
 

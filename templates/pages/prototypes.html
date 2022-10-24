@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block css %}
+<link rel="stylesheet" href="{% static 'css/pages/prototypes.css' %}" />
 {% endblock css %}
 {% block content %}
 <main>
@@ -7,10 +9,9 @@
     <h1 class="h1">
       Prototipos
     </h1>
-    {% include 'components/prototype-table.html' %}
+    {% include 'components/prototypes-table.html' %}
   </div>
 </main>
-
 {% endblock content %}
 {% block js %}
 {% endblock js %}
