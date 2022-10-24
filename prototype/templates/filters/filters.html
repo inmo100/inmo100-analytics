@@ -40,14 +40,13 @@
       <ul>
         {% for project in projects_filter.qs %}
           <li>
-            {{ project.name }}
-            <span>Descripción: {{ project.description }}</span>
+            <span>Proyecto: {{ project.name }}</span>
+            <span>Desarrolladora: {{ project.developer_field }}</span>
             <span>Fecha Inicial: {{ project.initial_date }}</span>
             <span>Latitud: {{ project.latitud }}</span>
             <span>Longitud: {{ project.longitude }}</span>
-            <span>Dirección: {{ project.address }}</span>
-            <span>Telefono: {{ project.phone }}</span>
-            <span>Brochure: {{ project.brochure }}</span>
+            <span>Niveles: {{ project.levels }}</span>
+            
           </li>
           <hr />
         {% endfor %}
