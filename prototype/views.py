@@ -10,8 +10,8 @@ import pandas as pd
 from os import remove
 
 
-def guardar_datos_csv(arr,pf):
-    project = Project.objects.get(id=pf)
+def guardar_datos_csv(arr, projectFile):
+    project = Project.objects.get(id= projectFile)
     for i in arr:
         if(i[8] == 'null'):
             segment = Segment.objects.get(name='No existe')    
@@ -59,11 +59,11 @@ class CreatePrototype(ListView):
 
 
 class PrototypeView(ListView):
-    template_name = 'table.html'
+    template_name = 'pages/prototypes.html'
     model = Prototype
-    def get(self,request,*args,**kwargs):
+    def get(self, request, *args,**kwargs):
         return render(request,self.template_name,context={
-            'list_prototype':Prototype.objects.all(),
+            'prototype_list':Prototype.objects.all(),
             'project_id':self.kwargs['id']
-            })
+        })
 
