@@ -64,6 +64,6 @@ class PrototypeView(ListView):
     def get(self, request, *args,**kwargs):
         return render(request,self.template_name,context={
             'prototype_list':Prototype.objects.all(),
-            'project_id':self.kwargs['id']
+            # 'project_id':self.kwargs['id']
         })
 
