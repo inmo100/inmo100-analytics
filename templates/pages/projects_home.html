@@ -12,14 +12,14 @@
     {% for project in list_projects %}
         
             <article class="project-card">
-              <img src="" alt="" class="project-card_img">
+              <img src="/media/{{project.logo}}" alt="" class="project-card_img">
               <div class="project-card_content">
-                <h3 class="body1">Paseo San Junipero</h3>
-                <p class="text-accent body2">Grand Living</p>
+                <h3 class="body1">{{project.name}}</h3>
+                <p class="text-accent body2">{{project.developer_field}}</p>
                 <p class="body2">
-                  PSC 4999, Box 0032 APO AE 25409 PSC 4999, Box 0032 APO AE 25409
+                  {{project.address}}
                 </p>
-                <a href="#" class="text-btn text-primary">Ver más</a>
+                <a href="/prototipos/add/{{project.id}}" class="text-btn text-primary">Ver más</a>
               </div>
             </article>
         

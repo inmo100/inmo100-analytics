@@ -8,32 +8,39 @@ from django.shortcuts import redirect
 from .models import *
 import pandas as pd
 from os import remove
+import os.path
 
-def delete_prototypes(pf):
-    project_prototypes = Prototype.objects.filter(project_field = pf)
+def delete_prototypes(project_fields):
+    project_prototypes = Prototype.objects.filter(project_field = project_fields)
     project_prototypes.delete()
 
-def guardar_datos_csv(arr,pf):
-    project = Project.objects.get(id=pf)
+def save_data_csv(arr,project_field):
+    project = Project.objects.get(id=project_field)
     for i in arr:
         if(i[8] == 'null'):
             segment = Segment.objects.get(name='No existe')    
         else:
             segment = Segment.objects.get(name=i[8])
-        prototipo = Prototype()
-        prototipo.segment_field = segment
-        prototipo.project_field = project
-        prototipo.name = i[0]
-        prototipo.price = i[1]
-        prototipo.total_units = i[2]
-        prototipo.sold_units = i[3]
-        prototipo.m2_terrain = i[4]
-        prototipo.m2_constructed = i[5]
-        prototipo.m2_habitable = i[6]
-        prototipo.floors = i[7]
-        prototipo.save()
+        prototype = Prototype()
+        prototype.segment_field = segment
+        prototype.project_field = project
+        prototype.name = i[0]
+        prototype.price = i[1]
+        prototype.total_units = i[2]
+        prototype.sold_units = i[3]
+        prototype.m2_terrain = i[4]
+        prototype.m2_constructed = i[5]
+        prototype.m2_habitable = i[6]
+        prototype.floors = i[9]
+        prototype.floors = i[10]
+        prototype.floors = i[11]
+        prototype.floors = i[12]
+        prototype.floors = i[13]
+        prototype.floors = i[14]
+        prototype.floors = i[15]
+        prototype.save()
 
-def handle_uploaded_file(f,pf,action):  
+def handle_uploaded_file(f,project_field,action):  
     with open('static/'+f.name, 'wb+') as destination:  
         for chunk in f.chunks():  
             destination.write(chunk)
@@ -41,16 +48,17 @@ def handle_uploaded_file(f,pf,action):
     valores = valores.fillna("null")
     valores = valores.values.tolist()
     if(action=='c'):
-        guardar_datos_csv(valores,pf)
+        save_data_csv(valores,project_field)
     elif(action=='u'):
-        delete_prototypes(pf)
-        guardar_datos_csv(valores,pf)
+        delete_prototypes(project_field)
+        save_data_csv(valores,project_field)
     remove('static/'+f.name)
 
 class CreatePrototype(ListView):
-    template_name = 'form_prototipo.html'
+    template_name = 'pages/form_prototype.html'
     model = Segment
     def get(self,request,*args,**kwargs):
+        download_csv()
         return render(request,self.template_name,context={
             'list_segment':Segment.objects.all(),
             'id':self.kwargs['id']
@@ -77,6 +85,7 @@ class UpdatePrototype(ListView):
     template_name = 'update_prototypes.html'
     model = Segment
     def get(self,request,*args,**kwargs):
+        download_csv()
         return render(request,self.template_name,context={
             'id':self.kwargs['id']
             })
@@ -89,3 +98,14 @@ class UpdatePrototype(ListView):
         else:
             return render(request,self.template_name,context={'Prueba':'No se pudo'})
 
+
+def download_csv():
+    if(os.path.isfile("static/plantilla_prototipos2.csv")):
+        remove("static/plantilla_prototipos2.csv")
+    equipments = Equipment.objects.all()
+    template = pd.read_csv("static/plantilla_prototipos.csv")
+    arr = [""]
+    for equipment in equipments:
+        template[equipment.name] = arr
+    template = template.drop(0)
+    template.to_csv("static/plantilla_prototipos2.csv",sep=",",index=False)
