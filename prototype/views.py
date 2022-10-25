@@ -109,4 +109,4 @@ def download_csv():
     for equipment in equipments:
         template[equipment.name] = arr
     template = template.drop(0)
-    template.to_csv("static/plantilla_prototipos2.csv",sep=",",index=False)
+    template.to_csv("static/plantilla_prototipos2.csv",sep=",",index=False,encoding="utf-8")
