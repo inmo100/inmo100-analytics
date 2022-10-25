@@ -1,5 +1,5 @@
 from django_seed import Seed
-from prototype.models import Finishing, PropertyType, Equipment, Segment, Prototype, Transaction
+from prototype.models import Finishing, PropertyType, Equipment, Segment, Prototype, Transaction, FinishingType
 from project.models import Amenity, Developer, Project
 from location.models import State, Corridor, Municipality, Colony
 import pandas as pd
@@ -86,6 +86,22 @@ proyects = ['Inspira L&A (T1-T3)', 'Paseo Pitahaya (T1)', 'Amuralle - Aragón', 
 for proyect in proyects:
     seeder.add_entity(Project, 1, {
         'name': proyect,
+    })
+    
+finishings = ['block', 'Tabique', 'Porcelanato', 'Cerámico', 'Porcelanato', 'Yeso', 'Pasta', 'Aluminio', 'Granito', 'Panel Fibra']
+
+for finishing in finishings:
+    seeder.add_entity(Finishing, 10, {
+        'name': finishing,
+        'description': 'Nombres de acabados existentes'
+    }) 
+
+finishing_types = ['Sistema Constructivo', 'Pisos', 'Muros', 'Cancelería Ventanas', 'Cubierta Cocina', 'Carpintería']
+
+for finishing_type in finishing_types:
+    seeder.add_entity(FinishingType, 6, {
+        'name': finishing_type,
+        'description': 'Tipos de acabados existentes'
     })
 
 inserted_pks = seeder.execute()
