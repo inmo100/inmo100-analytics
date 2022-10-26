@@ -5,17 +5,17 @@ from django.views.generic import View
 from .forms import RegisterUserForm, LoginForm
 
 def home(request):
-    return render(request, 'core/home.html')
+    return render(request, 'pages/home.html')
 
 #class based view for login of user
 class LoginUser(View):
-    template_name = "core/login.html"
+    template_name = "pages/login.html"
     form_class = LoginForm
 
     def get(self, request):
         form = self.form_class()
         context = {
-            'form': form,
+            'login_form': form,
         }
         return  render(request, self.template_name, context)
 
@@ -35,7 +35,7 @@ class LoginUser(View):
                     return redirect('home')
         messages.success(request, ("We could not authenticate you with the given credentials"))
         context = {
-            'form': form,
+            'login_form': form,
         }
         return render(request, self.template_name, context)
 
@@ -47,7 +47,7 @@ def logout_user(request):
 
 # process the registration form, create the new user and authenticate them
 class RegisterUser(View):
-    template_name = "core/register.html"
+    template_name = "pages/register.html"
     form_class = RegisterUserForm
 
     def get(self, request):

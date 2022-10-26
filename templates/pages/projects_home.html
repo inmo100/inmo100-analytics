@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block css %} 
+<link rel="stylesheet" href="{% static 'css/pages/projects.css' %}" />
+{% endblock css %}
+{% block title %} Proyectos {% endblock title %}
+{% block content %}
+
+<div class="container-wide">
+    <h3 class="h1">Proyectos</h3>
+    <div class="projects-grid">
+    {% for project in list_projects %}
+        
+            <article class="project-card">
+              <img src="/media/{{project.logo}}" alt="" class="project-card_img">
+              <div class="project-card_content">
+                <h3 class="body1">{{project.name}}</h3>
+                <p class="text-accent body2">{{project.developer_field}}</p>
+                <p class="body2">
+                  {{project.address}}
+                </p>
+                <a href="/prototipos/add/{{project.id}}" class="text-btn text-primary">Ver más</a>
+              </div>
+            </article>
+        
+
+    {% endfor %}
+    </div>
+</div>
+{% endblock content %}

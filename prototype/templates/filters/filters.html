@@ -1,5 +1,4 @@
-{% extends 'filters/base.html' %} 
-{% load crispy_forms_tags %}
+{% extends 'filters/base.html' %}
 {% block content %}
 
 <!DOCTYPE html>
@@ -31,7 +30,7 @@
     </form>  -->
 
     <form method="get">
-      {{ projects_filter.form|crispy }}
+      {{ projects_filter.form }}
       <button class="btn btn-sm btn-danger" type="submit">Filter</button>
     </form>
     <hr />

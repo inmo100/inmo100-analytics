@@ -1,0 +1,54 @@
+main {
+  padding: 3.5rem 0;
+}
+
+.h1 {
+  margin-bottom: 1.5rem;
+}
+
+.prototypes-table-container {
+  width: 100%;
+  overflow: auto;
+  padding-bottom: 1.5rem;
+}
+
+.prototypes-table-container::-webkit-scrollbar {
+  height: 10px;
+}
+
+.prototypes-table-container::-webkit-scrollbar-thumb {
+  border-radius: var(--border-small);
+  background-color: var(--color-primary);
+}
+
+.prototypes-table {
+  text-align: left;
+  border-spacing: 4px;
+}
+
+.prototypes-table tbody tr {
+  transition: opacity var(--timing-small) ease;
+}
+
+.prototypes-table:hover tbody tr {
+  opacity: 0.6;
+}
+
+.prototypes-table tbody tr:hover {
+  opacity: 1;
+}
+
+.prototypes-table th {
+  background-color: var(--color-primary);
+  color: var(--color-bg);
+}
+
+.prototypes-table th,
+.prototypes-table td {
+  padding: 0.25rem 0.5rem;
+  white-space: nowrap;
+}
+
+.prototypes-table tr:nth-child(even) {
+  background-color: rgba(var(--rgb-tertiary), 0.4);
+}
