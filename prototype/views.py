@@ -15,12 +15,27 @@ def delete_prototypes(project_fields):
     project_prototypes.delete()
 
 def save_data_csv(arr,project_field):
+    iterable = 10
+    helper = []
     project = Project.objects.get(id=project_field)
     for i in arr:
         if(i[8] == 'null'):
             segment = Segment.objects.get(name='No existe')    
         else:
             segment = Segment.objects.get(name=i[8])
+        
+        
+        
+        if(i[9] == 'null'):
+            finishing = Finishing.objects.get(name='No existe')
+            helper.append(finishing)
+        else:
+            if(Finishing.objects.filter(name=i[9]).exists() == False):
+                finishing = Finishing.objects.get(name='No existe')
+                helper.append(finishing)
+            else:
+                finishing = Finishing.objects.get(name=i[9])
+                helper.append(finishing)
         prototype = Prototype()
         prototype.segment_field = segment
         prototype.project_field = project
@@ -31,14 +46,9 @@ def save_data_csv(arr,project_field):
         prototype.m2_terrain = i[4]
         prototype.m2_constructed = i[5]
         prototype.m2_habitable = i[6]
-        prototype.floors = i[9]
-        prototype.floors = i[10]
-        prototype.floors = i[11]
-        prototype.floors = i[12]
-        prototype.floors = i[13]
-        prototype.floors = i[14]
-        prototype.floors = i[15]
         prototype.save()
+        prototype = Prototype.objects.get(name=i[0])
+        prototype.finishings.set(helper)
 
 def handle_uploaded_file(f,project_field,action):  
     with open('static/'+f.name, 'wb+') as destination:  
