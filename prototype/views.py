@@ -15,8 +15,10 @@ def delete_prototypes(project_fields):
     project_prototypes.delete()
 
 def save_data_csv(arr,project_field):
+    equipments = Equipment.objects.all()
     iterable = 16
     helper = []
+    helper2 = []
     project = Project.objects.get(id=project_field)
     for i in arr:
         if(i[8] == 'null'):
@@ -97,16 +99,10 @@ def save_data_csv(arr,project_field):
                 helper.append(finishing)
         cuantity = Equipment.objects.count()
         for j in range(cuantity+1):
-            if(i[iterable] == 'null'):
-                equipment = Equipment.objects.get(name='No existe')
-                iterable = iterable+1
+            if(i[iterable] == 'null' or i[iterable] == 0):
+                iterable = iterable + 1
             else:
-                if(Equipment.objects.filter(name=i[iterable]).exists() == False):
-                    equipment = Equipment.objects.get(name='No existe')
-                    iterable = iterable+1
-                else:
-                    equipment = Equipment.objects.get(name=i[iterable])
-                    iterable = iterable+1
+                helper2.append(i[iterable])
         prototype = Prototype()
         prototype.segment_field = segment
         prototype.project_field = project
@@ -122,6 +118,9 @@ def save_data_csv(arr,project_field):
         prototype = Prototype.objects.get(name=i[0],project_field = project_field)
         prototype.finishings.set(helper)
         helper.clear()
+        for equipment in equipments:
+            equipment_prototype = EquipmentQuantity()
+            equipment_prototype.equipment = equi
 
 def handle_uploaded_file(f,project_field,action):  
     with open('static/'+f.name, 'wb+') as destination:  
