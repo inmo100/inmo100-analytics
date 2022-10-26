@@ -108,7 +108,7 @@ def save_data_csv(arr,project_field):
         prototype.m2_habitable = i[6]
         prototype.propertyType = property_type
         prototype.save()
-        prototype = Prototype.objects.get(name=i[0])
+        prototype = Prototype.objects.get(name=i[0],project_field = project_field)
         prototype.finishings.set(helper)
         helper.clear()
 
@@ -155,7 +155,7 @@ class PrototypesListView(ListView):
 
 
 class UpdatePrototype(ListView):
-    template_name = 'update_prototypes.html'
+    template_name = 'pages/form_update_prototypes.html'
     model = Segment
     def get(self,request,*args,**kwargs):
         download_csv()
