@@ -1,6 +1,6 @@
 import django_filters
 from .models import Developer, Project
-from django.forms import NumberInput
+from django.forms import NumberInput, CheckboxSelectMultiple
 from django_filters.widgets import DateRangeWidget, RangeWidget
 from django.db.models import Q
 
@@ -45,9 +45,13 @@ class ProjectFilter(django_filters.FilterSet):
     developer = django_filters.ModelMultipleChoiceFilter(
         field_name='developer_field',
         label='Desarrolladora',
+        widget=CheckboxSelectMultiple(),
         queryset=Developer.objects.all())
+
+
 
     name = django_filters.ModelMultipleChoiceFilter(
         field_name='name',
         label='Proyecto',
+        widget=CheckboxSelectMultiple(),
         queryset=Project.objects.all())
