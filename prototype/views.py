@@ -15,7 +15,7 @@ def delete_prototypes(project_fields):
     project_prototypes.delete()
 
 def save_data_csv(arr,project_field):
-    iterable = 10
+    iterable = 16
     helper = []
     project = Project.objects.get(id=project_field)
     for i in arr:
@@ -95,7 +95,18 @@ def save_data_csv(arr,project_field):
             else:
                 finishing = Finishing.objects.get(name=i[15])
                 helper.append(finishing)
-        
+        cuantity = Equipment.objects.count()
+        for j in range(cuantity+1):
+            if(i[iterable] == 'null'):
+                equipment = Equipment.objects.get(name='No existe')
+                iterable = iterable+1
+            else:
+                if(Equipment.objects.filter(name=i[iterable]).exists() == False):
+                    equipment = Equipment.objects.get(name='No existe')
+                    iterable = iterable+1
+                else:
+                    equipment = Equipment.objects.get(name=i[iterable])
+                    iterable = iterable+1
         prototype = Prototype()
         prototype.segment_field = segment
         prototype.project_field = project
