@@ -12,6 +12,12 @@
         <th>M<sub>2</sub> habitables</th>
         <th>Segmento</th>
         <th>Tipo de Propiedad</th>
+        <th>Sistema Constructivo</th>
+        <th>Pisos</th>
+        <th>Muros</th>
+        <th>Cancelería Ventanas</th>
+        <th>Cubierta Cocina</th>
+        <th>Carpintería</th>
       </tr>
     </thead>
     <tbody>
@@ -27,6 +33,9 @@
         <td>{{prototype.m2_habitable}}</td>
         <td>{{prototype.segment_field}}</td>
         <td>{{prototype.propertyType}}</td>
+        {% for finishing in prototype.finishings.all %}
+          <td>{{finishing.name}}</td>
+        {% endfor %}
       </tr>
       {% endfor %}
     </tbody>
