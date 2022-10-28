@@ -8,12 +8,18 @@ from django.shortcuts import redirect
 from .models import *
 import pandas as pd
 from os import remove
+from project.models import Project
+from django.db.models import Q, Count
+
+# Create your views here.
 import os.path
 
+#Funciton that recieves the project id in order to delete all prototypes related to the project
 def delete_prototypes(project_fields):
     project_prototypes = Prototype.objects.filter(project_field = project_fields)
     project_prototypes.delete()
-
+#Function that recieves a list with all the rows from csv and the project field in order to register all the prototypes related
+# to a projet
 def save_data_csv(arr,project_field):
     equipments = Equipment.objects.all()
     iterable = 16
@@ -118,7 +124,7 @@ def save_data_csv(arr,project_field):
         prototype = Prototype.objects.get(name=i[0],project_field = project_field)
         prototype.finishings.set(helper)
         helper.clear()
-
+#Function that saves and read the csv.
 def handle_uploaded_file(f,project_field,action):  
     with open('static/'+f.name, 'wb+') as destination:  
         for chunk in f.chunks():  
@@ -126,22 +132,25 @@ def handle_uploaded_file(f,project_field,action):
     valores = pd.read_csv('static/'+f.name)
     valores = valores.fillna("null")
     valores = valores.values.tolist()
+    #That if compares if is to create prototyes or to update prototypes
     if(action=='c'):
         save_data_csv(valores,project_field)
     elif(action=='u'):
         delete_prototypes(project_field)
         save_data_csv(valores,project_field)
     remove('static/'+f.name)
-
+#Class based view to create prototypes
 class CreatePrototype(ListView):
     template_name = 'pages/form_prototype.html'
     model = Segment
+    #Overwriting the method get from the class
     def get(self,request,*args,**kwargs):
         download_csv()
         return render(request,self.template_name,context={
             'list_segment':Segment.objects.all(),
             'id':self.kwargs['id']
             })
+    #Overwriting the method post from the class
     def post(self,request,*args,**kwargs):
         csv_import = CSV_Form(request.POST, request.FILES)
         project_field = request.POST['project_field']
@@ -156,19 +165,23 @@ class PrototypesListView(ListView):
     template_name = 'pages/prototypes.html'
     model = Prototype
     def get(self, request, *args,**kwargs):
+        finishings_type = FinishingType.objects.exclude(name="No existe")
         return render(request,self.template_name,context={
             'prototype_list': Prototype.objects.all(),
+            'finishings_type': finishings_type
         })
 
-
+#Class based view to update prototype
 class UpdatePrototype(ListView):
     template_name = 'pages/form_update_prototypes.html'
     model = Segment
+    #Overwriting the method get from the class
     def get(self,request,*args,**kwargs):
         download_csv()
         return render(request,self.template_name,context={
             'id':self.kwargs['id']
             })
+    #Overwriting the method post from the class
     def post(self,request,*args,**kwargs):
         csv_import = CSV_Form(request.POST, request.FILES)
         project_field = request.POST['project_field']
@@ -178,7 +191,7 @@ class UpdatePrototype(ListView):
         else:
             return render(request,self.template_name,context={'Prueba':'No se pudo'})
 
-
+#Function that create a csv with all the equipments from the database.
 def download_csv():
     if(os.path.isfile("static/plantilla_prototipos2.csv")):
         remove("static/plantilla_prototipos2.csv")

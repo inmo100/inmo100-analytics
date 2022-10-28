@@ -1,14 +1,14 @@
-from django.http import HttpResponse
-from pipes import Template
 from django.shortcuts import render
-from django.views.generic import TemplateView, CreateView, ListView, DetailView
-from .forms import *
-from django.shortcuts import redirect
+from django.views.generic import TemplateView, CreateView, ListView, DetailView, View
+from .forms import IMG_Form, ProjectForm, DeveloperForm
 # Create your views here.
-from .models import *
+from .models import Developer, Project
 import json
+from django.db.models import Q
+from .filter import ProjectFilter
 
-#Función para guardar los datos de la desarrolladora
+# Función para guardar los datos de la desarrolladora
+
 
 class DeveloperView(ListView):
     template_name = 'home_desarrolladora.html'
@@ -16,10 +16,13 @@ class DeveloperView(ListView):
     queryset: Developer.objects.all()
     context_object_name = 'list_developers'
 
+
 class CreateDeveloper(TemplateView):
     template_name = 'form_desarrolladora.html'
+
     def get(self, request, *args, **kwargs):
         return render(request, self.template_name)
+
     def post(self, request, *args, **kwargs):
         image_developer = IMG_Form(request.POST, request.FILES)
         if image_developer.is_valid():
@@ -52,6 +55,7 @@ class CreateProject(CreateView):
     form_class = ProjectForm
     success_url = '/proyectos'
 
+
 class ProjectView(ListView):
     template_name = 'pages/projects_home.html'
     model = Project
@@ -61,3 +65,19 @@ class ProjectView(ListView):
 
 class ProjectDetail(DetailView):
     model = Project
+
+def filter_view(request):
+    context = {
+        'developers': Developer.objects.filter()
+    }
+
+    projects_filter = get_filter_queryset(request, Project.objects.all())
+    context['projects_filter'] = projects_filter
+
+    return render(request, 'filters/filters.html', context)
+
+def get_filter_queryset(request, projects):
+    return ProjectFilter(request.GET, queryset=projects)
+
+def is_valid_queryparam(param):
+    return param != '' and param is not None
