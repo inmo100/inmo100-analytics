@@ -12,12 +12,9 @@
         <th>M<sub>2</sub> habitables</th>
         <th>Segmento</th>
         <th>Tipo de Propiedad</th>
-        <th>Carpintería</th>
-        <th>Cubierta Cocina</th>
-        <th>Cancelería Ventanas</th>
-        <th>Muros</th>
-        <th>Pisos</th>
-        <th>Sistema Constructivo</th>
+        {% for finishing_type in finishings_type %}
+        <th>{{finishing_type}}</th>
+        {% endfor %}
       </tr>
     </thead>
     <tbody>
