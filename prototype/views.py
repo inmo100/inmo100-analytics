@@ -8,6 +8,10 @@ from django.shortcuts import redirect
 from .models import *
 import pandas as pd
 from os import remove
+from project.models import Project
+from django.db.models import Q, Count
+
+# Create your views here.
 import os.path
 
 def delete_prototypes(project_fields):
