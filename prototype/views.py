@@ -118,9 +118,6 @@ def save_data_csv(arr,project_field):
         prototype = Prototype.objects.get(name=i[0],project_field = project_field)
         prototype.finishings.set(helper)
         helper.clear()
-        for equipment in equipments:
-            equipment_prototype = EquipmentQuantity()
-            equipment_prototype.equipment = equi
 
 def handle_uploaded_file(f,project_field,action):  
     with open('static/'+f.name, 'wb+') as destination:  
