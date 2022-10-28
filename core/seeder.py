@@ -5,6 +5,7 @@ from location.models import State, Corridor, Municipality, Colony
 import pandas as pd
 import random
 
+# exec(open('core/seeder.py').read())
 
 seeder = Seed.seeder()
 #no dependencies
