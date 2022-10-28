@@ -19,12 +19,87 @@ def delete_prototypes(project_fields):
     project_prototypes.delete()
 
 def save_data_csv(arr,project_field):
+    iterable = 10
+    helper = []
     project = Project.objects.get(id=project_field)
     for i in arr:
         if(i[8] == 'null'):
             segment = Segment.objects.get(name='No existe')    
         else:
-            segment = Segment.objects.get(name=i[8])
+            if(Segment.objects.filter(name=i[8]).exists() == False):
+                segment = Segment.objects.get(name="No existe")
+            else:
+                segment = Segment.objects.get(name=i[8])
+        
+        if(i[9] == 'null'):
+            property_type = PropertyType.objects.get(name='No existe')
+        else:
+            if(PropertyType.objects.filter(name=i[9]).exists() == False):
+                property_type = PropertyType.objects.get(name='No existe')
+            else:
+                property_type = PropertyType.objects.get(name=i[9])
+         
+        if(i[10] == 'null'):
+            finishing = Finishing.objects.get(name='No existe')
+            helper.append(finishing)
+        else:
+            if(Finishing.objects.filter(name=i[10]).exists() == False):
+                finishing = Finishing.objects.get(name='No existe')
+                helper.append(finishing)
+            else:
+                finishing = Finishing.objects.get(name=i[10])
+                helper.append(finishing)
+        if(i[11] == 'null'):
+            finishing = Finishing.objects.get(name='No existe')
+            helper.append(finishing)
+        else:
+            if(Finishing.objects.filter(name=i[11]).exists() == False):
+                finishing = Finishing.objects.get(name='No existe')
+                helper.append(finishing)
+            else:
+                finishing = Finishing.objects.get(name=i[11])
+                helper.append(finishing)
+        if(i[12] == 'null'):
+            finishing = Finishing.objects.get(name='No existe')
+            helper.append(finishing)
+        else:
+            if(Finishing.objects.filter(name=i[12]).exists() == False):
+                finishing = Finishing.objects.get(name='No existe')
+                helper.append(finishing)
+            else:
+                finishing = Finishing.objects.get(name=i[12])
+                helper.append(finishing)
+        if(i[13] == 'null'):
+            finishing = Finishing.objects.get(name='No existe')
+            helper.append(finishing)
+        else:
+            if(Finishing.objects.filter(name=i[13]).exists() == False):
+                finishing = Finishing.objects.get(name='No existe')
+                helper.append(finishing)
+            else:
+                finishing = Finishing.objects.get(name=i[13])
+                helper.append(finishing)
+        if(i[14] == 'null'):
+            finishing = Finishing.objects.get(name='No existe')
+            helper.append(finishing)
+        else:
+            if(Finishing.objects.filter(name=i[14]).exists() == False):
+                finishing = Finishing.objects.get(name='No existe')
+                helper.append(finishing)
+            else:
+                finishing = Finishing.objects.get(name=i[14])
+                helper.append(finishing)
+        if(i[15] == 'null'):
+            finishing = Finishing.objects.get(name='No existe')
+            helper.append(finishing)
+        else:
+            if(Finishing.objects.filter(name=i[15]).exists() == False):
+                finishing = Finishing.objects.get(name='No existe')
+                helper.append(finishing)
+            else:
+                finishing = Finishing.objects.get(name=i[15])
+                helper.append(finishing)
+        
         prototype = Prototype()
         prototype.segment_field = segment
         prototype.project_field = project
@@ -35,14 +110,11 @@ def save_data_csv(arr,project_field):
         prototype.m2_terrain = i[4]
         prototype.m2_constructed = i[5]
         prototype.m2_habitable = i[6]
-        prototype.floors = i[9]
-        prototype.floors = i[10]
-        prototype.floors = i[11]
-        prototype.floors = i[12]
-        prototype.floors = i[13]
-        prototype.floors = i[14]
-        prototype.floors = i[15]
+        prototype.propertyType = property_type
         prototype.save()
+        prototype = Prototype.objects.get(name=i[0])
+        prototype.finishings.set(helper)
+        helper.clear()
 
 def handle_uploaded_file(f,project_field,action):  
     with open('static/'+f.name, 'wb+') as destination:  
@@ -72,7 +144,7 @@ class CreatePrototype(ListView):
         project_field = request.POST['project_field']
         if csv_import.is_valid():
                 handle_uploaded_file(request.FILES['csv'],project_field,'c')
-                return render(request,'prototype_uploaded.html', context={'project_id': project_field})
+                return redirect("prototypes")
         else:
             return render(request,self.template_name,context={'Prueba':'No se pudo'})
 
@@ -99,7 +171,7 @@ class UpdatePrototype(ListView):
         project_field = request.POST['project_field']
         if csv_import.is_valid():
                 handle_uploaded_file(request.FILES['csv'],project_field,'u')
-                return render(request,'prototype_uploaded.html', context={'project_id': project_field})
+                return redirect("prototypes")
         else:
             return render(request,self.template_name,context={'Prueba':'No se pudo'})
 
