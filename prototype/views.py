@@ -17,6 +17,9 @@ import os.path
 #Funciton that recieves the project id in order to delete all prototypes related to the project
 def delete_prototypes(project_fields):
     project_prototypes = Prototype.objects.filter(project_field = project_fields)
+    for i in project_prototypes:
+        equipment_quantity = EquipmentQuantity.objects.filter(prototype = i)
+        equipment_quantity.delete()
     project_prototypes.delete()
     
 #Function that recieves a list with all the rows from csv and the project field in order to register all the prototypes related
