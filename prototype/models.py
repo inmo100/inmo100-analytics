@@ -59,6 +59,11 @@ class EquipmentQuantity(AbstractModel):
     quantity = models.IntegerField(verbose_name=("Equipment quantity per prototype"),null=True)
 
 class Triangulo(AbstractModel):
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['finishings', 'material', 'prototype'], name='Unique triangles')
+        ]
+
     finishings = models.ForeignKey(Finishing, on_delete=models.PROTECT)
     material = models.ForeignKey(Material, on_delete=models.PROTECT)
     prototype = models.ForeignKey(Prototype, on_delete=models.PROTECT)
@@ -67,6 +72,6 @@ class Triangulo(AbstractModel):
 class Historical(models.Model):# Historical only needs abstract model
     prototype = models.ForeignKey(Prototype, on_delete=models.PROTECT)
 
-    date = models.DateField(verbose_name=_("Date"), default=datetime.now)
+    date = models.DateTimeField(verbose_name=_("Date"), default=datetime.now)
     price = models.IntegerField(verbose_name=_("Price"),null=True)
     available_units = models.IntegerField(verbose_name=_("Available Units"),null=True)
