@@ -133,8 +133,8 @@ class CreatePrototype(ListView):
 class PrototypesListView(ListView):
     template_name = 'pages/prototypes.html'
     model = Prototype
-    def get(self, request, *args,**kwargs):
-        finishings = Finishing.objects.exclude(name="No existe").order_by("id")
+    def get(self, request):
+        finishings = Finishing.objects.order_by("id")
         prototypes = Prototype.objects.all()
         for prototype in prototypes:
             historical = Historical.objects.filter(prototype=prototype).latest('date')
