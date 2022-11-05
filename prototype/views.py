@@ -6,7 +6,6 @@ from .models import *
 import pandas as pd
 from os import remove
 from project.models import Project
-from django.db.models import Q, Count
 
 # Create your views here.
 import os.path
@@ -133,11 +132,19 @@ class CreatePrototype(ListView):
 class PrototypesListView(ListView):
     template_name = 'pages/prototypes.html'
     model = Prototype
-    def get(self, request, *args,**kwargs):
-        finishings_type = FinishingType.objects.exclude(name="No existe").order_by("id")
+    def get(self, request):
+        finishings = Finishing.objects.order_by("id")
+        prototypes = Prototype.objects.all()
+        for prototype in prototypes:
+            historical = Historical.objects.filter(prototype=prototype).latest('date')
+            price = historical.price
+            units_sold = prototype.total_units - historical.available_units
+            setattr(prototype,'price',price)
+            setattr(prototype,'units_sold',units_sold)
+
         return render(request,self.template_name,context={
-            'prototype_list': Prototype.objects.all(),
-            'finishings_type': finishings_type
+            'prototype_list': prototypes,
+            'finishings_type': finishings,
         })
 
 #Class based view to update prototype
