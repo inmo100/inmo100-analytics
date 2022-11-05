@@ -7,6 +7,7 @@ from core.models import BaseModel, AbstractModel
 from project.models import Project
 
 class Finishing(BaseModel): # Acabados en el MER
+    finishing_type = models.ForeignKey(FinishingType, on_delete=models.PROTECT)
     description = models.TextField(verbose_name=_("Description"))
 
 class PropertyType(BaseModel):
