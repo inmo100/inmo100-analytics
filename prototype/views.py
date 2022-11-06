@@ -45,21 +45,6 @@ def save_data_csv(arr,project_field):
                 property_type = PropertyType.objects.get(name='No existe')
             else:
                 property_type = PropertyType.objects.get(name=i[9])
-         
-        """for k in range(6):
-            if(i[iterable2] == 'null'):
-                material = Material.objects.get(name='No existe')
-                helper.append(material)
-                iterable2 = iterable2+1
-            else:
-                if(Finishing.objects.filter(name=i[iterable2]).exists() == False):
-                    material = Material.objects.get(name='No existe')
-                    helper.append(material)
-                    iterable2 = iterable2+1
-                else:
-                    material = Material.objects.get(name=i[iterable2])
-                    helper.append(material)
-                    iterable2 = iterable2+1"""
 
         iterable2 = 16
         prototype = Prototype()
