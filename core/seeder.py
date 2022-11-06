@@ -17,7 +17,7 @@ for amenity in amenities:
         'description': 'Areas comunes',
     })
 #no dependencies
-property_types = ['Loft', 'Casa', 'Duplex', 'Departamento']
+property_types = ['Loft', 'Casa', 'Duplex', 'Departamento','No existe']
 
 for property_type in property_types:
     seeder.add_entity(PropertyType, 1, {

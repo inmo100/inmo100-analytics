@@ -1,5 +1,7 @@
 from django.shortcuts import render
+from django.shortcuts import redirect
 from django.views.generic import ListView
+import datetime
 from .forms import *
 # Create your views here.
 from .models import *
@@ -22,10 +24,10 @@ def delete_prototypes(project_fields):
 # to a projet
 def save_data_csv(arr,project_field):
     equipments = Equipment.objects.all().order_by('id')
-    iterable2 = 10
-    iterable = 16
-    helper = []
-    helper2 = []
+    finishings = Finishing.objects.all().order_by('id')
+    materials = Material.objects.all().order_by('id')
+    iterable = 10
+    iterable2 = 16
     project = Project.objects.get(id=project_field)
     for i in arr:
         if(i[8] == 'null'):
@@ -44,37 +46,38 @@ def save_data_csv(arr,project_field):
             else:
                 property_type = PropertyType.objects.get(name=i[9])
          
-        for k in range(6):
+        """for k in range(6):
             if(i[iterable2] == 'null'):
-                finishing = Finishing.objects.get(name='No existe')
-                helper.append(finishing)
+                material = Material.objects.get(name='No existe')
+                helper.append(material)
                 iterable2 = iterable2+1
             else:
                 if(Finishing.objects.filter(name=i[iterable2]).exists() == False):
-                    finishing = Finishing.objects.get(name='No existe')
-                    helper.append(finishing)
+                    material = Material.objects.get(name='No existe')
+                    helper.append(material)
                     iterable2 = iterable2+1
                 else:
-                    finishing = Finishing.objects.get(name=i[iterable2])
-                    helper.append(finishing)
-                    iterable2 = iterable2+1
-        iterable2 = 10
+                    material = Material.objects.get(name=i[iterable2])
+                    helper.append(material)
+                    iterable2 = iterable2+1"""
+
+        iterable2 = 16
         prototype = Prototype()
         prototype.segment_field = segment
         prototype.project_field = project
         prototype.name = i[0]
-        prototype.price = i[1]
-        prototype.total_units = i[2]
-        prototype.sold_units = i[3]
+        if(i[2] == 'null'):
+            prototype.total_units = 0
+        else:
+            prototype.total_units = i[2]
         prototype.m2_terrain = i[4]
         prototype.m2_constructed = i[5]
         prototype.m2_habitable = i[6]
+        prototype.floors = i[7]
         prototype.propertyType = property_type
         prototype.save()
         prototype = Prototype.objects.get(name=i[0],project_field = project_field)
-        prototype.finishings.set(helper)
-        helper.clear()
-        iterable = 16
+        #For that iterate equipments in order to save it to the respective prototype
         for equipment in equipments:
             if(i[iterable] == 'null' or i[iterable] == 0):
                 equipment_quantity = EquipmentQuantity()
@@ -90,7 +93,47 @@ def save_data_csv(arr,project_field):
                 equipment_quantity.quantity = i[iterable]
                 equipment_quantity.save()
                 iterable = iterable+1
-        iterable = 16
+        iterable = 10
+#For that iterate finishings in order to save it to the respective prototype
+        for finishing in finishings:
+            if(i[iterable2] == 'null'):
+                triangulo = Triangulo()
+                triangulo.finishings = finishing
+                material = Material.objects.get(name='No existe')
+                triangulo.material = material
+                triangulo.prototype = prototype
+                triangulo.save()
+                iterable2 = iterable2+1
+            else:
+                if(Finishing.objects.filter(name=i[iterable2]).exists() == False):
+                    triangulo = Triangulo()
+                    triangulo.finishings = finishing
+                    material = Material.objects.get(name='No existe')
+                    triangulo.material = material
+                    triangulo.prototype = prototype
+                    triangulo.save()
+                    iterable2 = iterable2+1
+                else:
+                    triangulo = Triangulo()
+                    triangulo.finishings = finishing
+                    material = Material.objects.get(name=i[iterable2])
+                    triangulo.material = material
+                    triangulo.prototype = prototype
+                    triangulo.save()
+                    iterable2 = iterable2+1
+#To insert into datatable Historical
+        historical = Historical()
+        historical.prototype = prototype
+        if(i[1] == 'null'):
+            historical.price = 0
+        else:
+            historical.price = i[1]
+        if(i[2]<i[3]):
+            historical.available_units = 0
+        else:
+            historical.available_units = i[2]-i[3]
+        historical.date = datetime.now()
+        historical.save()
 
 #Function that saves and read the csv.
 def handle_uploaded_file(f,project_field,action):  
