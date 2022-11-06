@@ -25,9 +25,9 @@ def delete_prototypes(project_fields):
 def save_data_csv(arr,project_field):
     equipments = Equipment.objects.all().order_by('id')
     finishings = Finishing.objects.all().order_by('id')
-    materials = Material.objects.all().order_by('id')
     iterable = 10
-    iterable2 = 16
+    count = Equipment.objects.count()
+    iterable2 = iterable+count
     project = Project.objects.get(id=project_field)
     for i in arr:
         if(i[8] == 'null'):
@@ -46,7 +46,6 @@ def save_data_csv(arr,project_field):
             else:
                 property_type = PropertyType.objects.get(name=i[9])
 
-        iterable2 = 16
         prototype = Prototype()
         prototype.segment_field = segment
         prototype.project_field = project
@@ -90,7 +89,7 @@ def save_data_csv(arr,project_field):
                 triangulo.save()
                 iterable2 = iterable2+1
             else:
-                if(Finishing.objects.filter(name=i[iterable2]).exists() == False):
+                if(Material.objects.filter(name=i[iterable2]).exists() == False):
                     triangulo = Triangulo()
                     triangulo.finishings = finishing
                     material = Material.objects.get(name='No existe')
@@ -106,6 +105,7 @@ def save_data_csv(arr,project_field):
                     triangulo.prototype = prototype
                     triangulo.save()
                     iterable2 = iterable2+1
+        iterable2 = iterable+count
 #To insert into datatable Historical
         historical = Historical()
         historical.prototype = prototype
@@ -164,11 +164,13 @@ class PrototypesListView(ListView):
         finishings = Finishing.objects.order_by("id")
         prototypes = Prototype.objects.all()
         for prototype in prototypes:
+            materials = Triangulo.objects.filter(prototype = prototype).order_by('id')
             historical = Historical.objects.filter(prototype=prototype).latest('date')
             price = historical.price
             units_sold = prototype.total_units - historical.available_units
             setattr(prototype,'price',price)
             setattr(prototype,'units_sold',units_sold)
+            setattr(prototype,'materials',materials)
 
         return render(request,self.template_name,context={
             'prototype_list': prototypes,

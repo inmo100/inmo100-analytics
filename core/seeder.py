@@ -96,7 +96,7 @@ for finishing in finishings:
         'name': finishing,
     })
 
-material_name = ['Madera','Panel Fibra','Granito','Aluminio','Pasta','Yeso','Ceramico','Porcelanato','Tabique','Block','No existe']
+material_name = ['Madera','Panel Fibra','Granito','Aluminio','Pasta','Yeso','Cerámico','Porcelanato','Tabique','Block','No existe']
 
 for material in material_name:
     seeder.add_entity(Material, 1, {

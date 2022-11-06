@@ -30,8 +30,8 @@
         <td>{{prototype.m2_habitable}}</td>
         <td>{{prototype.segment_field}}</td>
         <td>{{prototype.propertyType}}</td>
-        {% for finishing in prototype.finishings.all %}
-          <td>{{finishing.name}}</td>
+        {% for material in prototype.materials %}
+        <td>{{material.material}}</td>
         {% endfor %}
       </tr>
       {% endfor %}
