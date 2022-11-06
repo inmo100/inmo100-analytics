@@ -3,7 +3,9 @@
 {% block css %}
 <link rel="stylesheet" href="{% static 'css/pages/prototypes.css' %}" />
 {% endblock css %}
+
 {% block content %}
+{% include 'components/navbar.html' %}
 <main>
   <div class="container-wide">
     <h1 class="h1">
@@ -12,6 +14,11 @@
     {% include 'components/prototypes-table.html' %}
   </div>
 </main>
+<div class="container-wide">
+  <button class="btn-primary">Subir CSV</button>
+  <button class="btn-primary">Actualizar CSV</button>
+</div>
 {% endblock content %}
+
 {% block js %}
 {% endblock js %}
