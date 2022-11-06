@@ -169,12 +169,25 @@ class UpdatePrototype(ListView):
 
 #Function that create a csv with all the equipments from the database.
 def download_csv():
+#if the file exist we remove it in order to generetare a new one with all the database updates
     if(os.path.isfile("static/plantilla_prototipos2.csv")):
         remove("static/plantilla_prototipos2.csv")
+#We bring all the equipments on the database ordered by the id
+#This is important because indicates the order of the uploaded data
     equipments = Equipment.objects.all().order_by('id')
+    finishings = Finishing.objects.all().order_by('id')
+#Read the template
     template = pd.read_csv("static/plantilla_prototipos.csv")
+#Create a variable arr that contains nothing
     arr = [""]
+#Iterate all equipments
     for equipment in equipments:
+#Save the equipment name as a header on the template with nothing in order to put
+#Just the header
         template[equipment.name] = arr
+#The same thing done as above
+    for finishing in finishings:
+        template[finishing.name] = arr
+#Delete the first raw that contains , in order to save it clean
     template = template.drop(0)
     template.to_csv("static/plantilla_prototipos2.csv",sep=",",index=False,encoding="utf-8")

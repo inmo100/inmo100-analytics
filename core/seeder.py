@@ -89,7 +89,7 @@ for proyect in proyects:
         'name': proyect,
     })
 
-finishings = ['Carpinteria','Cubierta Cocina','Canceleria Ventanas','Muros','Pisos','Sistema Constructivo']
+finishings = ['Sistema Constructivo', 'Pisos', 'Muros', 'Canceleria Ventanas', 'Cubierta Cocina', 'Carpinteria']
 
 for finishing in finishings:
     seeder.add_entity(Finishing, 1, {
