@@ -1,16 +1,15 @@
-from enum import unique
-from lib2to3.pytree import Base
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from datetime import datetime 
 from core.models import BaseModel, AbstractModel
 from project.models import Project
 
-class FinishingType(BaseModel):
+#arreglar el MER y MR
+class Material(BaseModel):
     pass
 
 class Finishing(BaseModel): # Acabados en el MER
-    description = models.TextField(verbose_name=_("Description"))
+    pass
 
 class PropertyType(BaseModel):
     '''
@@ -23,7 +22,7 @@ class PropertyType(BaseModel):
     '''
     description = models.TextField(verbose_name=_("Description"))
 
-class Segment(BaseModel): 
+class Segment(BaseModel):
     description = models.TextField(verbose_name=_("Description"))
 
 class Equipment(BaseModel):
@@ -46,11 +45,9 @@ class Prototype(BaseModel):
     segment_field = models.ForeignKey(Segment, on_delete=models.PROTECT)
     propertyType = models.ForeignKey(PropertyType, on_delete=models.PROTECT,null=True)
     equipments = models.ManyToManyField(Equipment, through='EquipmentQuantity', null=True)
-    finishings = models.ManyToManyField(Finishing,null=True)
 
-    price = models.IntegerField(verbose_name=_("Price"),null=True)
+    #available_units = models.IntegerField(verbose_name=_("Available Units"),null=True)
     total_units = models.IntegerField(verbose_name=_("Total units"),null=True)
-    sold_units = models.IntegerField(verbose_name=_("Sold units"),null=True)
     m2_terrain = models.FloatField(verbose_name=("Terrain in square meters"),null=True)
     m2_constructed = models.FloatField(verbose_name=("Constructed area in square meters"),null=True)
     m2_habitable = models.FloatField(verbose_name=("Habiable area in square meters"),null=True)
@@ -61,14 +58,20 @@ class EquipmentQuantity(AbstractModel):
     prototype = models.ForeignKey(Prototype, on_delete=models.PROTECT)
     quantity = models.IntegerField(verbose_name=("Equipment quantity per prototype"),null=True)
 
-# Handles prototype sales
-class Transaction(AbstractModel):# Transactions only need abstract model
-    class TransactionType(models.TextChoices):
-        # Choice menu
-        sell = "S", _("Sell")
-        refund = "D", _("Refund")
-    
+class Triangulo(AbstractModel):
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['finishings', 'material', 'prototype'], name='Unique triangles')
+        ]
+
+    finishings = models.ForeignKey(Finishing, on_delete=models.PROTECT)
+    material = models.ForeignKey(Material, on_delete=models.PROTECT)
     prototype = models.ForeignKey(Prototype, on_delete=models.PROTECT)
-    type = models.CharField(verbose_name=_("Type"), choices=TransactionType.choices, default=TransactionType.sell, max_length=100)
-    date = models.DateField(verbose_name=_("Date"), default=datetime.now)
-    quantity = models.IntegerField(verbose_name=_("Quantity"))
+
+# Handles prototype historical data
+class Historical(models.Model):# Historical only needs abstract model
+    prototype = models.ForeignKey(Prototype, on_delete=models.PROTECT)
+
+    date = models.DateTimeField(verbose_name=_("Date"), default=datetime.now)
+    price = models.IntegerField(verbose_name=_("Price"),null=True)
+    available_units = models.IntegerField(verbose_name=_("Available Units"),null=True)
