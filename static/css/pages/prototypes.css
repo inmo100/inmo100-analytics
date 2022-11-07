@@ -50,5 +50,5 @@ main {
 }
 
 .prototypes-table tr:nth-child(even) {
-  background-color: rgba(var(--rgb-tertiary), 0.4);
+  background-color: rgba(var(--rgb-accent), 0.2);
 }
