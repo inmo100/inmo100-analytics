@@ -12,6 +12,9 @@
         <th>M<sub>2</sub> habitables</th>
         <th>Segmento</th>
         <th>Tipo de Propiedad</th>
+        {% for equipment in equipments %}
+        <th>{{equipment.name}}</th>
+        {% endfor %}
         {% for finishing_type in finishings_type %}
         <th>{{finishing_type}}</th>
         {% endfor %}
@@ -30,6 +33,9 @@
         <td>{{prototype.m2_habitable}}</td>
         <td>{{prototype.segment_field}}</td>
         <td>{{prototype.propertyType}}</td>
+        {% for equipment in prototype.equipments_q %}
+        <td>{{equipment.quantity}}</td>
+        {% endfor %}
         {% for material in prototype.materials %}
         <td>{{material.material}}</td>
         {% endfor %}

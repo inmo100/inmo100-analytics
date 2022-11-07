@@ -163,7 +163,9 @@ class PrototypesListView(ListView):
     def get(self, request):
         finishings = Finishing.objects.order_by("id")
         prototypes = Prototype.objects.all()
+        equipments = Equipment.objects.all().order_by('id')
         for prototype in prototypes:
+            equipments_q = EquipmentQuantity.objects.filter(prototype = prototype).order_by('id')
             materials = Triangulo.objects.filter(prototype = prototype).order_by('id')
             historical = Historical.objects.filter(prototype=prototype).latest('date')
             price = historical.price
@@ -171,10 +173,12 @@ class PrototypesListView(ListView):
             setattr(prototype,'price',price)
             setattr(prototype,'units_sold',units_sold)
             setattr(prototype,'materials',materials)
+            setattr(prototype,'equipments_q',equipments_q)
 
         return render(request,self.template_name,context={
             'prototype_list': prototypes,
             'finishings_type': finishings,
+            'equipments': equipments,
         })
 
 #Class based view to update prototype
