@@ -1,29 +1,34 @@
 <div class="prototypes-table-container">
+  <form method="get">
+    {{ prototypes_filter.form }}
+    <button class="btn btn-sm btn-danger" type="submit">Filter</button>
+  </form>
   <table class="prototypes-table">
     <thead>
       <tr>
+        <th>Unidades Totales</th>
+        <th>Unidades Vendidas</th>
+        <th>M<sub>2</sub>de Terreno</th>
+        <th>M<sub>2</sub> Construidos</th>
+        <th>M<sub>2</sub> Habitables</th>
+        <th>Número de Pisos</th>
         <th>Proyecto</th>
-        <th>Nombre</th>
-        <th>Precio</th>
-        <th>Unidades totales</th>
-        <th>Unidades vendidas</th>
-        <th>M<sub>2</sub> de terreno</th>
-        <th>M<sub>2</sub> construidos</th>
-        <th>M<sub>2</sub> habitables</th>
+        <th>Tipo de Propiedad</th>
         <th>Segmento</th>
       </tr>
     </thead>
     <tbody>
-      {% for prototype in prototype_list %}
+      {% for prototype in prototype_filter.qs %}
       <tr>
-        <td>{{prototype.project_field}}</td>
         <td>{{prototype.name}}</td>
-        <td>{{prototype.price}}</td>
         <td>{{prototype.total_units}}</td>
         <td>{{prototype.sold_units}}</td>
         <td>{{prototype.m2_terrain}}</td>
         <td>{{prototype.m2_constructed}}</td>
         <td>{{prototype.m2_habitable}}</td>
+        <td>{{prototype.floors}}</td>
+        <td>{{prototype.project_field}}</td>
+        <td>{{prototype.property_type}}</td>
         <td>{{prototype.segment_field}}</td>
       </tr>
       {% endfor %}

@@ -10,6 +10,7 @@ import pandas as pd
 from os import remove
 from project.models import Project
 from django.db.models import Q, Count
+from .filter import PrototypeFilter
 
 # Create your views here.
 import os.path
@@ -114,3 +115,24 @@ def download_csv():
         template[equipment.name] = arr
     template = template.drop(0)
     template.to_csv("static/plantilla_prototipos2.csv",sep=",",index=False,encoding="utf-8")
+
+class PrototypeDetail(DetailView):
+    model = Prototype
+
+def filter_view(request):
+    context = {
+         'segments': Segment.objects.filter(),
+         'propertyTypes' : PropertyType.objects.filter(),
+         'projects' : Project.objects.filter()
+    }
+
+    prototypes_filter = get_filter_queryset(request, Prototype.objects.all())
+    context['prototypes_filter'] = prototypes_filter
+
+    return render(request, 'pages/prototypes.html', context)
+
+def get_filter_queryset(request, prototypes):
+    return PrototypeFilter(request.GET, queryset=prototypes)
+
+def is_valid_queryparam(param):
+    return param != '' and param is not None
