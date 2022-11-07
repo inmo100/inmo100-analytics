@@ -17,7 +17,7 @@ for amenity in amenities:
         'description': 'Areas comunes',
     })
 #no dependencies
-property_types = ['Loft', 'Casa', 'Duplex', 'Departamento']
+property_types = ['Loft', 'Casa', 'Duplex', 'Departamento','No existe']
 
 for property_type in property_types:
     seeder.add_entity(PropertyType, 1, {
@@ -89,14 +89,14 @@ for proyect in proyects:
         'name': proyect,
     })
 
-finishings = ['Carpinteria','Cubierta Cocina','Canceleria Ventanas','Muros','Pisos','Sistema Constructivo']
+finishings = ['Sistema Constructivo', 'Pisos', 'Muros', 'Canceleria Ventanas', 'Cubierta Cocina', 'Carpinteria']
 
 for finishing in finishings:
     seeder.add_entity(Finishing, 1, {
         'name': finishing,
     })
 
-material_name = ['Madera','Panel Fibra','Granito','Aluminio','Pasta','Yeso','Ceramico','Porcelanato','Tabique','Block','No existe']
+material_name = ['Madera','Panel Fibra','Granito','Aluminio','Pasta','Yeso','Cerámico','Porcelanato','Tabique','Block','No existe']
 
 for material in material_name:
     seeder.add_entity(Material, 1, {

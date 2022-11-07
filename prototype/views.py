@@ -1,12 +1,14 @@
+from errno import EDESTADDRREQ
 from django.shortcuts import render
+from django.shortcuts import redirect
 from django.views.generic import ListView
+import datetime
 from .forms import *
 # Create your views here.
 from .models import *
 import pandas as pd
 from os import remove
 from project.models import Project
-from django.db.models import Q, Count
 
 # Create your views here.
 import os.path
@@ -23,10 +25,10 @@ def delete_prototypes(project_fields):
 # to a projet
 def save_data_csv(arr,project_field):
     equipments = Equipment.objects.all().order_by('id')
-    iterable2 = 10
-    iterable = 16
-    helper = []
-    helper2 = []
+    finishings = Finishing.objects.all().order_by('id')
+    iterable = 10
+    count = Equipment.objects.count()
+    iterable2 = iterable+count
     project = Project.objects.get(id=project_field)
     for i in arr:
         if(i[8] == 'null'):
@@ -44,38 +46,23 @@ def save_data_csv(arr,project_field):
                 property_type = PropertyType.objects.get(name='No existe')
             else:
                 property_type = PropertyType.objects.get(name=i[9])
-         
-        for k in range(6):
-            if(i[iterable2] == 'null'):
-                finishing = Finishing.objects.get(name='No existe')
-                helper.append(finishing)
-                iterable2 = iterable2+1
-            else:
-                if(Finishing.objects.filter(name=i[iterable2]).exists() == False):
-                    finishing = Finishing.objects.get(name='No existe')
-                    helper.append(finishing)
-                    iterable2 = iterable2+1
-                else:
-                    finishing = Finishing.objects.get(name=i[iterable2])
-                    helper.append(finishing)
-                    iterable2 = iterable2+1
-        iterable2 = 10
+
         prototype = Prototype()
         prototype.segment_field = segment
         prototype.project_field = project
         prototype.name = i[0]
-        prototype.price = i[1]
-        prototype.total_units = i[2]
-        prototype.sold_units = i[3]
+        if(i[2] == 'null'):
+            prototype.total_units = 0
+        else:
+            prototype.total_units = i[2]
         prototype.m2_terrain = i[4]
         prototype.m2_constructed = i[5]
         prototype.m2_habitable = i[6]
+        prototype.floors = i[7]
         prototype.propertyType = property_type
         prototype.save()
         prototype = Prototype.objects.get(name=i[0],project_field = project_field)
-        prototype.finishings.set(helper)
-        helper.clear()
-        iterable = 16
+        #For that iterate equipments in order to save it to the respective prototype
         for equipment in equipments:
             if(i[iterable] == 'null' or i[iterable] == 0):
                 equipment_quantity = EquipmentQuantity()
@@ -91,7 +78,48 @@ def save_data_csv(arr,project_field):
                 equipment_quantity.quantity = i[iterable]
                 equipment_quantity.save()
                 iterable = iterable+1
-        iterable = 16
+        iterable = 10
+#For that iterate finishings in order to save it to the respective prototype
+        for finishing in finishings:
+            if(i[iterable2] == 'null'):
+                triangulo = Triangulo()
+                triangulo.finishings = finishing
+                material = Material.objects.get(name='No existe')
+                triangulo.material = material
+                triangulo.prototype = prototype
+                triangulo.save()
+                iterable2 = iterable2+1
+            else:
+                if(Material.objects.filter(name=i[iterable2]).exists() == False):
+                    triangulo = Triangulo()
+                    triangulo.finishings = finishing
+                    material = Material.objects.get(name='No existe')
+                    triangulo.material = material
+                    triangulo.prototype = prototype
+                    triangulo.save()
+                    iterable2 = iterable2+1
+                else:
+                    triangulo = Triangulo()
+                    triangulo.finishings = finishing
+                    material = Material.objects.get(name=i[iterable2])
+                    triangulo.material = material
+                    triangulo.prototype = prototype
+                    triangulo.save()
+                    iterable2 = iterable2+1
+        iterable2 = iterable+count
+#To insert into datatable Historical
+        historical = Historical()
+        historical.prototype = prototype
+        if(i[1] == 'null'):
+            historical.price = 0
+        else:
+            historical.price = i[1]
+        if(i[2]<i[3]):
+            historical.available_units = 0
+        else:
+            historical.available_units = i[2]-i[3]
+        historical.date = datetime.now()
+        historical.save()
 
 #Function that saves and read the csv.
 def handle_uploaded_file(f,project_field,action):  
@@ -133,11 +161,38 @@ class CreatePrototype(ListView):
 class PrototypesListView(ListView):
     template_name = 'pages/prototypes.html'
     model = Prototype
-    def get(self, request, *args,**kwargs):
-        finishings_type = FinishingType.objects.exclude(name="No existe").order_by("id")
+    def get(self, request):
+        finishings = Finishing.objects.order_by("id")
+        prototypes = Prototype.objects.all()
+        equipments = Equipment.objects.all().order_by('id')
+        equipments_count = Equipment.objects.count()
+        for prototype in prototypes:
+            equipments_q_count = EquipmentQuantity.objects.filter(prototype = prototype).count()
+            if(equipments_count>equipments_q_count):
+                limit = equipments_count-equipments_q_count
+                equipments_ids = Equipment.objects.all().order_by("-id")[:limit]
+                for equipments_id in reversed(equipments_ids):
+                    missing_equipments = EquipmentQuantity()
+                    missing_equipments.prototype = prototype
+                    missing_equipments.equipment = equipments_id
+                    missing_equipments.quantity = 0
+                    missing_equipments.save()
+                equipments_q = EquipmentQuantity.objects.filter(prototype = prototype).order_by('id')
+            else:
+                equipments_q = EquipmentQuantity.objects.filter(prototype = prototype).order_by('id')
+            materials = Triangulo.objects.filter(prototype = prototype).order_by('id')
+            historical = Historical.objects.filter(prototype=prototype).latest('date')
+            price = historical.price
+            units_sold = prototype.total_units - historical.available_units
+            setattr(prototype,'price',price)
+            setattr(prototype,'units_sold',units_sold)
+            setattr(prototype,'materials',materials)
+            setattr(prototype,'equipments_q',equipments_q)
+
         return render(request,self.template_name,context={
-            'prototype_list': Prototype.objects.all(),
-            'finishings_type': finishings_type
+            'prototype_list': prototypes,
+            'finishings_type': finishings,
+            'equipments': equipments,
         })
 
 #Class based view to update prototype
@@ -162,12 +217,25 @@ class UpdatePrototype(ListView):
 
 #Function that create a csv with all the equipments from the database.
 def download_csv():
+#if the file exist we remove it in order to generetare a new one with all the database updates
     if(os.path.isfile("static/plantilla_prototipos2.csv")):
         remove("static/plantilla_prototipos2.csv")
+#We bring all the equipments on the database ordered by the id
+#This is important because indicates the order of the uploaded data
     equipments = Equipment.objects.all().order_by('id')
+    finishings = Finishing.objects.all().order_by('id')
+#Read the template
     template = pd.read_csv("static/plantilla_prototipos.csv")
+#Create a variable arr that contains nothing
     arr = [""]
+#Iterate all equipments
     for equipment in equipments:
+#Save the equipment name as a header on the template with nothing in order to put
+#Just the header
         template[equipment.name] = arr
+#The same thing done as above
+    for finishing in finishings:
+        template[finishing.name] = arr
+#Delete the first raw that contains , in order to save it clean
     template = template.drop(0)
     template.to_csv("static/plantilla_prototipos2.csv",sep=",",index=False,encoding="utf-8")
