@@ -1,163 +1,68 @@
-from errno import EDESTADDRREQ
 from django.shortcuts import render
 from django.shortcuts import redirect
 from django.views.generic import ListView
-import datetime
+from django.contrib import messages
 from .forms import *
-# Create your views here.
 from .models import *
-import pandas as pd
-from os import remove
-from project.models import Project
-
-# Create your views here.
-import os.path
-
-#Funciton that recieves the project id in order to delete all prototypes related to the project
-def delete_prototypes(project_fields):
-    project_prototypes = Prototype.objects.filter(project_field = project_fields)
-    for i in project_prototypes:
-        equipment_quantity = EquipmentQuantity.objects.filter(prototype = i)
-        equipment_quantity.delete()
-    project_prototypes.delete()
+from .helpers import *
     
-#Function that recieves a list with all the rows from csv and the project field in order to register all the prototypes related
-# to a projet
-def save_data_csv(arr,project_field):
-    equipments = Equipment.objects.all().order_by('id')
-    finishings = Finishing.objects.all().order_by('id')
-    iterable = 10
-    count = Equipment.objects.count()
-    iterable2 = iterable+count
-    project = Project.objects.get(id=project_field)
-    for i in arr:
-        if(i[8] == 'null'):
-            segment = Segment.objects.get(name='No existe')    
-        else:
-            if(Segment.objects.filter(name=i[8]).exists() == False):
-                segment = Segment.objects.get(name="No existe")
-            else:
-                segment = Segment.objects.get(name=i[8])
-        
-        if(i[9] == 'null'):
-            property_type = PropertyType.objects.get(name='No existe')
-        else:
-            if(PropertyType.objects.filter(name=i[9]).exists() == False):
-                property_type = PropertyType.objects.get(name='No existe')
-            else:
-                property_type = PropertyType.objects.get(name=i[9])
-
-        prototype = Prototype()
-        prototype.segment_field = segment
-        prototype.project_field = project
-        prototype.name = i[0]
-        if(i[2] == 'null'):
-            prototype.total_units = 0
-        else:
-            prototype.total_units = i[2]
-        prototype.m2_terrain = i[4]
-        prototype.m2_constructed = i[5]
-        prototype.m2_habitable = i[6]
-        prototype.floors = i[7]
-        prototype.propertyType = property_type
-        prototype.save()
-        prototype = Prototype.objects.get(name=i[0],project_field = project_field)
-        #For that iterate equipments in order to save it to the respective prototype
-        for equipment in equipments:
-            if(i[iterable] == 'null' or i[iterable] == 0):
-                equipment_quantity = EquipmentQuantity()
-                equipment_quantity.equipment = equipment
-                equipment_quantity.prototype = prototype
-                equipment_quantity.quantity = 0
-                equipment_quantity.save()
-                iterable = iterable + 1
-            else:
-                equipment_quantity = EquipmentQuantity()
-                equipment_quantity.equipment = equipment
-                equipment_quantity.prototype = prototype
-                equipment_quantity.quantity = i[iterable]
-                equipment_quantity.save()
-                iterable = iterable+1
-        iterable = 10
-#For that iterate finishings in order to save it to the respective prototype
-        for finishing in finishings:
-            if(i[iterable2] == 'null'):
-                triangulo = Triangulo()
-                triangulo.finishings = finishing
-                material = Material.objects.get(name='No existe')
-                triangulo.material = material
-                triangulo.prototype = prototype
-                triangulo.save()
-                iterable2 = iterable2+1
-            else:
-                if(Material.objects.filter(name=i[iterable2]).exists() == False):
-                    triangulo = Triangulo()
-                    triangulo.finishings = finishing
-                    material = Material.objects.get(name='No existe')
-                    triangulo.material = material
-                    triangulo.prototype = prototype
-                    triangulo.save()
-                    iterable2 = iterable2+1
-                else:
-                    triangulo = Triangulo()
-                    triangulo.finishings = finishing
-                    material = Material.objects.get(name=i[iterable2])
-                    triangulo.material = material
-                    triangulo.prototype = prototype
-                    triangulo.save()
-                    iterable2 = iterable2+1
-        iterable2 = iterable+count
-#To insert into datatable Historical
-        historical = Historical()
-        historical.prototype = prototype
-        if(i[1] == 'null'):
-            historical.price = 0
-        else:
-            historical.price = i[1]
-        if(i[2]<i[3]):
-            historical.available_units = 0
-        else:
-            historical.available_units = i[2]-i[3]
-        historical.date = datetime.now()
-        historical.save()
-
-#Function that saves and read the csv.
-def handle_uploaded_file(f,project_field,action):  
-    with open('static/'+f.name, 'wb+') as destination:  
-        for chunk in f.chunks():  
-            destination.write(chunk)
-    valores = pd.read_csv('static/'+f.name)
-    valores = valores.fillna("null")
-    valores = valores.values.tolist()
-    #That if compares if is to create prototyes or to update prototypes
-    if(action=='c'):
-        save_data_csv(valores,project_field)
-    elif(action=='u'):
-        delete_prototypes(project_field)
-        save_data_csv(valores,project_field)
-    remove('static/'+f.name)
 #Class based view to create prototypes
 class CreatePrototype(ListView):
-    template_name = 'pages/form_prototype.html'
-    model = Segment
+    template_name = 'pages/create_prototype.html'
     #Overwriting the method get from the class
     def get(self,request,*args,**kwargs):
         download_csv()
+        project = Project.objects.get(id=self.kwargs['id'])
+
+        prototypes = recreate_prototypes(self.kwargs['id'])
+        finishings = Finishing.objects.order_by("id")
+        equipments = Equipment.objects.all().order_by('id')
+
         return render(request,self.template_name,context={
-            'list_segment':Segment.objects.all(),
-            'id':self.kwargs['id']
+            'id':self.kwargs['id'],
+            'proyecto': project,
+            'prototype_list': prototypes,
+            'finishings_type': finishings,
+            'equipments': equipments,
             })
     #Overwriting the method post from the class
     def post(self,request,*args,**kwargs):
         csv_import = CSV_Form(request.POST, request.FILES)
         project_field = request.POST['project_field']
+
+        prototypes = recreate_prototypes(project_field)
+        finishings = Finishing.objects.order_by("id")
+        equipments = Equipment.objects.all().order_by('id')
+        project = Project.objects.get(id=self.kwargs['id'])
+        
         if csv_import.is_valid():
-                handle_uploaded_file(request.FILES['csv'],project_field,'c')
-                return redirect("prototypes")
+                response = handle_uploaded_file(request.FILES['csv'],project_field,'c')
+                if response == 1:
+                    messages.success(request, ("Formato de Plantilla invalida"))
+                    return render(request, self.template_name, context={
+                        'proyecto': project,
+                        'prototype_list': prototypes,
+                        'finishings_type': finishings,
+                        'equipments': equipments,
+                        }) 
+                else: 
+                    messages.success(request, ("Plantilla se pudo actualizar"))
+                    return render(request, self.template_name, context={
+                        'proyecto': project,
+                        'prototype_list': prototypes,
+                        'finishings_type': finishings,
+                        'equipments': equipments,
+                        })
         else:
-            return render(request,self.template_name,context={'Prueba':'No se pudo'})
+            messages.success(request, ("Formato incorrecto"))
+            return render(request,self.template_name,context={
+                        'proyecto': project,
+                        'prototype_list': prototypes,
+                        'finishings_type': finishings,
+                        'equipments': equipments,
+                        })
 
-
+#class based view to list all prototypes
 class PrototypesListView(ListView):
     template_name = 'pages/prototypes.html'
     model = Prototype
@@ -214,28 +119,3 @@ class UpdatePrototype(ListView):
                 return redirect("prototypes")
         else:
             return render(request,self.template_name,context={'Prueba':'No se pudo'})
-
-#Function that create a csv with all the equipments from the database.
-def download_csv():
-#if the file exist we remove it in order to generetare a new one with all the database updates
-    if(os.path.isfile("static/plantilla_prototipos2.csv")):
-        remove("static/plantilla_prototipos2.csv")
-#We bring all the equipments on the database ordered by the id
-#This is important because indicates the order of the uploaded data
-    equipments = Equipment.objects.all().order_by('id')
-    finishings = Finishing.objects.all().order_by('id')
-#Read the template
-    template = pd.read_csv("static/plantilla_prototipos.csv")
-#Create a variable arr that contains nothing
-    arr = [""]
-#Iterate all equipments
-    for equipment in equipments:
-#Save the equipment name as a header on the template with nothing in order to put
-#Just the header
-        template[equipment.name] = arr
-#The same thing done as above
-    for finishing in finishings:
-        template[finishing.name] = arr
-#Delete the first raw that contains , in order to save it clean
-    template = template.drop(0)
-    template.to_csv("static/plantilla_prototipos2.csv",sep=",",index=False,encoding="utf-8")
