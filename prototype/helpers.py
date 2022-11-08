@@ -1,5 +1,6 @@
 import datetime
 import pandas as pd
+from django.utils import timezone
 from project.models import Project
 import os.path
 from os import remove
@@ -111,7 +112,7 @@ def save_data_csv(arr,project_field):
             historical.available_units = 0
         else:
             historical.available_units = i[2]-i[3]
-        historical.date = datetime.now()
+        historical.date = datetime.now(tz=timezone.utc)
         historical.save()
 
 #Function that handles csv options
@@ -120,9 +121,9 @@ def handle_uploaded_file(f,project_field,action):
         for chunk in f.chunks():  
             destination.write(chunk)
     df = pd.read_csv('static/'+f.name)
+    remove('static/'+f.name)
     df = df.fillna("null")
     template = pd.read_csv('static/plantilla_prototipos2.csv')
-
     for column in template.columns.values:
         if column not in df.columns.values:
             return 1
@@ -135,7 +136,7 @@ def handle_uploaded_file(f,project_field,action):
     elif(action=='u'):
         delete_prototypes(project_field)
         save_data_csv(df,project_field)
-    remove('static/'+f.name)
+    del df
 
 #Function that create a csv with all the equipments from the database.
 def download_csv():
@@ -162,9 +163,13 @@ def download_csv():
     template = template.drop(0)
     template.to_csv("static/plantilla_prototipos2.csv",sep=",",index=False,encoding="utf-8")
 
-
+#function that returns a list of all prototypes or a projects prototypes
 def recreate_prototypes(id):
-        prototypes = Prototype.objects.filter(project_field=id)
+        if id == 0:
+            prototypes = Prototype.objects.all()
+        else:
+            prototypes = Prototype.objects.filter(project_field=id)
+
         equipments_count = Equipment.objects.count()
         for prototype in prototypes:
             equipments_q_count = EquipmentQuantity.objects.filter(prototype = prototype).count()
