@@ -1,5 +1,5 @@
 from django_seed import Seed
-from prototype.models import Finishing, PropertyType, Equipment, Segment, Prototype,Material
+from prototype.models import Finishing, PropertyType, Equipment, Segment, Material
 from project.models import Amenity, Developer, Project
 from location.models import State, Corridor, Municipality, Colony
 import pandas as pd
