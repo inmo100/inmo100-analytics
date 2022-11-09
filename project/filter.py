@@ -1,5 +1,5 @@
 import django_filters
-from .models import Developer, Project
+from .models import Developer, Project, Colony
 from django.forms import NumberInput, CheckboxSelectMultiple
 from django_filters.widgets import DateRangeWidget, RangeWidget
 from django.db.models import Q
@@ -40,7 +40,7 @@ class ProjectFilter(django_filters.FilterSet):
         field_name='levels',
         label='Niveles',
         lookup_expr='exact',
-        widget=NumberInput(attrs={'type': 'number', 'min' : '0', 'max' : '15'}))
+        widget=NumberInput(attrs={'type': 'number', 'min' : '0'}))
 
     developer = django_filters.ModelMultipleChoiceFilter(
         field_name='developer_field',
@@ -48,10 +48,15 @@ class ProjectFilter(django_filters.FilterSet):
         widget=CheckboxSelectMultiple(),
         queryset=Developer.objects.all())
 
-
-
     name = django_filters.ModelMultipleChoiceFilter(
         field_name='name',
         label='Proyecto',
         widget=CheckboxSelectMultiple(),
         queryset=Project.objects.all())
+
+    colony = django_filters.ModelMultipleChoiceFilter(
+        field_name='colony_field',
+        label='Colonia',
+        widget=CheckboxSelectMultiple(),
+        queryset=Colony.objects.all())
+    

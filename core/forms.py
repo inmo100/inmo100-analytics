@@ -1,4 +1,5 @@
 from django import forms
+from django.utils.translation import gettext as _
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
@@ -20,6 +21,6 @@ class RegisterUserForm(UserCreationForm):
 
 #custom form for login as a user
 class LoginForm(forms.Form):
-    username = forms.CharField(widget=forms.TextInput(attrs={"placeholder": "Username","class": "input"}), error_messages={'required': 'The username field is required.'})
-    password = forms.CharField(widget=forms.PasswordInput(attrs={"placeholder": "Password","class": "input"}), error_messages={'required': 'The password field is required.'})
-    remember_me = forms.BooleanField(required=False, widget=forms.CheckboxInput(attrs={"class": "input"}))
+    username = forms.CharField(label=_("Email"), widget=forms.TextInput(attrs={"placeholder":_("Email"),"class": "input"}), error_messages={'required':_('The email field is required.')})
+    password = forms.CharField(label=_("Password"), widget=forms.PasswordInput(attrs={"placeholder":_("Password"),"class": "input"}), error_messages={'required':_('The password field is required.')})
+    remember_me = forms.BooleanField(label=_("Remember me"), required=False, widget=forms.CheckboxInput(attrs={"class": "input"}))
