@@ -9,5 +9,6 @@ urlpatterns = [
     path('update/<id>', views.UpdatePrototype.as_view(), name='update_prototype'),
     path('download_format/', views.download_csv, name='download_format'),
     path('filters', filter_view, name="filter"),
+    
 
 ]
