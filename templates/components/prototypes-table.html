@@ -3,52 +3,56 @@
     {{ prototypes_filter.form }}
     <button class="btn btn-sm btn-danger" type="submit">Filter</button>
   </form>
-  <table class="prototypes-table">
-    <thead>
-      <tr>
-        <th>Nombre</th>
-        <th>Unidades Totales</th>
-        <th>Unidades Vendidas</th>
-        <th>M<sub>2</sub> de Terreno</th>
-        <th>M<sub>2</sub> Construidos</th>
-        <th>M<sub>2</sub> Habitables</th>
-        <th>Número de Pisos</th>
-        <th>Proyecto</th>
-        <th>Tipo de Propiedad</th>
-        <th>Segmento</th>
-        {% for equipment in equipments %}
-        <th>{{equipment.name}}</th>
-        {% endfor %}
-        {% for finishing_type in finishings_type %}
-        <th>{{finishing_type}}</th>
-        {% endfor %}
-      </tr>
-    </thead>
-    <tbody>
-        
-        {% for prototype in prototypes_filter.qs %}
+  {% if prototype is defined %}
+    <table class="prototypes-table">
+      <thead>
         <tr>
-          <td>{{prototype.name}}</td>
-          <td>{{prototype.total_units}}</td>
-          <td>{{prototype.units_sold}}</td>
-          <td>{{prototype.m2_terrain}}</td>
-          <td>{{prototype.m2_constructed}}</td>
-          <td>{{prototype.m2_habitable}}</td>
-          <td>{{prototype.floors}}</td>
-          <td>{{prototype.project_field}}</td>
-          <td>{{prototype.propertyType}}</td>
-          <td>{{prototype.segment_field}}</td>
-          {% for equipment in prototype.equipments_q %}
-          <td>{{equipment.quantity}}</td>
+          <th>Nombre</th>
+          <th>Unidades Totales</th>
+          <th>Unidades Vendidas</th>
+          <th>M<sub>2</sub> de Terreno</th>
+          <th>M<sub>2</sub> Construidos</th>
+          <th>M<sub>2</sub> Habitables</th>
+          <th>Número de Pisos</th>
+          <th>Proyecto</th>
+          <th>Tipo de Propiedad</th>
+          <th>Segmento</th>
+          {% for equipment in equipments %}
+          <th>{{equipment.name}}</th>
           {% endfor %}
-          {% for material in prototype.materials %}
-          <td>{{material.material}}</td>
+          {% for finishing_type in finishings_type %}
+          <th>{{finishing_type}}</th>
           {% endfor %}
         </tr>
-        {% endfor %}
+      </thead>
+      <tbody>
+          
+          {% for prototype in prototypes_filter.qs %}
+          <tr>
+            <td>{{prototype.name}}</td>
+            <td>{{prototype.total_units}}</td>
+            <td>{{prototype.units_sold}}</td>
+            <td>{{prototype.m2_terrain}}</td>
+            <td>{{prototype.m2_constructed}}</td>
+            <td>{{prototype.m2_habitable}}</td>
+            <td>{{prototype.floors}}</td>
+            <td>{{prototype.project_field}}</td>
+            <td>{{prototype.propertyType}}</td>
+            <td>{{prototype.segment_field}}</td>
+            {% for equipment in prototype.equipments_q %}
+            <td>{{equipment.quantity}}</td>
+            {% endfor %}
+            {% for material in prototype.materials %}
+            <td>{{material.material}}</td>
+            {% endfor %}
+          </tr>
+          {% endfor %}
 
-    </tbody>
-  </table>
+      </tbody>
+    </table>
+  {% else %}
+    <h2>No existen prototipos para mostrar</h2>
+  {% endif %}
 </div>
 
 <div class="pagination" style="margin-top: 1em;">
