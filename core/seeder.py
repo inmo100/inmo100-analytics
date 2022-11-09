@@ -68,6 +68,23 @@ for equipment_name in equipment_names:
         'type': lambda x: random.choice(equipment_type)
     })
 
+#no dependencies
+'''
+finishingTypes = ['Sistema Constructivo', 'Pisos', 'Muros', 'Cancelería Ventanas', 'Cubierta Cocina', 'Carpintería']
+
+for finishingType in finishingTypes:
+    seeder.add_entity(FinishingType, 1, {
+        'name': finishingType
+    })
+'''
+#no dependencies
+finishings = ['BLOCK', 'TABIQUE', 'PORCELANATO', 'CERAMICO', 'YESO', 'PASTA', 'ALUMINIO', 'GRANITO', 'PANEL FIBRA']
+
+for finishing in finishings:
+    seeder.add_entity(Finishing, 1, {
+        'name': finishing
+    })
+
 municipalities = ['Queretaro', 'Marques', 'Corregidora']
 
 for municipality in municipalities:
