@@ -1,0 +1,4 @@
+Nombre,Precio,Unidades_Totales,Unidades_Vendidas,m2_Terreno,m2_Construidos,m2_Habitables,No_Pisos,Segmento,Tipo de Propiedad,BaÃ±os,Estacionamiento,HabitaciÃ³n,Medios BaÃ±os,Cuarto de Servicio,Roof Garden,Penthouse,Pentgarden,Sistema Constructivo,Pisos,Muros,Canceleria Ventanas,Cubierta Cocina,Carpinteria
+A,30680,22,22,85.8,74.2,68.4,1,Medio Residencial,Casa,6,,,,2,2,2,,Block,Porcelanato,Pasta,Aluminio,Granito,Madera
+C / C1,30680,36,35,165.4,149.7,138,2,Residencial,,2,,,,1,2,2,2,Tabique,Porcelanato,Yeso,Aluminio,Granito,Panel Fibra
+D,39200,12,11,210.5,189.3,171.8,3,Residencial Plus,Casa,5,,,,,2,2,2,Tabique,Cerámico,Yeso,Aluminio,Granito,Panel Fibra
