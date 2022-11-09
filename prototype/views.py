@@ -1,113 +1,46 @@
 from django.shortcuts import render
-from django.shortcuts import redirect
 from django.views.generic import ListView
-from django.contrib import messages
 from .forms import *
+from django.shortcuts import redirect
 from .models import *
 from .helpers import *
-    
-#Class based view to create prototypes
+
 class CreatePrototype(ListView):
-    template_name = 'pages/create_prototype.html'
-    #Overwriting the method get from the class
+    template_name = 'pages/form_prototype.html'
+    model = Segment
     def get(self,request,*args,**kwargs):
         download_csv()
-        project = Project.objects.get(id=self.kwargs['id'])
-        prototypes = recreate_prototypes(self.kwargs['id'])
-        finishings = Finishing.objects.order_by("id")
-        equipments = Equipment.objects.all().order_by('id')
-
         return render(request,self.template_name,context={
-            'id':self.kwargs['id'],
-            'proyecto': project,
-            'prototype_list': prototypes,
-            'finishings_type': finishings,
-            'equipments': equipments,
+            'list_segment':Segment.objects.all(),
+            'id':self.kwargs['id']
             })
-    #Overwriting the method post from the class
     def post(self,request,*args,**kwargs):
         csv_import = CSV_Form(request.POST, request.FILES)
         project_field = request.POST['project_field']
-        project = Project.objects.get(id=self.kwargs['id'])
-        finishings = Finishing.objects.order_by("id")
-        equipments = Equipment.objects.all().order_by('id')
-
         if csv_import.is_valid():
-                response = handle_uploaded_file(request.FILES['csv'],project_field,'c')
-                prototypes = recreate_prototypes(self.kwargs['id'])
-
-                if response == 1:
-                    messages.success(request, ("Formato de Plantilla invalida"))
-                    return render(request, self.template_name, context={
-                        'id':self.kwargs['id'],
-                        'proyecto': project,
-                        'prototype_list': prototypes,
-                        'finishings_type': finishings,
-                        'equipments': equipments,
-                        })
-                elif response == 2:
-                    messages.success(request, ("Formato no es csv"))
-                    return render(request, self.template_name, context={
-                        'id':self.kwargs['id'],
-                        'proyecto': project,
-                        'prototype_list': prototypes,
-                        'finishings_type': finishings,
-                        'equipments': equipments,
-                        })
-                elif response == 3:
-                    messages.success(request, ("Plantilla vacia"))
-                    return render(request, self.template_name, context={
-                        'id':self.kwargs['id'],
-                        'proyecto': project,
-                        'prototype_list': prototypes,
-                        'finishings_type': finishings,
-                        'equipments': equipments,
-                        })
-                else: 
-                    messages.success(request, ("Plantilla se pudo actualizar"))
-                    return render(request, self.template_name, context={
-                        'id':self.kwargs['id'],
-                        'proyecto': project,
-                        'prototype_list': prototypes,
-                        'finishings_type': finishings,
-                        'equipments': equipments,
-                        })
+                handle_uploaded_file(request.FILES['csv'],project_field,'c')
+                return redirect("prototypes")
         else:
-            prototypes = recreate_prototypes(self.kwargs['id'])
-            messages.success(request, ("Formato incorrecto"))
-            return render(request,self.template_name,context={
-                        'id':self.kwargs['id'],
-                        'proyecto': project,
-                        'prototype_list': prototypes,
-                        'finishings_type': finishings,
-                        'equipments': equipments,
-                        })
+            return render(request,self.template_name,context={'Prueba':'No se pudo'})
 
-#class based view to list all prototypes
+
 class PrototypesListView(ListView):
     template_name = 'pages/prototypes.html'
     model = Prototype
-    def get(self, request):
-        finishings = Finishing.objects.order_by("id")
-        equipments = Equipment.objects.all().order_by('id')
-        prototypes = recreate_prototypes(0)
+    def get(self, request, *args,**kwargs):
         return render(request,self.template_name,context={
-            'prototype_list': prototypes,
-            'finishings_type': finishings,
-            'equipments': equipments,
+            'prototype_list': Prototype.objects.all(),
         })
 
-#Class based view to update prototype
+
 class UpdatePrototype(ListView):
     template_name = 'pages/form_update_prototypes.html'
     model = Segment
-    #Overwriting the method get from the class
     def get(self,request,*args,**kwargs):
         download_csv()
         return render(request,self.template_name,context={
             'id':self.kwargs['id']
             })
-    #Overwriting the method post from the class
     def post(self,request,*args,**kwargs):
         csv_import = CSV_Form(request.POST, request.FILES)
         project_field = request.POST['project_field']

@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.views.generic import TemplateView, CreateView, ListView, DetailView, View
 from .forms import IMG_Form, ProjectForm, DeveloperForm
 # Create your views here.
-from .models import Developer, Project
+from .models import Developer, Project, Colony
 import json
 from django.db.models import Q
 from .filter import ProjectFilter
@@ -68,13 +68,14 @@ class ProjectDetail(DetailView):
 
 def filter_view(request):
     context = {
-        'developers': Developer.objects.filter()
+        'developers': Developer.objects.filter(),
+        'colonies' : Colony.objects.filter(),
     }
 
     projects_filter = get_filter_queryset(request, Project.objects.all())
     context['projects_filter'] = projects_filter
 
-    return render(request, 'filters/filters.html', context)
+    return render(request, 'pages/projects.html', context)
 
 def get_filter_queryset(request, projects):
     return ProjectFilter(request.GET, queryset=projects)
