@@ -249,10 +249,44 @@ body {
 }
 
 .form-block.checkbox {
+  position: relative;
+}
+
+.form-block.checkbox > div {
+  visibility: hidden;
+  position: absolute;
+  background-color: var(--color-bg);
+  color: var(--color-primary);
+  padding: 0.75rem 0.25rem;
+  border-radius: var(--border-small);
+  border: var(--color-secondary) 1px solid;
+  max-height: 15rem;
+  overflow: auto;
+  transform: translateY(-1.5rem);
+  opacity: 0;
+  z-index: 10;
+  transition: transform var(--timing-medium) ease, opacity var(--timing-medium) ease;
+}
+
+.form-block.checkbox.active > div {
+  visibility: visible;
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.form-block.checkbox div label {
   display: flex;
   column-gap: 0.5rem;
   align-items: center;
   position: relative;
+  padding: 0.5rem 0.25rem;
+  cursor: pointer;
+  transition: background-color var(--timing-small) ease;
+  font-size: var(--size-body2);
+}
+
+.form-block.checkbox div label:hover {
+  background-color: rgba(var(--rgb-accent), 0.2);
 }
 
 .form-block:not(.checkbox) label {
@@ -269,6 +303,19 @@ body {
 
 .input:focus {
   border-color: var(--color-primary);
+}
+
+.filters-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  width: 100%;
+  row-gap: 1.5rem;
+  column-gap: 1rem;
+}
+
+.filters-row .form-block {
+  margin: 0;
 }
 
 /************ Navbar Additions ***************/
