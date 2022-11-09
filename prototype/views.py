@@ -103,9 +103,11 @@ class UpdatePrototype(ListView):
     model = Segment
     #Overwriting the method get from the class
     def get(self,request,*args,**kwargs):
-        download_csv()
+        update_download_csv(self.kwargs['id'])
+        project_name = Project.objects.get(id=self.kwargs['id']).name
         return render(request,self.template_name,context={
-            'id':self.kwargs['id']
+            'id':self.kwargs['id'],
+            'project_name':project_name,
             })
     #Overwriting the method post from the class
     def post(self,request,*args,**kwargs):

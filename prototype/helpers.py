@@ -174,6 +174,42 @@ def download_csv():
     template = template.drop(0)
     template.to_csv("static/plantilla_prototipos2.csv",sep=",",index=False,encoding="utf-8")
 
+#Function that create a csv with all the equipments from the database.
+def update_download_csv(project_id):
+#if the file exist we remove it in order to generetare a new one with all the database updates
+    if(os.path.isfile("static/plantilla_prototipos3.csv")):
+        remove("static/plantilla_prototipos3.csv")
+    template = pd.DataFrame()
+    project = Project.objects.get(id=project_id)
+    prototypes = Prototype.objects.filter(project_field=project)
+    equipments_count = Equipment.objects.count()
+    arr = {}
+    for prototype in prototypes:
+        equipments_q_count = EquipmentQuantity.objects.filter(prototype = prototype).count()
+        if(equipments_count>equipments_q_count):
+                limit = equipments_count-equipments_q_count
+                equipments_ids = Equipment.objects.all().order_by("-id")[:limit]
+                for equipments_id in reversed(equipments_ids):
+                    missing_equipments = EquipmentQuantity()
+                    missing_equipments.prototype = prototype
+                    missing_equipments.equipment = equipments_id
+                    missing_equipments.quantity = 0
+                    missing_equipments.save()
+                equipments_p = EquipmentQuantity.objects.filter(prototype = prototype).order_by("id")
+        else:
+            equipments_p = EquipmentQuantity.objects.filter(prototype = prototype).order_by("id")
+        historicals = Historical.objects.filter(prototype=prototype).latest('date')
+        arr = {"Nombre":prototype.name,"Precio":historicals.price,"Unidades_Totales":prototype.total_units,"UnIdades_Vendidas":prototype.total_units-historicals.available_units,"m2_Terreno":prototype.m2_terrain,"m2_Construidos":prototype.m2_constructed,"m2_Habitables":prototype.m2_habitable,"No_Pisos":prototype.floors,"Segmento":prototype.segment_field,"Tipo de Propiedad":prototype.propertyType}
+        triangulos = Triangulo.objects.filter(prototype = prototype).order_by("id")
+        for equipment_p in equipments_p:
+            arr[equipment_p.equipment] = equipment_p.quantity
+        for triangulo in triangulos:
+            arr[triangulo.finishings] = triangulo.material
+        template = template.append(arr, ignore_index=True)
+    template.to_csv("static/plantilla_prototipos3.csv",sep=",",index=False,encoding="utf-8")
+
+
+
 #function that returns a list of all prototypes or a projects prototypes
 def recreate_prototypes(id):
         if id == 0:
