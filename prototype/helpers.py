@@ -6,6 +6,7 @@ import os.path
 from os import remove
 from .forms import *
 from .models import *
+import hashlib
 
 #Funciton that recieves the project id in order to delete all prototypes related to the project
 def delete_prototypes(project_fields):
@@ -116,27 +117,37 @@ def save_data_csv(arr,project_field):
         historical.save()
 
 #Function that handles csv options
-def handle_uploaded_file(f,project_field,action):  
-    with open('static/'+f.name, 'wb+') as destination:  
-        for chunk in f.chunks():  
+def handle_uploaded_file(f,project_field,action):
+    filename = hashlib.md5(str(datetime.now()).encode("utf-8")).hexdigest()
+    filename = 'static/'+filename
+    with open(filename, 'wb+') as destination:
+        for chunk in f.chunks():
             destination.write(chunk)
-    df = pd.read_csv('static/'+f.name)
-    remove('static/'+f.name)
-    df = df.fillna("null")
-    template = pd.read_csv('static/plantilla_prototipos2.csv')
-    for column in template.columns.values:
-        if column not in df.columns.values:
-            return 1
-    
-    df = df.values.tolist()
-    
-    #That if compares if is to create prototyes or to update prototypes
-    if(action=='c'):
-        save_data_csv(df,project_field)
-    elif(action=='u'):
-        delete_prototypes(project_field)
-        save_data_csv(df,project_field)
-    del df
+    try:
+        df = pd.read_csv(filename)
+        remove(filename)
+        df = df.fillna("null")
+        template = pd.read_csv('static/plantilla_prototipos2.csv')
+        
+        for column in template.columns.values:
+            if column not in df.columns.values:
+                return 1
+        
+        df = df.values.tolist()
+        if not df:
+            return 3
+        
+        #That if compares if is to create prototyes or to update prototypes
+        if(action=='c'):
+            save_data_csv(df,project_field)
+        elif(action=='u'):
+            delete_prototypes(project_field)
+            save_data_csv(df,project_field)
+        del df
+        return 0
+    except:
+        remove(filename)
+        return 2
 
 #Function that create a csv with all the equipments from the database.
 def download_csv():

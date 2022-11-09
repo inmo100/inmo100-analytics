@@ -45,6 +45,24 @@ class CreatePrototype(ListView):
                         'finishings_type': finishings,
                         'equipments': equipments,
                         })
+                elif response == 2:
+                    messages.success(request, ("Formato no es csv"))
+                    return render(request, self.template_name, context={
+                        'id':self.kwargs['id'],
+                        'proyecto': project,
+                        'prototype_list': prototypes,
+                        'finishings_type': finishings,
+                        'equipments': equipments,
+                        })
+                elif response == 3:
+                    messages.success(request, ("Plantilla vacia"))
+                    return render(request, self.template_name, context={
+                        'id':self.kwargs['id'],
+                        'proyecto': project,
+                        'prototype_list': prototypes,
+                        'finishings_type': finishings,
+                        'equipments': equipments,
+                        })
                 else: 
                     messages.success(request, ("Plantilla se pudo actualizar"))
                     return render(request, self.template_name, context={
