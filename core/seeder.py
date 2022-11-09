@@ -69,20 +69,19 @@ for equipment_name in equipment_names:
     })
 
 #no dependencies
-'''
-finishingTypes = ['Sistema Constructivo', 'Pisos', 'Muros', 'Cancelería Ventanas', 'Cubierta Cocina', 'Carpintería']
-
-for finishingType in finishingTypes:
-    seeder.add_entity(FinishingType, 1, {
-        'name': finishingType
-    })
-'''
-#no dependencies
-finishings = ['BLOCK', 'TABIQUE', 'PORCELANATO', 'CERAMICO', 'YESO', 'PASTA', 'ALUMINIO', 'GRANITO', 'PANEL FIBRA']
+finishings = ['Sistema Constructivo', 'Pisos', 'Muros', 'Canceleria Ventanas', 'Cubierta Cocina', 'Carpinteria']
 
 for finishing in finishings:
     seeder.add_entity(Finishing, 1, {
-        'name': finishing
+        'name': finishing,
+    })
+
+#no depencendies
+material_name = ['Madera','Panel Fibra','Granito','Aluminio','Pasta','Yeso','Cerámico','Porcelanato','Tabique','Block','No existe']
+
+for material in material_name:
+    seeder.add_entity(Material, 1, {
+        'name': material,
     })
 
 municipalities = ['Queretaro', 'Marques', 'Corregidora']
@@ -104,20 +103,6 @@ proyects = ['Inspira L&A (T1-T3)', 'Paseo Pitahaya (T1)', 'Amuralle - Aragón', 
 for proyect in proyects:
     seeder.add_entity(Project, 1, {
         'name': proyect,
-    })
-
-finishings = ['Sistema Constructivo', 'Pisos', 'Muros', 'Canceleria Ventanas', 'Cubierta Cocina', 'Carpinteria']
-
-for finishing in finishings:
-    seeder.add_entity(Finishing, 1, {
-        'name': finishing,
-    })
-
-material_name = ['Madera','Panel Fibra','Granito','Aluminio','Pasta','Yeso','Cerámico','Porcelanato','Tabique','Block','No existe']
-
-for material in material_name:
-    seeder.add_entity(Material, 1, {
-        'name': material,
     })
 
 inserted_pks = seeder.execute()
