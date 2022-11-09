@@ -177,3 +177,4 @@ cython_debug/
 # End of https://www.toptal.com/developers/gitignore/api/django
 
 static/plantilla_prototipos2.csv
+static/plantilla_prototipos3.csv
