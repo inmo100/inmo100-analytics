@@ -125,7 +125,7 @@ def handle_uploaded_file(f,project_field,action):
             destination.write(chunk)
     try:
         df = pd.read_csv(filename)
-        #remove(filename)
+        remove(filename)
         df = df.fillna("null")
         template = pd.read_csv('static/plantilla_prototipos2.csv')
         
@@ -146,7 +146,7 @@ def handle_uploaded_file(f,project_field,action):
         del df
         return 0
     except:
-        #remove(filename)
+        remove(filename)
         return 2
 
 #Function that create a csv with all the equipments from the database.
@@ -170,8 +170,6 @@ def download_csv():
 #The same thing done as above
     for finishing in finishings:
         template[finishing.name] = arr
-
-    print(template)
 #Delete the first raw that contains , in order to save it clean
     template = template.drop(0)
     template.to_csv("static/plantilla_prototipos2.csv",sep=",",index=False,encoding="utf-8")
