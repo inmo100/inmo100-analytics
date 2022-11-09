@@ -84,6 +84,7 @@ body {
   max-width: 1440px;
   margin-right: auto;
   margin-left: auto;
+  margin-top: 1em;
 }
 
 .screen-container {
@@ -270,7 +271,7 @@ body {
   border-color: var(--color-primary);
 }
 
-/************ Header Additions ***************/
+/************ Navbar Additions ***************/
 
 HTML CSSResult Skip Results Iframe
 EDIT ON
@@ -299,7 +300,7 @@ EDIT ON
   width: 26px;
   height: 26px;
   cursor: pointer;
-  z-index: 1;
+  z-index: 1000;
 }
 .menu__btn > span,
 .menu__btn > span::before,
@@ -319,6 +320,7 @@ EDIT ON
   content: '';
   top: 8px;
 }
+
 .menu__box {
   display: block;
   position: fixed;
@@ -332,18 +334,21 @@ EDIT ON
   background-color: var(--color-primary);
   box-shadow: 2px 2px 6px rgba(0, 0, 0, .4);
   transition-duration: .25s;
+  z-index: 999;
 }
+
 .menu__item {
   display: block;
   padding: 12px 24px;
   color: var(--color-bg);
   text-decoration: none;
   transition-duration: .25s;
+  margin-top: 1em;
 }
+
 .menu__item:hover {
   background-color: var(--color-bg);
   color: var(--color-secondary);
-
 }
 
 .navbar_image {
@@ -357,6 +362,7 @@ EDIT ON
 .pagination {
   display: flex;
   justify-content: center;
+  margin-top: 1em;
 }
 
 .pagination a {
@@ -372,71 +378,3 @@ EDIT ON
 }
 
 .pagination a:hover:not(.active) {background-color: #ddd;}
-
-/* DROPWDOWNS */
-
-.checkbox-dropdown {
-  width: 200px;
-  border: 1px solid #aaa;
-  padding: 10px;
-  position: relative;
-  margin: 0 auto;
-  
-  user-select: none;
-}
-
-/* Display CSS arrow to the right of the dropdown text */
-.checkbox-dropdown:after {
-  content:'';
-  height: 0;
-  position: absolute;
-  width: 0;
-  border: 6px solid transparent;
-  border-top-color: #000;
-  top: 50%;
-  right: 10px;
-  margin-top: -3px;
-}
-
-/* Reverse the CSS arrow when the dropdown is active */
-.checkbox-dropdown.is-active:after {
-  border-bottom-color: #000;
-  border-top-color: #fff;
-  margin-top: -9px;
-}
-
-.checkbox-dropdown-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  position: absolute;
-  top: 100%; /* align the dropdown right below the dropdown text */
-  border: inherit;
-  border-top: none;
-  left: -1px; /* align the dropdown to the left */
-  right: -1px; /* align the dropdown to the right */
-  opacity: 0; /* hide the dropdown */
- 
-  transition: opacity 0.4s ease-in-out;
-  height: 100px;
-  overflow: scroll;
-  overflow-x: hidden;
-  pointer-events: none; /* avoid mouse click events inside the dropdown */
-}
-.is-active .checkbox-dropdown-list {
-  opacity: 1; /* display the dropdown */
-  pointer-events: auto; /* make sure that the user still can select checkboxes */
-}
-
-.checkbox-dropdown-list li label {
-  display: block;
-  border-bottom: 1px solid silver;
-  padding: 10px;
- 
-  transition: all 0.2s ease-out;
-}
-
-.checkbox-dropdown-list li label:hover {
-  background-color: #555;
-  color: white;
-}
