@@ -1,7 +1,7 @@
 from errno import EDESTADDRREQ
 from django.shortcuts import render
 from django.shortcuts import redirect
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 import datetime
 from .forms import *
 # Create your views here.
@@ -192,7 +192,7 @@ class PrototypesListView(ListView):
             setattr(prototype,'equipments_q',equipments_q)
 
         return render(request,self.template_name,context={
-            'prototype_list': prototypes,
+            'prototypes_filter': prototypes,
             'finishings_type': finishings,
             'equipments': equipments,
         })
@@ -246,10 +246,12 @@ class PrototypeDetail(DetailView):
     model = Prototype
 
 def filter_view(request):
+    prototypes = Prototype.objects.all()
     context = {
          'segments': Segment.objects.filter(),
          'propertyTypes' : PropertyType.objects.filter(),
          'projects' : Project.objects.filter()
+         
     }
 
     prototypes_filter = get_filter_queryset(request, Prototype.objects.all())
@@ -262,3 +264,4 @@ def get_filter_queryset(request, prototypes):
 
 def is_valid_queryparam(param):
     return param != '' and param is not None
+
