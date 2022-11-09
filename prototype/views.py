@@ -164,11 +164,11 @@ class PrototypesListView(ListView):
     template_name = 'pages/prototypes.html'
     model = Prototype
     def get(self, request):
+        prototypes = get_filter_queryset(request, Prototype.objects.all())
         finishings = Finishing.objects.order_by("id")
-        prototypes = Prototype.objects.all()
         equipments = Equipment.objects.all().order_by('id')
         equipments_count = Equipment.objects.count()
-        for prototype in prototypes:
+        for prototype in prototypes.qs:
             equipments_q_count = EquipmentQuantity.objects.filter(prototype = prototype).count()
             if(equipments_count>equipments_q_count):
                 limit = equipments_count-equipments_q_count
@@ -247,6 +247,8 @@ class PrototypeDetail(DetailView):
 
 def filter_view(request):
     prototypes = Prototype.objects.all()
+    
+
     context = {
          'segments': Segment.objects.filter(),
          'propertyTypes' : PropertyType.objects.filter(),
@@ -254,7 +256,7 @@ def filter_view(request):
          
     }
 
-    prototypes_filter = get_filter_queryset(request, Prototype.objects.all())
+    prototypes_filter = get_filter_queryset(request, prototypes)
     context['prototypes_filter'] = prototypes_filter
 
     return render(request, 'pages/prototypes.html', context)

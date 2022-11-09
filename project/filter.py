@@ -60,3 +60,4 @@ class ProjectFilter(django_filters.FilterSet):
         widget=CheckboxSelectMultiple(),
         queryset=Colony.objects.all())
     
+    
