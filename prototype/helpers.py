@@ -216,14 +216,17 @@ def save_data_csv(arr,project_field):
 #Function that handles csv options
 def handle_uploaded_file(f,project_field,action):
     filename = hashlib.md5(str(datetime.now()).encode("utf-8")).hexdigest()
-    filename = 'static/'+filename
+    filename = 'media/'+filename
     with open(filename, 'wb+') as destination:
         for chunk in f.chunks():
             destination.write(chunk)
     try:
         df = pd.read_csv(filename)
         df = df.fillna("null")
-        template = pd.read_csv('static/plantilla_prototipos2.csv')
+        template = pd.read_csv('media/plantilla_prototipos2.csv')
+
+        remove(filename)
+
         for column in template.columns.values:
             if column not in df.columns.values:
                 return 1
@@ -233,12 +236,15 @@ def handle_uploaded_file(f,project_field,action):
             return 3
         
         #That if compares if is to create prototyes or to update prototypes
-        if(action=='c'):
-            save_data_csv(df,project_field)
-        elif(action=='u'):
-            update_data_csv(df,project_field)
+        try:
+            if(action=='c'):
+                save_data_csv(df,project_field)
+            elif(action=='u'):
+                update_data_csv(df,project_field)
+        except:
+            return 4
+
         del df
-        remove(filename)
         return 0
     except:
         remove(filename)
@@ -247,14 +253,14 @@ def handle_uploaded_file(f,project_field,action):
 #Function that create a csv with all the equipments from the database.
 def download_csv():
 #if the file exist we remove it in order to generetare a new one with all the database updates
-    if(os.path.isfile("static/plantilla_prototipos2.csv")):
-        remove("static/plantilla_prototipos2.csv")
+    if(os.path.isfile("media/plantilla_prototipos2.csv")):
+        remove("media/plantilla_prototipos2.csv")
 #We bring all the equipments on the database ordered by the id
 #This is important because indicates the order of the uploaded data
     equipments = Equipment.objects.all().order_by('id')
     finishings = Finishing.objects.all().order_by('id')
 #Read the template
-    template = pd.read_csv("static/plantilla_prototipos.csv")
+    template = pd.read_csv("media/plantilla_prototipos.csv")
 #Create a variable arr that contains nothing
     arr = [""]
 #Iterate all equipments
@@ -267,13 +273,13 @@ def download_csv():
         template[finishing.name] = arr
 #Delete the first raw that contains , in order to save it clean
     template = template.drop(0)
-    template.to_csv("static/plantilla_prototipos2.csv",sep=",",index=False,encoding="utf-8")
+    template.to_csv("media/plantilla_prototipos2.csv",sep=",",index=False,encoding="utf-8")
 
 def delete_csv(project_id):
     project = Project.objects.get(id=project_id)
     nombre = "plantilla_prototipos_"+project.name
-    if(os.path.isfile("static/"+nombre+".csv")):
-        remove("static/"+nombre+".csv")
+    if(os.path.isfile("media/"+nombre+".csv")):
+        remove("media/"+nombre+".csv")
 
 #Function that create a csv with all the equipments from the database.
 def update_download_csv(project_id):
@@ -307,7 +313,8 @@ def update_download_csv(project_id):
         for triangulo in triangulos:
             arr[triangulo.finishings] = triangulo.material
         template = template.append(arr, ignore_index=True)
-    template.to_csv("static/"+nombre+".csv",sep=",",index=False,encoding="utf-8")
+        #template = pd.concat(template, arr)
+    template.to_csv("media/"+nombre+".csv",sep=",",index=False,encoding="utf-8")
 
 
 

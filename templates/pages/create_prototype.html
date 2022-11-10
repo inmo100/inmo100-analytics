@@ -29,7 +29,7 @@
             <input type="text" id="project_field" name="project_field" hidden value="{{id}}">
         </div>
         <button type="submit" class="btn btn-secondary">Submit</button>
-        <a href="/static/plantilla_prototipos2.csv" class="btn btn-primary" download="plantilla_prototipos2.csv">Descargar Plantilla</a>
+        <a href="{% get_media_prefix %}plantilla_prototipos2.csv" class="btn btn-primary" download>Descargar Plantilla</a>
     </form>
 </div>
 {% endblock content %}
