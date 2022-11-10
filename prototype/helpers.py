@@ -8,6 +8,89 @@ from .forms import *
 from .models import *
 import hashlib
 
+def fix_data_csv(arr,project_field):
+    iterable = 10
+    count = Equipment.objects.count()
+    iterable2 = iterable+count
+    project = Project.objects.get(id=project_field)
+    prototypes = Prototype.objects.filter(project_field = project_field).order_by("id")
+    prototypes_count = Prototype.objects.filter(project_field = project_field).order_by("id")
+    iterable3 = 0
+    for i in arr:
+        if(i[8] == 'null'):
+            segment = Segment.objects.get(name='No existe')    
+        else:
+            if(Segment.objects.filter(name=i[8]).exists() == False):
+                segment = Segment.objects.get(name="No existe")
+            else:
+                segment = Segment.objects.get(name=i[8])
+        
+        if(i[9] == 'null'):
+            property_type = PropertyType.objects.get(name='No existe')
+        else:
+            if(PropertyType.objects.filter(name=i[9]).exists() == False):
+                property_type = PropertyType.objects.get(name='No existe')
+            else:
+                property_type = PropertyType.objects.get(name=i[9])
+
+        prototype = prototypes[iterable3]
+        prototype.segment_field = segment
+        prototype.project_field = project
+        prototype.name = i[0]
+        if(i[2] == 'null'):
+            prototype.total_units = 0
+        else:
+            prototype.total_units = i[2]
+        prototype.m2_terrain = i[4]
+        prototype.m2_constructed = i[5]
+        prototype.m2_habitable = i[6]
+        prototype.floors = i[7]
+        prototype.propertyType = property_type
+        prototype.save()
+        equipments = EquipmentQuantity.objects.filter(prototype=prototype).order_by('id')
+        for equipment in equipments:
+            if(i[iterable] == 'null' or i[iterable] == 0):
+                equipment.quantity = 0
+                equipment.save()
+                iterable = iterable + 1
+            else:
+                equipment.quantity = i[iterable]
+                equipment.save()
+                iterable = iterable+1
+        iterable = 10
+        triangulos = Triangulo.objects.filter(prototype = prototype).order_by("id")
+        for triangulo in triangulos:
+            if(i[iterable2] == 'null'):
+                material = Material.objects.get(name='No existe')
+                triangulo.material = material
+                triangulo.save()
+                iterable2 = iterable2+1
+            else:
+                if(Material.objects.filter(name=i[iterable2]).exists() == False):
+                    material = Material.objects.get(name='No existe')
+                    triangulo.material = material
+                    triangulo.save()
+                    iterable2 = iterable2+1
+                else:
+                    material = Material.objects.get(name=i[iterable2])
+                    triangulo.material = material
+                    triangulo.save()
+                    iterable2 = iterable2+1
+        iterable2 = iterable+count
+        historical = Historical.objects.filter(prototype=prototype).latest('date')
+        if(i[1] == 'null'):
+            historical.price = 0
+        else:
+            historical.price = i[1]
+        if(i[2]<i[3]):
+            historical.available_units = 0
+        else:
+            historical.available_units = i[2]-i[3]
+        historical.date = datetime.now(tz=timezone.utc)
+        historical.save()
+        iterable3 = iterable3+1
+
+
 def update_data_csv(arr,project_field):
     iterable = 10
     count = Equipment.objects.count()
@@ -237,6 +320,8 @@ def handle_uploaded_file(f,project_field,action):
             save_data_csv(df,project_field)
         elif(action=='u'):
             update_data_csv(df,project_field)
+        elif(action=="f"):
+            fix_data_csv(df,project_field)
         del df
         remove(filename)
         return 0
