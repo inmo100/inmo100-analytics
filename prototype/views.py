@@ -20,7 +20,7 @@ class CreatePrototype(ListView):
         return render(request,self.template_name,context={
             'id':self.kwargs['id'],
             'proyecto': project,
-            'prototype_list': prototypes,
+            'prototypes_filter': prototypes,
             'finishings_type': finishings,
             'equipments': equipments,
             })
@@ -31,7 +31,6 @@ class CreatePrototype(ListView):
         project = Project.objects.get(id=self.kwargs['id'])
         finishings = Finishing.objects.order_by("id")
         equipments = Equipment.objects.all().order_by('id')
-
         if csv_import.is_valid():
                 response = handle_uploaded_file(request.FILES['csv'],project_field,'c')
                 prototypes = recreate_prototypes(self.kwargs['id'])
@@ -41,7 +40,7 @@ class CreatePrototype(ListView):
                     return render(request, self.template_name, context={
                         'id':self.kwargs['id'],
                         'proyecto': project,
-                        'prototype_list': prototypes,
+                        'prototypes_filter': prototypes,
                         'finishings_type': finishings,
                         'equipments': equipments,
                         })
@@ -50,7 +49,7 @@ class CreatePrototype(ListView):
                     return render(request, self.template_name, context={
                         'id':self.kwargs['id'],
                         'proyecto': project,
-                        'prototype_list': prototypes,
+                        'prototypes_filter': prototypes,
                         'finishings_type': finishings,
                         'equipments': equipments,
                         })
@@ -59,7 +58,7 @@ class CreatePrototype(ListView):
                     return render(request, self.template_name, context={
                         'id':self.kwargs['id'],
                         'proyecto': project,
-                        'prototype_list': prototypes,
+                        'prototypes_filter': prototypes,
                         'finishings_type': finishings,
                         'equipments': equipments,
                         })
@@ -68,7 +67,7 @@ class CreatePrototype(ListView):
                     return render(request, self.template_name, context={
                         'id':self.kwargs['id'],
                         'proyecto': project,
-                        'prototype_list': prototypes,
+                        'prototypes_filter': prototypes,
                         'finishings_type': finishings,
                         'equipments': equipments,
                         })
@@ -78,7 +77,7 @@ class CreatePrototype(ListView):
             return render(request,self.template_name,context={
                         'id':self.kwargs['id'],
                         'proyecto': project,
-                        'prototype_list': prototypes,
+                        'prototypes_filter': prototypes,
                         'finishings_type': finishings,
                         'equipments': equipments,
                         })
@@ -90,27 +89,37 @@ class PrototypesListView(ListView):
     def get(self, request):
         finishings = Finishing.objects.order_by("id")
         equipments = Equipment.objects.all().order_by('id')
-        prototypes = recreate_prototypes(0)
+        prototypes_filter = recreate_prototypes(0)
+        print(prototypes_filter)
         return render(request,self.template_name,context={
-            'prototype_list': prototypes,
+            'prototypes_filter': prototypes_filter,
             'finishings_type': finishings,
             'equipments': equipments,
         })
 
 #Class based view to update prototype
 class UpdatePrototype(ListView):
-    template_name = 'pages/form_update_prototypes.html'
+    template_name = 'pages/update_prototypes.html'
     model = Segment
     #Overwriting the method get from the class
     def get(self,request,*args,**kwargs):
         update_download_csv(self.kwargs['id'])
-        project_name = Project.objects.get(id=self.kwargs['id']).name
+        project = Project.objects.get(id=self.kwargs['id'])
+        prototypes = recreate_prototypes(self.kwargs['id'])
+        finishings = Finishing.objects.order_by("id")
+        equipments = Equipment.objects.all().order_by('id')
+
         return render(request,self.template_name,context={
             'id':self.kwargs['id'],
-            'project_name':project_name,
+            'proyecto': project,
+            'project_name':project.name,
+            'prototypes_filter': prototypes,
+            'finishings_type': finishings,
+            'equipments': equipments,
             })
     #Overwriting the method post from the class
     def post(self,request,*args,**kwargs):
+        delete_csv(request.POST['project_field'])
         csv_import = CSV_Form(request.POST, request.FILES)
         project_field = request.POST['project_field']
         if csv_import.is_valid():
