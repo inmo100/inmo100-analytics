@@ -8,14 +8,13 @@ from .forms import *
 from .models import *
 import hashlib
 
-def update_data_csv(arr,project_field):
+def fix_data_csv(arr,project_field):
     iterable = 10
     count = Equipment.objects.count()
     iterable2 = iterable+count
     project = Project.objects.get(id=project_field)
     prototypes = Prototype.objects.filter(project_field = project_field).order_by("id")
     prototypes_count = Prototype.objects.filter(project_field = project_field).order_by("id")
-    bandera = 0
     iterable3 = 0
     for i in arr:
         if(i[8] == 'null'):
@@ -39,12 +38,8 @@ def update_data_csv(arr,project_field):
         prototype.project_field = project
         prototype.name = i[0]
         if(i[2] == 'null'):
-            if(prototype.total_units == 0):
-                bandera = bandera+1
             prototype.total_units = 0
         else:
-            if(prototype.total_units == i[2]):
-                bandera = bandera+1
             prototype.total_units = i[2]
         prototype.m2_terrain = i[4]
         prototype.m2_constructed = i[5]
@@ -82,12 +77,197 @@ def update_data_csv(arr,project_field):
                     triangulo.save()
                     iterable2 = iterable2+1
         iterable2 = iterable+count
-        historical_old = Historical.objects.filter(prototype=prototype).latest('date')
+        historical = Historical.objects.filter(prototype=prototype).latest('date')
         if(i[1] == 'null'):
-            i[1] = 0
-        if(historical_old.price == i[1]):
-            bandera = bandera+1
-        if(bandera != 2):
+            historical.price = 0
+        else:
+            historical.price = i[1]
+        if(i[2]<i[3]):
+            historical.available_units = 0
+        else:
+            historical.available_units = i[2]-i[3]
+        historical.date = datetime.now(tz=timezone.utc)
+        historical.save()
+        iterable3 = iterable3+1
+
+
+def update_data_csv(arr,project_field):
+    iterable = 10
+    count = Equipment.objects.count()
+    iterable2 = iterable+count
+    project = Project.objects.get(id=project_field)
+    prototypes = Prototype.objects.filter(project_field = project_field).order_by("id")
+    prototypes_count = Prototype.objects.filter(project_field = project_field).order_by("id").count()
+    equipments_general = Equipment.objects.all().order_by('id')
+    finishings_general = Finishing.objects.all().order_by('id')
+    bandera = 0
+    iterable3 = 0
+    
+    for i in arr:
+        if((iterable3+1)<=prototypes_count):
+            if(i[8] == 'null'):
+                segment = Segment.objects.get(name='No existe')    
+            else:
+                if(Segment.objects.filter(name=i[8]).exists() == False):
+                    segment = Segment.objects.get(name="No existe")
+                else:
+                    segment = Segment.objects.get(name=i[8])
+            
+            if(i[9] == 'null'):
+                property_type = PropertyType.objects.get(name='No existe')
+            else:
+                if(PropertyType.objects.filter(name=i[9]).exists() == False):
+                    property_type = PropertyType.objects.get(name='No existe')
+                else:
+                    property_type = PropertyType.objects.get(name=i[9])
+
+            prototype = prototypes[iterable3]
+            prototype.segment_field = segment
+            prototype.project_field = project
+            prototype.name = i[0]
+            if(i[2] == 'null'):
+                if(prototype.total_units == 0):
+                    bandera = bandera+1
+                prototype.total_units = 0
+            else:
+                if(prototype.total_units == i[2]):
+                    bandera = bandera+1
+                prototype.total_units = i[2]
+            prototype.m2_terrain = i[4]
+            prototype.m2_constructed = i[5]
+            prototype.m2_habitable = i[6]
+            prototype.floors = i[7]
+            prototype.propertyType = property_type
+            prototype.save()
+            equipments = EquipmentQuantity.objects.filter(prototype=prototype).order_by('id')
+            for equipment in equipments:
+                if(i[iterable] == 'null' or i[iterable] == 0):
+                    equipment.quantity = 0
+                    equipment.save()
+                    iterable = iterable + 1
+                else:
+                    equipment.quantity = i[iterable]
+                    equipment.save()
+                    iterable = iterable+1
+            iterable = 10
+            triangulos = Triangulo.objects.filter(prototype = prototype).order_by("id")
+            for triangulo in triangulos:
+                if(i[iterable2] == 'null'):
+                    material = Material.objects.get(name='No existe')
+                    triangulo.material = material
+                    triangulo.save()
+                    iterable2 = iterable2+1
+                else:
+                    if(Material.objects.filter(name=i[iterable2]).exists() == False):
+                        material = Material.objects.get(name='No existe')
+                        triangulo.material = material
+                        triangulo.save()
+                        iterable2 = iterable2+1
+                    else:
+                        material = Material.objects.get(name=i[iterable2])
+                        triangulo.material = material
+                        triangulo.save()
+                        iterable2 = iterable2+1
+            iterable2 = iterable+count
+            historical_old = Historical.objects.filter(prototype=prototype).latest('date')
+            if(i[1] == 'null'):
+                i[1] = 0
+            if(historical_old.price == i[1]):
+                bandera = bandera+1
+            if(bandera != 2):
+                historical = Historical()
+                historical.prototype = prototype
+                if(i[1] == 'null'):
+                    historical.price = 0
+                else:
+                    historical.price = i[1]
+                if(i[2]<i[3]):
+                    historical.available_units = 0
+                else:
+                    historical.available_units = i[2]-i[3]
+                historical.date = datetime.now(tz=timezone.utc)
+                historical.save()
+            
+            iterable3 = iterable3+1
+            bandera = 0
+        else:
+            if(i[8] == 'null'):
+                segment = Segment.objects.get(name='No existe')    
+            else:
+                if(Segment.objects.filter(name=i[8]).exists() == False):
+                    segment = Segment.objects.get(name="No existe")
+                else:
+                    segment = Segment.objects.get(name=i[8])
+            
+            if(i[9] == 'null'):
+                property_type = PropertyType.objects.get(name='No existe')
+            else:
+                if(PropertyType.objects.filter(name=i[9]).exists() == False):
+                    property_type = PropertyType.objects.get(name='No existe')
+                else:
+                    property_type = PropertyType.objects.get(name=i[9])
+
+            prototype = Prototype()
+            prototype.segment_field = segment
+            prototype.project_field = project
+            prototype.name = i[0]
+            if(i[2] == 'null'):
+                prototype.total_units = 0
+            else:
+                prototype.total_units = i[2]
+            prototype.m2_terrain = i[4]
+            prototype.m2_constructed = i[5]
+            prototype.m2_habitable = i[6]
+            prototype.floors = i[7]
+            prototype.propertyType = property_type
+            prototype.save()
+            prototype = Prototype.objects.get(name=i[0],project_field = project_field)
+            #For that iterate equipments in order to save it to the respective prototype
+            for equipment in equipments_general:
+                if(i[iterable] == 'null' or i[iterable] == 0):
+                    equipment_quantity = EquipmentQuantity()
+                    equipment_quantity.equipment = equipment
+                    equipment_quantity.prototype = prototype
+                    equipment_quantity.quantity = 0
+                    equipment_quantity.save()
+                    iterable = iterable + 1
+                else:
+                    equipment_quantity = EquipmentQuantity()
+                    equipment_quantity.equipment = equipment
+                    equipment_quantity.prototype = prototype
+                    equipment_quantity.quantity = i[iterable]
+                    equipment_quantity.save()
+                    iterable = iterable+1
+            iterable = 10
+    #For that iterate finishings in order to save it to the respective prototype
+            for finishing in finishings_general:
+                if(i[iterable2] == 'null'):
+                    triangulo = Triangulo()
+                    triangulo.finishings = finishing
+                    material = Material.objects.get(name='No existe')
+                    triangulo.material = material
+                    triangulo.prototype = prototype
+                    triangulo.save()
+                    iterable2 = iterable2+1
+                else:
+                    if(Material.objects.filter(name=i[iterable2]).exists() == False):
+                        triangulo = Triangulo()
+                        triangulo.finishings = finishing
+                        material = Material.objects.get(name='No existe')
+                        triangulo.material = material
+                        triangulo.prototype = prototype
+                        triangulo.save()
+                        iterable2 = iterable2+1
+                    else:
+                        triangulo = Triangulo()
+                        triangulo.finishings = finishing
+                        material = Material.objects.get(name=i[iterable2])
+                        triangulo.material = material
+                        triangulo.prototype = prototype
+                        triangulo.save()
+                        iterable2 = iterable2+1
+            iterable2 = iterable+count
+    #To insert into datatable Historical
             historical = Historical()
             historical.prototype = prototype
             if(i[1] == 'null'):
@@ -100,11 +280,6 @@ def update_data_csv(arr,project_field):
                 historical.available_units = i[2]-i[3]
             historical.date = datetime.now(tz=timezone.utc)
             historical.save()
-        
-        iterable3 = iterable3+1
-        bandera = 0
-
-
 #Funciton that recieves the project id in order to delete all prototypes related to the project
 def delete_prototypes(project_fields):
     project_prototypes = Prototype.objects.filter(project_field = project_fields)
@@ -241,6 +416,8 @@ def handle_uploaded_file(f,project_field,action):
                 save_data_csv(df,project_field)
             elif(action=='u'):
                 update_data_csv(df,project_field)
+            elif(action=="f"):
+                fix_data_csv(df,project_field)
         except:
             return 4
 

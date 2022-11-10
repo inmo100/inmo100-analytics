@@ -53,18 +53,25 @@ class CreateProject(CreateView):
     template_name = 'form_proyectos.html'
     model = Project
     form_class = ProjectForm
-    success_url = '/proyectos'
+    success_url = 'projects'
 
 
-class ProjectView(ListView):
-    template_name = 'pages/projects_home.html'
+class ProjectsList(ListView):
+    template_name = 'pages/projects/home.html'
     model = Project
     queryset: Developer.objects.all()
-    context_object_name = 'list_projects'
+    context_object_name = 'projects_list'
 
 
 class ProjectDetail(DetailView):
+    template_name = 'pages/projects/single.html'
     model = Project
+    context_object_name = 'project'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['prototypes'] = context['project'].prototype_set.all()
+        return context
 
 
 def filter_view(request):

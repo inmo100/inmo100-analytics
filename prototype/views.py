@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.views.generic import ListView
 from django.contrib import messages
+from django.shortcuts import redirect
 from .forms import *
 from .models import *
 from .helpers import *
@@ -154,3 +155,35 @@ class UpdatePrototype(ListView):
                         'equipments': equipments,
                         'file_name': 'plantilla_prototipos_'+project.name+'.csv',
                         })
+
+#Class based view to fix prototype
+class FixPrototype(ListView):
+    template_name = 'pages/fix_prototypes.html'
+    model = Segment
+    #Overwriting the method get from the class
+    def get(self,request,*args,**kwargs):
+        update_download_csv(self.kwargs['id'])
+        project = Project.objects.get(id=self.kwargs['id'])
+        prototypes = recreate_prototypes(self.kwargs['id'])
+        finishings = Finishing.objects.order_by("id")
+        equipments = Equipment.objects.all().order_by('id')
+
+        return render(request,self.template_name,context={
+            'id':self.kwargs['id'],
+            'proyecto': project,
+            'project_name':project.name,
+            'prototypes_filter': prototypes,
+            'finishings_type': finishings,
+            'equipments': equipments,
+            })
+
+    #Overwriting the method post from the class
+    def post(self,request,*args,**kwargs):
+        delete_csv(request.POST['project_field'])
+        csv_import = CSV_Form(request.POST, request.FILES)
+        project_field = request.POST['project_field']
+        if csv_import.is_valid():
+                handle_uploaded_file(request.FILES['csv'],project_field,'f')
+                return redirect("prototypes")
+        else:
+            return render(request,self.template_name,context={'Prueba':'No se pudo'})

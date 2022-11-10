@@ -1,26 +1,12 @@
 {% load static %}
-<nav class="hamburger-menu">
-  
-  <input name="check" hidden id="menu__toggle" type="checkbox">
-  <label class="menu__btn" for="menu__toggle">
-    <span></span>
-  </label>
-
-  <ul class="menu__box">
-
-    <nav class="navbar_image">
-      <img src="{% static 'img/logoinmo.png' %}" alt="logoinmo" class="navbar_image">
-    </nav>
-
-    <li><a class="menu__item" href="#" >Screener</a></li>
-    <li><a class="menu__item" href="#">Gráficas</a></li>
-    <li><a class="menu__item" href="#">Desarrolladoras</a></li>
-
-    <hr class="solid">
-    
-    <li><a class="menu__item" href="#">Tu Perfil</a></li>
-    <li><a class="menu__item" href="#">Cerrar sesión</a></li>
-
-
+<nav class="navbar">
+  <a href="" class="nav-logo"><img src="{% static 'img/logo-white.svg' %}" alt="Inmo100"></a>
+  <ul class="nav-menu">
+    <li class="nav-link icon-folder"><a href="">Desarrolladoras</a></li>
+    <li class="nav-link icon-grid"><a href="{% url 'projects' %}">Proyectos</a></li>
+    <li class="nav-link icon-home"><a href="">Prototipos</a></li>
+    <div class="nav-divider"></div>
+    <li class="nav-link icon-user"><a href="">Tu Perfil</a></li>
+    <li class="nav-link icon-logout"><a href="">Cerrar sesión</a></li>
   </ul>
 </nav>
