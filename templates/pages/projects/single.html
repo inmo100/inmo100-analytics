@@ -1,0 +1,52 @@
+{% extends 'innerPage.html' %}
+{% load static %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/pages/projects/single.css' %}" />
+{% endblock css %}
+
+{% block title %} Detalle de proyecto {% endblock title %}
+
+{% block content %}
+<header class="hero" style="background-image: url('/media/{{project.logo}}')">
+  <div class="container-slim">
+    <p class="h3 icon-grid">Proyectos</p>
+    <h1 class="h1">{{ project.name }}</h1>
+  </div>
+</header>
+<main class="inner-page">
+  <section class="project-info">
+    <div class="container-slim">
+      <div class="project-info_row">
+        <div class="project-info_half">
+          <p class="project-info_title">Descripción:</p>
+          <p>
+            {{ project.description }}
+          </p>
+        </div>
+        <ul class="project-info_half">
+          <li class="project-info_item">
+            <span class="weight-bold">Latitud:</span> {{ project.latitude }}
+          </li>
+          <li class="project-info_item">
+            <span class="weight-bold">Longitud:</span> {{ project.longitude }}
+          </li>
+          <li class="project-info_item">
+            <span class="weight-bold">Dirección:</span> {{ project.address }}
+          </li>
+          <li class="project-info_item">
+            <span class="weight-bold">Teléfono:</span> {{ project.phone }}
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+  <section class="project-prototypes">
+    <div class="container-wide">
+      <h2 class="h2">
+        Prototipos de {{project.name}}
+      </h2>
+      {% include 'components/prototypes-table.html' %}
+    </div>
+  </section>
+</main>
+{% endblock content %}

@@ -1,0 +1,27 @@
+{% extends 'innerPage.html' %}
+{% load static %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/pages/projects/home.css' %}" />
+{% endblock css %}
+
+{% block title %} Proyectos {% endblock title %}
+
+{% block content %}
+<main class="inner-page">
+  <div class="container-wide">
+    <h1 class="h1">Proyectos</h1>
+    <div class="filters-row">
+      <form action="" method="get">
+        <div class="input search icon-search">
+          <input type="text" placeholder="Buscar proyecto">
+        </div>
+      </form>
+    </div>
+    <div class="projects-grid">
+      {% for project in projects_list %}
+        {% include 'components/project-card.html' %}
+      {% endfor %}
+    </div>
+  </div>
+</main>
+{% endblock content %}

@@ -1,0 +1,21 @@
+
+.icon-pencil:before { content: '\e800'; } /* '' */
+.icon-home:before { content: '\e801'; } /* '' */
+.icon-right:before { content: '\e802'; } /* '' */
+.icon-plus:before { content: '\e803'; } /* '' */
+.icon-cancel:before { content: '\e804'; } /* '' */
+.icon-mail:before { content: '\e805'; } /* '' */
+.icon-grid:before { content: '\f00a'; } /* '' */
+.icon-reload:before { content: '\f025'; } /* '' */
+.icon-login:before { content: '\f02c'; } /* '' */
+.icon-logout:before { content: '\f02d'; } /* '' */
+.icon-download:before { content: '\f02e'; } /* '' */
+.icon-upload:before { content: '\f02f'; } /* '' */
+.icon-facebook:before { content: '\f052'; } /* '' */
+.icon-twitter:before { content: '\f058'; } /* '' */
+.icon-linkedin:before { content: '\f05c'; } /* '' */
+.icon-instagram:before { content: '\f05d'; } /* '' */
+.icon-user:before { content: '\f061'; } /* '' */
+.icon-folder:before { content: '\f067'; } /* '' */
+.icon-search:before { content: '\f50d'; } /* '' */
+.icon-chart-bar:before { content: '\f526'; } /* '' */
