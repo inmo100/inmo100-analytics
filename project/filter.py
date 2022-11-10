@@ -9,7 +9,7 @@ class ProjectFilter(django_filters.FilterSet):
     initial_date = django_filters.DateFromToRangeFilter(
         field_name='initial_date',
         label='Fecha de Inicio',
-        widget=DateRangeWidget(attrs={'type': 'date'}))
+        widget=DateRangeWidget(attrs={'type': 'date', 'class': 'input'}))
 
     # description = django_filters.CharFilter(
     #     field_name='description',
@@ -19,12 +19,12 @@ class ProjectFilter(django_filters.FilterSet):
     latitude = django_filters.RangeFilter(
         field_name='latitud',
         label='Latitud',
-        widget=RangeWidget(attrs={'type': 'number', 'step': "0.1"}))
+        widget=RangeWidget(attrs={'type': 'number', 'step': "0.1", 'class': 'input'}))
 
     longitude = django_filters.RangeFilter(
         field_name='longitude',
         label='Longitud',
-        widget=RangeWidget(attrs={'type': 'number', 'step': "0.1"}))
+        widget=RangeWidget(attrs={'type': 'number', 'step': "0.1", 'class': 'input'}))
 
     # address = django_filters.CharFilter(
     #     field_name='address',
@@ -40,7 +40,7 @@ class ProjectFilter(django_filters.FilterSet):
         field_name='levels',
         label='Niveles',
         lookup_expr='exact',
-        widget=NumberInput(attrs={'type': 'number', 'min' : '0'}))
+        widget=NumberInput(attrs={'type': 'number', 'min': '0', 'class': 'input'}))
 
     developer = django_filters.ModelMultipleChoiceFilter(
         field_name='developer_field',
@@ -59,4 +59,3 @@ class ProjectFilter(django_filters.FilterSet):
         label='Colonia',
         widget=CheckboxSelectMultiple(),
         queryset=Colony.objects.all())
-    

@@ -26,27 +26,27 @@ class CreateDeveloper(TemplateView):
     def post(self, request, *args, **kwargs):
         image_developer = IMG_Form(request.POST, request.FILES)
         if image_developer.is_valid():
-         developer = Developer()
-         developer.name = request.POST['name']
-         developer.description = request.POST['description']
-         developer.image = request.FILES['image']
-         ig = request.POST['ig']
-         wp = request.POST['wp']
-         fb = request.POST['fb']
-         yb = request.POST['yb']
-         arr = {}
-         if(yb!=None):
-            arr['youtube'] = yb
-         if(fb!=None):
-            arr['facebook'] = fb
-         if(ig!=None):
-            arr['instagram'] = ig
-         if(wp!=None):
-            arr['pagina_web'] = wp
-         networks = json.dumps(arr)
-         developer.social_networks = networks
-         developer.save()
-         return render(request,self.template_name)
+            developer = Developer()
+            developer.name = request.POST['name']
+            developer.description = request.POST['description']
+            developer.image = request.FILES['image']
+            ig = request.POST['ig']
+            wp = request.POST['wp']
+            fb = request.POST['fb']
+            yb = request.POST['yb']
+            arr = {}
+            if (yb != None):
+                arr['youtube'] = yb
+            if (fb != None):
+                arr['facebook'] = fb
+            if (ig != None):
+                arr['instagram'] = ig
+            if (wp != None):
+                arr['pagina_web'] = wp
+            networks = json.dumps(arr)
+            developer.social_networks = networks
+            developer.save()
+            return render(request, self.template_name)
 
 
 class CreateProject(CreateView):
@@ -66,19 +66,22 @@ class ProjectView(ListView):
 class ProjectDetail(DetailView):
     model = Project
 
+
 def filter_view(request):
     context = {
         'developers': Developer.objects.filter(),
-        'colonies' : Colony.objects.filter(),
+        'colonies': Colony.objects.filter(),
     }
 
-    projects_filter = get_filter_queryset(request, Project.objects.all())
-    context['projects_filter'] = projects_filter
+    projects = get_filter_queryset(request, Project.objects.all())
+    context['projects'] = projects
 
     return render(request, 'pages/projects.html', context)
 
+
 def get_filter_queryset(request, projects):
     return ProjectFilter(request.GET, queryset=projects)
+
 
 def is_valid_queryparam(param):
     return param != '' and param is not None
