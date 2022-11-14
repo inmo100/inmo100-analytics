@@ -62,6 +62,13 @@ class ProjectsList(ListView):
     queryset: Developer.objects.all()
     context_object_name = 'projects_list'
 
+class DevelopersList(ListView):
+    paginate_by = 2
+    template_name = 'pages/developers/home.html'
+    model = Developer
+    queryset = Developer.objects.all()
+    context_object_name = 'developers_list'
+
 
 class ProjectDetail(DetailView):
     template_name = 'pages/projects/single.html'
@@ -72,7 +79,6 @@ class ProjectDetail(DetailView):
         context = super().get_context_data(**kwargs)
         context['prototypes'] = context['project'].prototype_set.all()
         return context
-
 
 def filter_view(request):
     context = {

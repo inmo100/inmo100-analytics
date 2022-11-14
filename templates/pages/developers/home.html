@@ -1,0 +1,40 @@
+{% extends 'innerPage.html' %}
+{% load static %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+{% endblock css %}
+
+{% block title %} Desarrolladoras {% endblock title %}
+
+{{queryset}}
+
+{% block content %}
+<main class="inner-page">
+  <div class="container-wide">
+    <h1 class="h1">Desarrolladoras</h1>
+    <div class="filters-row">
+      <form action="" method="get">
+        <div class="input search icon-search">
+          <input type="text" placeholder="Buscar desarrolladora">
+        </div>
+      </form>
+    </div>
+    <div class="card-grid">
+      {% for developer in page_obj %}
+        {% include 'components\developer-card.html' %}
+      {% endfor %}
+    </div>
+  </div>
+</main>
+
+<div class="pagination">
+  <a href="#">&laquo;</a>
+  <a href="#">1</a>
+  <a class="active" href="#">2</a>
+  <a href="#">3</a>
+  <a href="#">4</a>
+  <a href="#">5</a>
+  <a href="#">6</a>
+  <a href="#">&raquo;</a>
+</div> 
+{% endblock content %}
