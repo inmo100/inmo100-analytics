@@ -63,12 +63,11 @@ class ProjectsList(ListView):
     context_object_name = 'projects_list'
 
 class DevelopersList(ListView):
-    paginate_by = 2
+    paginate_by = 15
     template_name = 'pages/developers/home.html'
     model = Developer
     queryset = Developer.objects.all()
     context_object_name = 'developers_list'
-
 
 class ProjectDetail(DetailView):
     template_name = 'pages/projects/single.html'

@@ -232,7 +232,6 @@ body {
 .btn-terciary {
   color: var(--color-bg);
   background-color: var(--color-accent);
-  border-color: var(--color-bg);
 }
 
 .btn-terciary:hover {
@@ -479,22 +478,14 @@ body {
 .pagination {
   display: flex;
   justify-content: center;
-  margin-bottom: 3rem;
+  margin-bottom: 1.5rem;
 }
 
-.pagination a {
-  color: black;
-  float: left;
-  padding: 8px 16px;
-  text-decoration: none;
+.pagination_nums{
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
 }
-
-.pagination a.active {
-  background-color: var(--color-primary);
-  color: white;
-}
-
-.pagination a:hover:not(.active) {background-color: #ddd;}
 
 /* card components */
 

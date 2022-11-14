@@ -28,13 +28,23 @@
 </main>
 
 <div class="pagination">
-  <a href="#">&laquo;</a>
-  <a href="#">1</a>
-  <a class="active" href="#">2</a>
-  <a href="#">3</a>
-  <a href="#">4</a>
-  <a href="#">5</a>
-  <a href="#">6</a>
-  <a href="#">&raquo;</a>
-</div> 
+    <div>
+        {% if page_obj.has_previous %}
+            <a href="?page=1" class="btn-primary">&laquo; first</a>
+            <a href="?page={{ page_obj.previous_page_number }}" class="btn-terciary">previous</a>
+        {% endif %}
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}" class="btn-terciary">next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}" class="btn-primary">last &raquo;</a>
+        {% endif %}
+    </div>
+</div>
+
+<div class="pagination_nums">
+
+  <h1 class="h3">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</h1>
+
+</div>
+
 {% endblock content %}
