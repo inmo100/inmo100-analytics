@@ -1,7 +1,7 @@
 {% extends 'innerPage.html' %}
 {% load static %}
 {% block css %}
-<link rel="stylesheet" href="{% static 'css/pages/projects/home.css' %}" />
+<link rel="stylesheet" href="{% static 'css/styles.css' %}" />
 {% endblock css %}
 
 {% block title %} Proyectos {% endblock title %}
@@ -17,11 +17,13 @@
         </div>
       </form>
     </div>
-    <div class="projects-grid">
-      {% for project in projects_list %}
-        {% include 'components/project-card.html' %}
-      {% endfor %}
-    </div>
+    
+    <section class="project-prototypes">
+      <div class="container-wide">
+        {% include 'components/projects-table.html' %}
+      </div>
+    </section>
+
   </div>
 </main>
 {% endblock content %}

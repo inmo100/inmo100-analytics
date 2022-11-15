@@ -59,7 +59,7 @@ class CreateProject(CreateView):
 class ProjectsList(ListView):
     template_name = 'pages/projects/home.html'
     model = Project
-    queryset: Developer.objects.all()
+    queryset: Project.objects.all()
     context_object_name = 'projects_list'
 
 class DevelopersList(ListView):

@@ -229,6 +229,34 @@ body {
   background-color: transparent;
 }
 
+/** TBL BUTTN ONLY **/
+
+.botn-secondary-tbl {
+  border-radius: var(--radius-medium);
+  line-height: 1;
+  border: 2px solid transparent;
+  font-size: var(--size-body1);
+  padding: 0.75rem 1.5rem;
+  cursor: pointer;
+  transition: color var(--timing-small) ease,
+    background-color var(--timing-small) ease,
+    border-color var(--timing-small) ease,
+    transform var(--timing-small) ease;
+
+
+  color: var(--color-bg);
+  background-color: var(--color-secondary);
+  border-color: var(--color-secondary);
+}
+
+.botn-secondary-tbl:hover {
+  color: var(--color-secondary);
+  background-color: transparent;
+}
+
+/**********************/
+
+
 .btn-terciary {
   color: var(--color-bg);
   background-color: var(--color-accent);
@@ -442,7 +470,7 @@ body {
   background-color: #787C82;
 }
 
-.table {
+.table-in {
   text-align: left;
   border-spacing: 4px;
 }
