@@ -1,8 +1,6 @@
 from django.db import models
 from django.db.models import Count, Q
-from django.db.models.functions import Concat
 from .models import *
-from pprint import pprint
 import numpy
 
 class PrototypesManager(models.Manager):
