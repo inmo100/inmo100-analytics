@@ -1,16 +1,10 @@
-const setCheckboxes = () => {
-  const checkboxes = document.querySelectorAll('.form-block.checkbox');
-  if (!checkboxes) return;
-  
-  checkboxes.forEach(checkbox => {
-    checkbox.onclick = function() {
-      checkbox.classList.toggle('active');
-    }
-  });
-}
+document.addEventListener("click", (e) => {
+  const selector = '.form-block.checkbox';
+  const closest = e.target.closest(selector);
 
-const init = () => {
-  setCheckboxes();
-}
+  document.querySelectorAll(selector).forEach(element => element.classList.remove('active'));
+
+  if (closest) closest.classList.add('active');
+});
 
 window.addEventListener('DOMContentLoaded', init);

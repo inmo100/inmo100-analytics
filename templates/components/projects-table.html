@@ -1,15 +1,4 @@
 <div class="table-container">
-  <form method="get" class="filters-row">
-    {% for field in projects.form %}
-      <div class="form-block {{ field.field.widget.input_type }}">
-        <label for="{{field.id_for_label}}" class="body2"> 
-          {{field.label}}
-        </label>
-        {{ field }}
-      </div>
-    {% endfor %}
-    <button class="btn-secondary" type="submit">Filter</button>
-  </form>
   <table class="table">
     <thead>
       <tr>
@@ -28,12 +17,12 @@
       <tr>
         <td>{{project.name}}</td>
         <td>{{project.initial_date}}</td>
-        <td>{{project.latitud}}</td>
+        <td>{{project.latitude}}</td>
         <td>{{project.longitude}}</td>
         <td>{{project.levels}}</td>
         <td>{{project.developer_field}}</td>
         <td>{{project.colony_field}}</td>
-        <td><a href="{% url 'project_detail' project.id%}" class="btn-primary-tbl icon-right"></a></td>
+        <td align="center"><a href="{% url 'project_detail' project.id%}" class="btn-primary-tbl icon-right"></a></td>
       </tr>
       {% endfor %}
     </tbody>

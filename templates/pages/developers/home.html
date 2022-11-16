@@ -1,8 +1,5 @@
 {% extends 'innerPage.html' %}
 {% load static %}
-{% block css %}
-<link rel="stylesheet" href="{% static 'css/styles.css' %}" />
-{% endblock css %}
 
 {% block title %} Desarrolladoras {% endblock title %}
 
@@ -12,16 +9,9 @@
 <main class="inner-page">
   <div class="container-wide">
     <h1 class="h1">Desarrolladoras</h1>
-    <div class="filters-row">
-      <form action="" method="get">
-        <div class="input search icon-search">
-          <input type="text" placeholder="Buscar desarrolladora">
-        </div>
-      </form>
-    </div>
     <div class="card-grid">
-      {% for developer in page_obj %}
-        {% include 'components\developer-card.html' %}
+      {% for item in page_obj %}
+        {% include 'components\card.html' %}
       {% endfor %}
     </div>
   </div>
@@ -33,7 +23,7 @@
             <a href="?page=1" class="btn-primary">&laquo; first</a>
             <a href="?page={{ page_obj.previous_page_number }}" class="btn-terciary">previous</a>
         {% endif %}
-
+        
         {% if page_obj.has_next %}
             <a href="?page={{ page_obj.next_page_number }}" class="btn-terciary">next</a>
             <a href="?page={{ page_obj.paginator.num_pages }}" class="btn-primary">last &raquo;</a>

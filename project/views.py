@@ -1,10 +1,9 @@
 from django.shortcuts import render
-from django.views.generic import TemplateView, CreateView, ListView, DetailView, View
-from .forms import IMG_Form, ProjectForm, DeveloperForm
-# Create your views here.
-from .models import Developer, Project, Colony
+from django.views.generic import TemplateView, CreateView, ListView, DetailView
+from .forms import IMG_Form, ProjectForm
+from .models import Developer, Project
 import json
-from django.db.models import Q
+from django_filters.views import FilterView
 from .filter import ProjectFilter
 
 # Función para guardar los datos de la desarrolladora
@@ -56,18 +55,13 @@ class CreateProject(CreateView):
     success_url = 'projects'
 
 
-class ProjectsList(ListView):
-    template_name = 'pages/projects/home.html'
-    model = Project
-    queryset: Project.objects.all()
-    context_object_name = 'projects_list'
-
 class DevelopersList(ListView):
     paginate_by = 15
     template_name = 'pages/developers/home.html'
     model = Developer
     queryset = Developer.objects.all()
     context_object_name = 'developers_list'
+
 
 class ProjectDetail(DetailView):
     template_name = 'pages/projects/single.html'
@@ -79,20 +73,12 @@ class ProjectDetail(DetailView):
         context['prototypes'] = context['project'].prototype_set.all()
         return context
 
-def filter_view(request):
-    context = {
-        'developers': Developer.objects.filter(),
-        'colonies': Colony.objects.filter(),
-    }
 
-    projects = get_filter_queryset(request, Project.objects.all())
-    context['projects'] = projects
-
-    return render(request, 'pages/projects.html', context)
-
-
-def get_filter_queryset(request, projects):
-    return ProjectFilter(request.GET, queryset=projects)
+class ProjectsList(FilterView):
+    model = Project
+    template_name: str = 'pages/projects/home.html'
+    filterset_class = ProjectFilter
+    context_object_name = 'projects_list'
 
 
 def is_valid_queryparam(param):
