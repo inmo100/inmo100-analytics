@@ -56,7 +56,6 @@ class Prototype(BaseModel):
         PropertyType, on_delete=models.PROTECT, null=True)
     equipments = models.ManyToManyField(Equipment, through='EquipmentQuantity')
 
-    #available_units = models.IntegerField(verbose_name=_("Available Units"),null=True)
     total_units = models.IntegerField(verbose_name=_("Total units"), null=True)
     m2_terrain = models.FloatField(verbose_name=(
         "Terrain in square meters"), null=True)

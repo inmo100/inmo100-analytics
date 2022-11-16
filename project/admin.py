@@ -10,7 +10,7 @@ from prototype.helpers import *
 # manage prototype data from admin
 @admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):
-    list_display = ('name', 'address', 'levels', 'datos')
+    list_display = ('name', 'developer_field', 'colony_field', 'address', 'datos')
 
     def get_urls(self):
         urls = super().get_urls()
