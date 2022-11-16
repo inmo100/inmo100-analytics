@@ -11,30 +11,15 @@ class ProjectFilter(django_filters.FilterSet):
         label='Fecha de Inicio',
         widget=DateRangeWidget(attrs={'type': 'date', 'class': 'input'}))
 
-    # description = django_filters.CharFilter(
-    #     field_name='description',
-    #     label='Descripción',
-    #     lookup_expr='icontains')
-
     latitude = django_filters.RangeFilter(
-        field_name='latitud',
+        field_name='latitude',
         label='Latitud',
-        widget=RangeWidget(attrs={'type': 'number', 'step': "0.1", 'class': 'input'}))
+        widget=RangeWidget(attrs={'type': 'number', 'step': "0.0000000000000001", 'class': 'input'}))
 
     longitude = django_filters.RangeFilter(
         field_name='longitude',
         label='Longitud',
-        widget=RangeWidget(attrs={'type': 'number', 'step': "0.1", 'class': 'input'}))
-
-    # address = django_filters.CharFilter(
-    #     field_name='address',
-    #     label='Dirección',
-    #     lookup_expr='icontains')
-
-    # phone = django_filters.CharFilter(
-    #     field_name='phone',
-    #     label='Teléfono',
-    #     lookup_expr='icontains')
+        widget=RangeWidget(attrs={'type': 'number', 'step': "0.0000000000000001", 'class': 'input'}))
 
     levels = django_filters.NumberFilter(
         field_name='levels',
@@ -45,17 +30,17 @@ class ProjectFilter(django_filters.FilterSet):
     developer = django_filters.ModelMultipleChoiceFilter(
         field_name='developer_field',
         label='Desarrolladora',
-        widget=CheckboxSelectMultiple(),
-        queryset=Developer.objects.all())
+        widget=CheckboxSelectMultiple(attrs={'checked': 'true'}),
+        queryset=Developer.objects.all().order_by('name'))
 
     name = django_filters.ModelMultipleChoiceFilter(
         field_name='name',
         label='Proyecto',
-        widget=CheckboxSelectMultiple(),
-        queryset=Project.objects.all())
+        widget=CheckboxSelectMultiple(attrs={'checked': 'true'}),
+        queryset=Project.objects.all().order_by('name'))
 
     colony = django_filters.ModelMultipleChoiceFilter(
         field_name='colony_field',
         label='Colonia',
-        widget=CheckboxSelectMultiple(),
-        queryset=Colony.objects.all())
+        widget=CheckboxSelectMultiple(attrs={'checked': 'true'}),
+        queryset=Colony.objects.all().order_by('name'))
