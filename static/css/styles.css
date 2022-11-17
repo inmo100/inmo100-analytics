@@ -154,7 +154,6 @@ body {
   line-height: 1.4;
 }
 
-
 /* Text colors */
 .text-primary {
   color: var(--color-primary);
@@ -190,7 +189,9 @@ body {
 }
 
 /* Buttons */
+
 [class^="btn"] {
+  display: inline-block;
   border-radius: var(--radius-medium);
   line-height: 1;
   border: 2px solid transparent;
