@@ -1,9 +1,9 @@
 import django_filters
-from .models import Prototype, Project, Segment, PropertyType, EquipmentQuantity
+from .models import Prototype, Project, Segment, PropertyType, EquipmentQuantity, Equipment
 from django.forms import NumberInput, CheckboxSelectMultiple
 from django_filters.widgets import DateRangeWidget, RangeWidget
 from django.db.models import Q
-
+from .views import *
 
 class PrototypeFilter(django_filters.FilterSet):
     name = django_filters.ModelMultipleChoiceFilter(
@@ -65,10 +65,17 @@ class PrototypeFilter(django_filters.FilterSet):
         field_name='equipment',
         label='Equipamiento',
         widget=CheckboxSelectMultiple(),
-        queryset=Equioment.objects.exclude(equipment=0)) """
+        queryset=Equioment.objects.exclude(equipment=0))  """
 
-    equipmentquantity = django_filters.ModelMultipleChoiceFilter(
-        field_name='equipmentquantity',
+    equipment = django_filters.ModelMultipleChoiceFilter(
+        field_name='equipment',
         label='Equipamiento',
         widget=CheckboxSelectMultiple(),
-        queryset=EquipmentQuantity.objects.all())
+        queryset=EquipmentQuantity.objects.all().select_related('equipment', 'prototype'))   
+
+
+    """ equipments = django_filters.ModelMultipleChoiceFilter(
+        field_name='equipments',
+        label='Equipamiento',
+        widget=CheckboxSelectMultiple(),
+        queryset=EquipmentQuantity.objects.all().select_related('equipment'))  """

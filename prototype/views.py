@@ -1,4 +1,5 @@
 from errno import EDESTADDRREQ
+from multiprocessing import context
 from django.shortcuts import render
 from django.shortcuts import redirect
 from django.views.generic import ListView, DetailView
@@ -11,7 +12,6 @@ from os import remove
 from project.models import Project
 from django.db.models import Q, Count
 from .filter import PrototypeFilter
-
 # Create your views here.
 import os.path
 
@@ -164,7 +164,22 @@ class PrototypesListView(ListView):
     template_name = 'pages/prototypes.html'
     model = Prototype
     def get(self, request):
-        prototypes = get_filter_queryset(request, Prototype.objects.all())
+        """ q1 = Prototype.objects.all()
+        q2 = EquipmentQuantity.objects.all()
+        q3 = Triangulo.objects.all()
+        prototypes = q1.union(q2,q3)
+        print('protipos qs', prototypes) """
+        
+        q = self.get_queryset()
+        sql = 'SELECT proto.basemodel_ptr_id,proto.total_units,proto.m2_terrain,proto.m2_constructed,proto.m2_habitable, proto.floors,proto.project_field_id ,proto."propertyType_id", proto.segment_field_id, equip.quantity, equip.equipment_id, tri.finishings_id, tri.material_id FROM public.prototype_prototype AS proto JOIN public.prototype_equipmentquantity AS equip ON equip.prototype_id = basemodel_ptr_id JOIN public.prototype_triangulo AS tri ON tri.prototype_id = basemodel_ptr_id'
+        prototypes_sql = q.extra(where=[sql])
+        prototypes = get_filter_queryset(request, prototypes_sql)
+        
+        # prototypes = get_filter_queryset(request, Prototype.objects.all().select_related(''))
+        # prototypes = get_filter_queryset(request, Prototype.objects.all())
+        # ejemplo = get_filter_queryset(request, Prototype.objects.all())
+
+        # prototypes = Prototype.objects.prefetch_related('Triangulo__prototype_id').all()
         finishings = Finishing.objects.order_by("id")
         equipments = Equipment.objects.all().order_by('id')
         equipments_count = Equipment.objects.count()
@@ -248,13 +263,16 @@ class PrototypeDetail(DetailView):
 def filter_view(request):
     prototypes = Prototype.objects.all()
     
-
     context = {
+        
+    }
+
+    """ context = {
          'segments': Segment.objects.filter(),
          'propertyTypes' : PropertyType.objects.filter(),
          'projects' : Project.objects.filter()
          
-    }
+    } """
 
     prototypes_filter = get_filter_queryset(request, prototypes)
     context['prototypes_filter'] = prototypes_filter
