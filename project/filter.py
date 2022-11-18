@@ -11,15 +11,15 @@ class ProjectFilter(django_filters.FilterSet):
         label='Fecha de Inicio',
         widget=DateRangeWidget(attrs={'type': 'date', 'class': 'input'}))
 
-    latitude = django_filters.RangeFilter(
-        field_name='latitude',
-        label='Latitud',
-        widget=RangeWidget(attrs={'type': 'number', 'step': "0.0000000000000001", 'class': 'input'}))
+#    latitude = django_filters.RangeFilter(
+#        field_name='latitude',
+#        label='Latitud',
+#        widget=RangeWidget(attrs={'type': 'number', 'step': "0.0000000000000001", 'class': 'input'}))
 
-    longitude = django_filters.RangeFilter(
-        field_name='longitude',
-        label='Longitud',
-        widget=RangeWidget(attrs={'type': 'number', 'step': "0.0000000000000001", 'class': 'input'}))
+#    longitude = django_filters.RangeFilter(
+#        field_name='longitude',
+#        label='Longitud',
+#        widget=RangeWidget(attrs={'type': 'number', 'step': "0.0000000000000001", 'class': 'input'}))
 
     levels = django_filters.NumberFilter(
         field_name='levels',

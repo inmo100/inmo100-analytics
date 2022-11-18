@@ -1,0 +1,95 @@
+<div class="filters-container">
+    <form method="get">
+        <div class="filters-row">
+            <div class="form-block ">
+                <label for="" class="body2"> 
+                    Unidades Totales
+                </label>
+                <input type="number" name="total_units_min" class="input" step="1" id="id_total_units_0">
+                -
+                <input type="number" name="total_units_max" class="input" step="1" id="id_total_units_1">
+            </div>
+
+            <div class="form-block ">
+                <label for="" class="body2"> 
+                    Unidades Vendidas
+                </label>
+                <input type="number" name="sold_units_min" class="input" step="1" id="id_sold_units_0">
+                -
+                <input type="number" name="sold_units_max" class="input" step="1" id="id_sold_units_1">
+            </div>
+
+            <div class="form-block ">
+                <label for="" class="body2"> 
+                    Metros cuadrados de Terreno
+                </label>
+                <input type="number" name="m2_terrain_min" class="input" step="0.1" min="0" id="id_m2_terrain_0">
+                -
+                <input type="number" name="m2_terrain_max" class="input" step="0.1" min="0" id="id_m2_terrain_1">
+            </div>
+
+            <div class="form-block ">
+                <label for="" class="body2"> 
+                    Metros cuadrados construidos
+                </label>
+                <input type="number" name="m2_constructed_min" class="input" step="0.1" min="0" id="id_m2_constructed_0">
+                -
+                <input type="number" name="m2_constructed_max" class="input" step="0.1" min="0" id="id_m2_constructed_1">
+            </div>
+
+            <div class="form-block ">
+                <label for="" class="body2"> 
+                    Metros cuadrados habitables
+                </label>
+                <input type="number" name="m2_habitable_min" class="input" step="0.1" min="0" id="id_m2_habitable_0">
+                -
+                <input type="number" name="m2_habitable_max" class="input" step="0.1" min="0" id="id_m2_habitable_1">
+            </div>
+
+            <div class="form-block number">
+                <label for="id_floors" class="body2"> 
+                    Pisos
+                </label>
+                <input type="number" name="floors" class="input" min="0" step="any" id="id_floors">
+            </div>
+
+  <!-- //////////////////////////////////////////////// -->
+
+           <div class="form-block checkbox">
+            <label for="" class="body2"> 
+                Prototipo
+            </label>
+
+            <div id="id_name"><div>
+    <label for="id_name_0"><input type="checkbox" name="name" value="193" id="id_name_0">
+    Jajaja
+    </label>
+
+</div><div>
+    <label for="id_name_1"><input type="checkbox" name="name" value="192" id="id_name_1">
+    BEHAB
+    </label>
+
+</div><div>
+    <label for="id_name_2"><input type="checkbox" name="name" value="191" id="id_name_2">
+    Bruh
+    </label>
+
+</div><div>
+    <label for="id_name_3"><input type="checkbox" name="name" value="190" id="id_name_3">
+    Leche santa clara
+    </label>
+
+</div>
+</div>
+            </div>
+
+
+  <!-- //////////////////////////////////////////////// -->
+
+
+        </div>
+        <button class="btn-secondary" type="submit">Filtrar</button>
+        <a class="btn-secondary" href='.'>Refrescar</a>
+    </form>
+</div>
