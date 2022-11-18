@@ -5,18 +5,31 @@ import numpy
 
 class PrototypesManager(models.Manager):
     #Managers for prtotoypes
+    def segment_filter(self,segments):
+        if(segments == []):
+            arr = []
+            prototypes = self.all()
+            for i in prototypes:
+                arr.append(i.prototype.id)
+            return arr
+        arr2 = []
+        for i in segments:
+            helper = []
+            query = self.filter(
+                Q(equipment=i) & Q(quantity__gt = 0)
+            )
+            for j in query:
+                helper.append(j.prototype.id)
+            arr2.append(helper)
+        cant = len(arr2)
+        cant = cant-1
+        for j in range(cant):
+            helper = list(set(arr2[j]) & set(arr2[j+1]))
+        if(helper==[]):
+            helper = ['null']
+        return helper
 
-    def listar_prototipos(self):
-        return self.all()
-    def listar_prototipos_equipamiento(self):
-        prototypes = self.all()
-        return prototypes
-    def contar_equipamientos(self):
-        prototypes = self.annotate(
-            num_equipments = Count('prototipo_equipamiento')
-        )
-        for i in prototypes:
-            print(i.num_equipments)
+
     def prototipos_filtrados(self,ids1,ids2):
         if(ids1==[] and ids2==[]):
             return self.all()

@@ -526,4 +526,28 @@ def recreate_prototypes(id):
             setattr(prototype,'materials',materials)
             setattr(prototype,'equipments_q',equipments_q)
         return prototypes
-    
+
+def bring_prototypes(prototypes):
+    equipments_count = Equipment.objects.count()
+    for prototype in prototypes:
+        equipments_q_count = EquipmentQuantity.objects.filter(prototype = prototype).count()
+        if(equipments_count>equipments_q_count):
+            limit = equipments_count-equipments_q_count
+            equipments_ids = Equipment.objects.all().order_by("-id")[:limit]
+            for equipments_id in reversed(equipments_ids):
+                missing_equipments = EquipmentQuantity()
+                missing_equipments.prototype = prototype
+                missing_equipments.equipment = equipments_id
+                missing_equipments.quantity = 0
+                missing_equipments.save()
+            equipments_q = EquipmentQuantity.objects.filter(prototype = prototype).order_by('id')
+        else:
+            equipments_q = EquipmentQuantity.objects.filter(prototype = prototype).order_by('id')
+        materials = Triangulo.objects.filter(prototype = prototype).order_by('id')
+        historical = Historical.objects.filter(prototype=prototype).latest('date')
+        price = historical.price
+        units_sold = prototype.total_units - historical.available_units
+        setattr(prototype,'price',price)
+        setattr(prototype,'units_sold',units_sold)
+        setattr(prototype,'materials',materials)
+        setattr(prototype,'equipments_q',equipments_q)
