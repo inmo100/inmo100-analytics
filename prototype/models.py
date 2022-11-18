@@ -3,7 +3,7 @@ from django.utils.translation import gettext_lazy as _
 from datetime import datetime
 from core.models import BaseModel, AbstractModel
 from project.models import Project
-from .managers import PrototypesManager,EquipmentQuantityManager,TrianguloManager
+from .managers import PrototypesManager,EquipmentQuantityManager,TrianguloManager,HistoricalManager
 
 # arreglar el MER y MR
 
@@ -65,7 +65,7 @@ class Prototype(BaseModel):
         "Habiable area in square meters"), null=True)
     floors = models.SmallIntegerField(
         verbose_name=("Pisos"), default=1, null=True)
-    objects: PrototypesManager()
+    objects = PrototypesManager()
 
 
 class EquipmentQuantity(AbstractModel):
@@ -73,7 +73,7 @@ class EquipmentQuantity(AbstractModel):
     prototype = models.ForeignKey(Prototype, on_delete=models.PROTECT)
     quantity = models.IntegerField(verbose_name=(
         "Equipment quantity per prototype"), null=True)
-    objects: EquipmentQuantityManager()
+    objects = EquipmentQuantityManager()
 
 
 class Triangulo(AbstractModel):
@@ -86,7 +86,7 @@ class Triangulo(AbstractModel):
     finishings = models.ForeignKey(Finishing, on_delete=models.PROTECT)
     material = models.ForeignKey(Material, on_delete=models.PROTECT)
     prototype = models.ForeignKey(Prototype, on_delete=models.PROTECT)
-    objects: TrianguloManager()
+    objects = TrianguloManager()
 
 # Handles prototype historical data
 
@@ -98,3 +98,4 @@ class Historical(models.Model):  # Historical only needs abstract model
     price = models.IntegerField(verbose_name=_("Price"), null=True)
     available_units = models.IntegerField(
         verbose_name=_("Available Units"), null=True)
+    objects = HistoricalManager()
