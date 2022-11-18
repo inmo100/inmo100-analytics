@@ -1,59 +1,16 @@
-{% load static %}
-
-{% block css %}
-<link rel="stylesheet" href="{% static 'css/pages/prototypes.css' %}" />
-{% endblock css %}
-
-{% block filters %}
-
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
-
-<script>
-$(".container-dropdown").click(function () {
-    $(this).toggleClass("is-active");
-});
-
-$(".container-dropdown ul").click(function(e) {
-    e.stopPropagation();
-});
-</script>
-
-<div class="container-filters" style="background-color: rgba(var(--rgb-accent), 0.2); padding: 1rem;">
-    <h1 class="h3">Filtros</h1>
-
-    <div class="container-dropdown">Filtro
-        <ul class="container-dropdown-list">
-            <li>
-                <label><input type="checkbox" value="Corredor" name="opcion" />Opcion1</label>
-            </li>
-            <li>
-                <label><input type="checkbox" value="Corredor" name="opcion" />Opcion2</label>
-            </li>
-        </ul>
-    </div>
-
-    <div class="container-dropdown">Filtro
-        <ul class="container-dropdown-list">
-            <li>
-                <label><input type="checkbox" value="Corredor" name="opcion" />Opcion1</label>
-            </li>
-            <li>
-                <label><input type="checkbox" value="Corredor" name="opcion" />Opcion2</label>
-            </li>
-        </ul>
-    </div>
-
-    <div class="container-dropdown">Filtro
-        <ul class="container-dropdown-list">
-            <li>
-                <label><input type="checkbox" value="Corredor" name="opcion" />Opcion1</label>
-            </li>
-            <li>
-                <label><input type="checkbox" value="Corredor" name="opcion" />Opcion1</label>
-            </li>
-        </ul>
-    </div>
-
-  </div>
-
-  {% endblock filters %}
+<div class="filters-container">
+    <form method="get">
+        <div class="filters-row">
+            {% for field in filter.form %}
+            <div class="form-block {{ field.field.widget.input_type }}">
+            <label for="{{field.id_for_label}}" class="body2"> 
+                {{field.label}}
+            </label>
+            {{ field }}
+            </div>
+            {% endfor %}
+        </div>
+        <button class="btn-secondary" type="submit">Filtrar</button>
+        <a class="btn-secondary" href='/proyectos'>Refrescar</a>
+    </form>
+</div>

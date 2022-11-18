@@ -1,5 +1,5 @@
 from django_seed import Seed
-from prototype.models import Finishing, PropertyType, Equipment, Segment, Prototype,Material
+from prototype.models import Finishing, PropertyType, Equipment, Segment, Material
 from project.models import Amenity, Developer, Project
 from location.models import State, Corridor, Municipality, Colony
 import pandas as pd
@@ -68,6 +68,22 @@ for equipment_name in equipment_names:
         'type': lambda x: random.choice(equipment_type)
     })
 
+#no dependencies
+finishings = ['Sistema Constructivo', 'Pisos', 'Muros', 'Canceleria Ventanas', 'Cubierta Cocina', 'Carpinteria']
+
+for finishing in finishings:
+    seeder.add_entity(Finishing, 1, {
+        'name': finishing,
+    })
+
+#no depencendies
+material_name = ['Madera','Panel Fibra','Granito','Aluminio','Pasta','Yeso','Cerámico','Porcelanato','Tabique','Block','No existe']
+
+for material in material_name:
+    seeder.add_entity(Material, 1, {
+        'name': material,
+    })
+
 municipalities = ['Queretaro', 'Marques', 'Corregidora']
 
 for municipality in municipalities:
@@ -87,20 +103,6 @@ proyects = ['Inspira L&A (T1-T3)', 'Paseo Pitahaya (T1)', 'Amuralle - Aragón', 
 for proyect in proyects:
     seeder.add_entity(Project, 1, {
         'name': proyect,
-    })
-
-finishings = ['Sistema Constructivo', 'Pisos', 'Muros', 'Canceleria Ventanas', 'Cubierta Cocina', 'Carpinteria']
-
-for finishing in finishings:
-    seeder.add_entity(Finishing, 1, {
-        'name': finishing,
-    })
-
-material_name = ['Madera','Panel Fibra','Granito','Aluminio','Pasta','Yeso','Cerámico','Porcelanato','Tabique','Block','No existe']
-
-for material in material_name:
-    seeder.add_entity(Material, 1, {
-        'name': material,
     })
 
 inserted_pks = seeder.execute()

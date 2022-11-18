@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block css %} 
+<link rel="stylesheet" href="{% static 'css/pages/projects.css' %}" />
+<link rel="stylesheet" href="{% static 'css/pages/prototypes.css' %}" />
+{% endblock css %}
+{% block title %} Arreglar Prototipos {% endblock title %}
+{% block content %}
+{%if messages %}
+    {% for message in messages %}
+    {{message}}
+    {% endfor %}
+{% endif %}
+<div class="container-wide">
+    <div class="container-wide" id="reference">
+        <h1 class="h1">
+          Prototipos de {{project_name}}
+        </h1>
+        {% include 'components/prototypes-table.html' %}
+      </div>
+    </br>
+    </br>
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="formFile" class="form-label">Archivo CSV</label>
+            <input class="form-control" type="file" id="formFile" name="csv">
+            <input type="text" id="project_field" name="project_field" hidden value="{{id}}">
+        </div>
+        <button type="submit" class="btn btn-secondary">Actualizar</button>
+        <button type="submit" class="btn btn-secondary">Arreglar</button>
+        <a href="/static/plantilla_prototipos_{{project_name}}.csv" class="btn btn-primary" download="plantilla_prototipos_{{project_name}}.csv">Descargar Plantilla</a>
+    </form>
+</div>
+{% endblock content %}

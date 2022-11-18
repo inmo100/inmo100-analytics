@@ -1,10 +1,6 @@
-<div class="prototypes-table-container">
-  <form method="get">
-    {{ projects_filter.form }}
-    <button class="btn btn-sm btn-danger" type="submit">Filter</button>
-  </form>
-  <thead>
-  <table class="prototypes-table">
+<div class="table-container">
+  <table class="table">
+    <thead>
       <tr>
         <th>Nombre</th>
         <th>Fecha Inicial</th>
@@ -13,18 +9,20 @@
         <th>Niveles</th>
         <th>Desarrolladora</th>
         <th>Colonia</th>
+        <th>Info</th>
       </tr>
     </thead>
     <tbody>
-      {% for project in projects_filter.qs %}
+      {% for project in projects_list %}
       <tr>
         <td>{{project.name}}</td>
         <td>{{project.initial_date}}</td>
-        <td>{{project.latitud}}</td>
+        <td>{{project.latitude}}</td>
         <td>{{project.longitude}}</td>
         <td>{{project.levels}}</td>
         <td>{{project.developer_field}}</td>
         <td>{{project.colony_field}}</td>
+        <td align="center"><a href="{% url 'project_detail' project.id%}" class="btn-primary-tbl icon-right"></a></td>
       </tr>
       {% endfor %}
     </tbody>

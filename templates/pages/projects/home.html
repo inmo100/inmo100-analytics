@@ -1,0 +1,14 @@
+{% extends 'innerPage.html' %}
+{% load static %}
+
+{% block title %} Proyectos {% endblock title %}
+
+{% block content %}
+<main class="inner-page">
+  <div class="container-wide">
+    <h1 class="h1">Proyectos</h1>
+      {% include 'components/filters.html' %}
+      {% include 'components/projects-table.html' %}
+  </div>
+</main>
+{% endblock content %}

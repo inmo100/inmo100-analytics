@@ -4,13 +4,15 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{% block title %}{% endblock title %}</title>
+    <title>INMO100 | {% block title %}{% endblock title %}</title>
     <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
     {% block css %} {% endblock css %}
   </head>
   <body>
+    {% include 'components/navbar.html' %}
     {% block content %} {% endblock content %}
-
+    {%include 'components/footer.html' %}
+    <script src="{% static 'js/main.js' %}"></script>
     {% block js %} {% endblock js %}
   </body>
 </html>
