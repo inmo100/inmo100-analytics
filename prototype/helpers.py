@@ -528,6 +528,10 @@ def recreate_prototypes(id):
         return prototypes
 
 def bring_prototypes(prototypes):
+    if(prototypes == []):
+        return 'null'
+    if(prototypes == 'null'):
+        return 'null'
     equipments_count = Equipment.objects.count()
     for prototype in prototypes:
         equipments_q_count = EquipmentQuantity.objects.filter(prototype = prototype).count()
@@ -552,3 +556,14 @@ def bring_prototypes(prototypes):
         setattr(prototype,'materials',materials)
         setattr(prototype,'equipments_q',equipments_q)
     return prototypes
+
+
+def check_arguments(argument):
+    if(argument == []):
+        return argument
+    if argument[0] == '':
+        return []
+    arr = []
+    for i in argument:
+        arr.append(int(i))
+    return arr

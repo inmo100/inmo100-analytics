@@ -209,7 +209,33 @@ class FixPrototype(ListView):
 class PrototypesList(ListView):
     template_name = 'pages/prototypes/home.html'
     def get(self, request, *args, **kwargs):
-        prototypes = Prototype.objects.all()
+        #------------------------------------------------------------------------
+        # This is for the select form
+        prototypes_form = Prototype.objects.all()
+        projects_form = Project.objects.all()
+        segment_form = Segment.objects.all()
+        propertyType_form = PropertyType.objects.all()
+        #------------------------------------------------------------------------
+        prototypes_id = request.GET.getlist('prototype')
+        prototypes_id = check_arguments(prototypes_id)
+        projects_id = request.GET.getlist('project')
+        projects_id = check_arguments(projects_id)
+        segments_id = request.GET.getlist('segment')
+        segments_id = check_arguments(segments_id)
+        propertyTypes = request.GET.getlist('propertyType')
+        propertyTypes = check_arguments(propertyTypes)
+        total_units = [request.GET.get('total_units_min',''),request.GET.get('total_units_max','')]
+        total_units = check_arguments(total_units)
+        prototypes = Prototype.objects.project_filter(projects_id)
+        prototypes = Prototype.objects.prototype_filter(prototypes,prototypes_id)
+        prototypes = Prototype.objects.segment_filter(segments_id,prototypes)
+        prototypes = Prototype.objects.propertyType_filter(propertyTypes,prototypes)
+        prototypes = Prototype.objects.total_units_filter(total_units,prototypes)
+        #------------------------------------------------------------------------
+        #This line needs to be at the end of the filtering section
+        prototypes = Prototype.objects.get_prototypes(prototypes)
+        #------------------------------------------------------------------------
+        
         equipments = Equipment.objects.all().order_by('id')
         finishings = Finishing.objects.all().order_by('id')
         prototypes_list = bring_prototypes(prototypes)
@@ -217,4 +243,8 @@ class PrototypesList(ListView):
             'prototypes_list':prototypes_list,
             'equipments':equipments,
             'finishings':finishings,
+            'prototypes_form':prototypes_form,
+            'projects_form':projects_form,
+            'segment_form':segment_form,
+            'propertyType_form':propertyType_form,
         })

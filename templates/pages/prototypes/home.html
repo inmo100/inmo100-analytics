@@ -8,7 +8,11 @@
   <div class="container-wide">
     <h1 class="h1">Prototipos</h1>
       {% include 'components/filters_new.html' %}
+      {% if prototypes_list == 'null' %}
+      {{"No se encontraron resultados"}}
+      {% else %}
       {% include 'components/prototypes-table.html' %}
+      {% endif %}
   </div>
 </main>
 {% endblock content %}

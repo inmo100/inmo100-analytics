@@ -55,34 +55,74 @@
 
   <!-- //////////////////////////////////////////////// -->
 
-           <div class="form-block checkbox">
+
+        <div class="form-block checkbox">
+            <label for="" class="body2"> 
+                Proyectos
+            </label>
+            
+            <div id="projects">
+                {% for project in projects_form %}
+                <div>
+                    <label for="{{project.id}}_{{project.name}}"><input type="checkbox" name="project" value="{{project.id}}" id="{{project.id}}_{{project.name}}">
+                    {{project.name}}
+                    </label>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="form-block checkbox">
             <label for="" class="body2"> 
                 Prototipo
             </label>
-
-            <div id="id_name"><div>
-    <label for="id_name_0"><input type="checkbox" name="name" value="193" id="id_name_0">
-    Jajaja
-    </label>
-
-</div><div>
-    <label for="id_name_1"><input type="checkbox" name="name" value="192" id="id_name_1">
-    BEHAB
-    </label>
-
-</div><div>
-    <label for="id_name_2"><input type="checkbox" name="name" value="191" id="id_name_2">
-    Bruh
-    </label>
-
-</div><div>
-    <label for="id_name_3"><input type="checkbox" name="name" value="190" id="id_name_3">
-    Leche santa clara
-    </label>
-
-</div>
-</div>
+            
+            <div id="prototypes">
+                {% for prototype in prototypes_form %}
+                <div>
+                    <label for="{{prototype.id}}_{{prototype.name}}"><input type="checkbox" name="prototype" value="{{prototype.id}}" id="{{prototype.id}}_{{prototype.name}}">
+                    {{prototype.name}}
+                    </label>
+                </div>
+                
+                {% endfor %}
             </div>
+        </div>
+
+
+        <div class="form-block checkbox">
+            <label for="" class="body2"> 
+                Segmento
+            </label>
+            
+            <div id="segments">
+                {% for segment in segment_form %}
+                <div>
+                    <label for="{{segment.id}}_{{segment.name}}"><input type="checkbox" name="segment" value="{{segment.id}}" id="{{segment.id}}_{{segment.name}}">
+                    {{segment.name}}
+                    </label>
+                </div>
+                
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="form-block checkbox">
+            <label for="" class="body2"> 
+                Tipo de Propeidad
+            </label>
+            
+            <div id="propertyTypes">
+                {% for propertyType in propertyType_form %}
+                <div>
+                    <label for="{{propertyType.id}}_{{propertyType.name}}"><input type="checkbox" name="propertyType" value="{{propertyType.id}}" id="{{propertyType.id}}_{{propertyType.name}}">
+                    {{propertyType.name}}
+                    </label>
+                </div>
+                
+                {% endfor %}
+            </div>
+        </div>
+
 
 
   <!-- //////////////////////////////////////////////// -->

@@ -74,25 +74,33 @@ class PrototypesManager(models.Manager):
             helper = ['null']
         return helper
 
-    def total_units_filter(self,total_units):
-        if(total_units == []):
+    def total_units_filter(self,total_units,prototypes):
+        if(total_units == [] and prototypes[0] != 'null'):
+            return prototypes
+        if(total_units == [] and prototypes[0] == 'null'):
             arr = []
-            propertyTypes = self.all()
-            for i in propertyTypes:
+            prototypes = self.all()
+            for i in prototypes:
                 arr.append(i.prototype.id)
             return arr
         query = self.filter(
             Q(total_units__gt = (total_units[0]-1)) & Q(total_units__lt = (total_units[1]+1))
         )
+        print(query)
         helper = []
         for j in query:
                 helper.append(j.prototype.id)
         if(helper==[]):
             helper = ['null']
+        if((prototypes != [] and helper != []) or (prototypes!= [] and helper != ['null'])):
+            helper2 = list(set(prototypes) & set(helper))
+            return helper2
         return helper
 
-    def propertyType_filter(self,propertyTypes):
-        if(propertyTypes == []):
+    def propertyType_filter(self,propertyTypes,prototypes):
+        if(propertyTypes == [] and prototypes[0] != 'null'):
+            return prototypes
+        if(propertyTypes == [] and prototypes[0] == 'null'):
             arr = []
             propertyTypes = self.all()
             for i in propertyTypes:
@@ -107,6 +115,11 @@ class PrototypesManager(models.Manager):
                 helper.append(j.prototype.id)
         if(helper==[]):
             helper = ['null']
+        if((prototypes != [] and helper != []) or (prototypes!= [] and helper != ['null'])):
+            helper2 = list(set(prototypes) & set(helper))
+            if(helper2 == []):
+                return ['null']
+            return helper2
         return helper
 
     def project_filter(self,projects):
@@ -127,15 +140,20 @@ class PrototypesManager(models.Manager):
             helper = ['null']
         return helper
     
-    def prototype_filter(self,prototypes):
+    def prototype_filter(self,prototypes,prototypes2):
+        if(prototypes[0] != 'null'  and prototypes2 != []):
+            response = list(set(prototypes) & set(prototypes2))
+            return response
+        if(prototypes[0] == 'null'):
+            return ['null']
         if(prototypes == []):
             arr = []
             prototypes = self.all()
             for i in prototypes:
                 arr.append(i.prototype.id)
             return arr
+        helper = []
         for i in prototypes:
-            helper = []
             query = self.filter(
                 id = i
             )
@@ -144,15 +162,17 @@ class PrototypesManager(models.Manager):
         if(helper==[]):
             helper = ['null']
         return helper
-    def segment_filter(self,segments):
-        if(segments == []):
+    def segment_filter(self,segments,prototypes):
+        if(segments == [] and prototypes[0] != 'null'):
+            return prototypes
+        if(segments == [] and prototypes[0] == 'null'):
             arr = []
             prototypes = self.all()
             for i in prototypes:
                 arr.append(i.prototype.id)
             return arr
+        helper = []
         for i in segments:
-            helper = []
             query = self.filter(
                 segment_field = i
             )
@@ -160,9 +180,21 @@ class PrototypesManager(models.Manager):
                 helper.append(j.prototype.id)
         if(helper==[]):
             helper = ['null']
+        if((prototypes != [] and helper != []) or (prototypes!= [] and helper != ['null'])):
+            helper2 = list(set(prototypes) & set(helper))
+            if(helper2 == []):
+                return ['null']
+            return helper2
         return helper
-
-
+    
+    def get_prototypes(self,prototypes_id):
+        if (prototypes_id == []):
+            return self.all()
+        if(prototypes_id[0] == 'null'):
+            return 'null'
+        queryset = self.filter(id__in=prototypes_id)
+        return queryset
+    
     def prototipos_filtrados_e_f(self,ids1,ids2):
         if(ids1==[] and ids2==[]):
             return self.all()
