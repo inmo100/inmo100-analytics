@@ -551,3 +551,4 @@ def bring_prototypes(prototypes):
         setattr(prototype,'units_sold',units_sold)
         setattr(prototype,'materials',materials)
         setattr(prototype,'equipments_q',equipments_q)
+    return prototypes

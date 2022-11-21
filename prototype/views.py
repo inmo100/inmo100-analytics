@@ -200,8 +200,21 @@ class FixPrototype(ListView):
             return render(request, self.template_name, context={'Prueba': 'No se pudo'})
 
 
-class PrototypesList(FilterView):
+"""class PrototypesList(FilterView):
     model = Prototype
     template_name: str = 'pages/prototypes/home.html'
     filterset_class = PrototypeFilter
-    context_object_name = 'prototypes_list'
+    context_object_name = 'prototypes_list'"""
+
+class PrototypesList(ListView):
+    template_name = 'pages/prototypes/home.html'
+    def get(self, request, *args, **kwargs):
+        prototypes = Prototype.objects.all()
+        equipments = Equipment.objects.all().order_by('id')
+        finishings = Finishing.objects.all().order_by('id')
+        prototypes_list = bring_prototypes(prototypes)
+        return render(request, self.template_name, context={
+            'prototypes_list':prototypes_list,
+            'equipments':equipments,
+            'finishings':finishings,
+        })
