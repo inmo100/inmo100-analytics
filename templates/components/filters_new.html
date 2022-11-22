@@ -125,6 +125,40 @@
             </div>
         </div>
 
+        <div class="form-block checkbox">
+            <label for="" class="body2"> 
+                Equipamiento
+            </label>
+            
+            <div id="equipments">
+                {% for equipment in equipments_form %}
+                <div>
+                    <label for="{{equipment.id}}_{{equipment.name}}"><input type="checkbox" name="equipment" value="{{equipment.id}}" id="{{equipment.id}}_{{equipment.name}}">
+                    {{equipment.name}}
+                    </label>
+                </div>
+                
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="form-block checkbox">
+            <label for="" class="body2"> 
+                Materiales
+            </label>
+            
+            <div id="materials">
+                {% for material in materials_form %}
+                <div>
+                    <label for="{{material.id}}_{{material.material}}"><input type="checkbox" name="material" value="{{material.id}}" id="{{material.id}}_{{material.material}}">
+                    {{material.material}}
+                    </label>
+                </div>
+                
+                {% endfor %}
+            </div>
+        </div>
+
 
 
   <!-- //////////////////////////////////////////////// -->

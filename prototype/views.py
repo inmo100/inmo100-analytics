@@ -212,10 +212,12 @@ class PrototypesList(ListView):
     def get(self, request, *args, **kwargs):
         #------------------------------------------------------------------------
         # This is for the select form
-        prototypes_form = Prototype.objects.all()
-        projects_form = Project.objects.all()
-        segment_form = Segment.objects.all()
-        propertyType_form = PropertyType.objects.all()
+        prototypes_form = Prototype.objects.all().order_by('name')
+        projects_form = Project.objects.all().order_by('name')
+        segment_form = Segment.objects.all().order_by('name')
+        propertyType_form = PropertyType.objects.all().order_by('name')
+        equipments_form = Equipment.objects.all().order_by('name')
+        materials_form  = Material.objects.all().order_by('name')
         #------------------------------------------------------------------------
         prototypes_id = request.GET.getlist('prototype')
         prototypes_id = check_arguments(prototypes_id)
@@ -237,6 +239,12 @@ class PrototypesList(ListView):
         m2_habitable = check_arguments(m2_habitable)
         floors = [request.GET.get('floors_min',''),request.GET.get('floors_max','')]
         floors = check_arguments(floors)
+        equipments_id = request.GET.getlist('equipment')
+        equipments_id = check_arguments(equipments_id)
+        materials_id = request.GET.getlist('material')
+        materials_id = check_arguments(materials_id)
+        #------------------------------------------------------------------------
+        # This are the filters
         prototypes = Prototype.objects.project_filter(projects_id)
         prototypes = Prototype.objects.prototype_filter(prototypes,prototypes_id)
         prototypes = Prototype.objects.segment_filter(segments_id,prototypes)
@@ -248,6 +256,8 @@ class PrototypesList(ListView):
         prototypes = Prototype.objects.m2_constructed_filter(m2_constructed,prototypes)
         prototypes = Prototype.objects.m2_habitable_filter(m2_habitable,prototypes)
         prototypes = Prototype.objects.floors_filter(floors,prototypes)
+        prototypes = EquipmentQuantity.objects.equipment_filter(equipments_id,prototypes)
+        prototypes = Triangulo.objects.triangulo_filter(materials_id,prototypes)
         #------------------------------------------------------------------------
         #This line needs to be at the end of the filtering section
         prototypes = Prototype.objects.get_prototypes(prototypes)
@@ -264,4 +274,6 @@ class PrototypesList(ListView):
             'projects_form':projects_form,
             'segment_form':segment_form,
             'propertyType_form':propertyType_form,
+            'equipments_form':equipments_form,
+            'materials_form':materials_form,
         })

@@ -225,13 +225,11 @@ class PrototypesManager(models.Manager):
 class EquipmentQuantityManager(models.Manager):
     #Managers for equipment quantity
 
-    def equipment_filter(self, equipments):
-        if(equipments == []):
-            arr = []
-            prototypes = self.all()
-            for i in prototypes:
-                arr.append(i.prototype.id)
-            return arr
+    def equipment_filter(self, equipments,prototypes):
+        if(equipments == [] and prototypes[0] != 'null'):
+            return prototypes
+        if(equipments == [] and prototypes[0] == 'null'):
+            return ['null']
         arr2 = []
         for i in equipments:
             helper = []
@@ -247,20 +245,22 @@ class EquipmentQuantityManager(models.Manager):
             helper = list(set(arr2[j]) & set(arr2[j+1]))
         if(helper==[]):
             helper = ['null']
+        if(prototypes!= [] and helper != ['null']):
+            helper2 = list(set(prototypes) & set(helper))
+            if(helper2 == []):
+                return ['null']
+            return helper2
         return helper
 
 class TrianguloManager(models.Manager):
-    def triangulo_filter(self,materials):
-        helper = 0
-        if(materials == []):
-            arr = []
-            prototypes = self.all()
-            for i in prototypes:
-                arr.append(i.prototype.id)
-            return arr
+    def triangulo_filter(self,materials,prototypes):
+        if(materials == [] and prototypes[0] != 'null'):
+            return prototypes
+        if(materials == [] and prototypes[0] == 'null'):
+            return ['null']
         arr2 = []
+        helper = []
         for i in materials:
-            helper = []
             query = self.filter(
                 Q(material=i)
             )
@@ -273,6 +273,11 @@ class TrianguloManager(models.Manager):
             helper = list(set(arr2[j]) & set(arr2[j+1]))
         if(helper==[]):
             helper = ['null']
+        if(prototypes!= [] and helper != ['null']):
+            helper2 = list(set(prototypes) & set(helper))
+            if(helper2 == []):
+                return ['null']
+            return helper2
         return helper
 
 class HistoricalManager(models.Manager):
