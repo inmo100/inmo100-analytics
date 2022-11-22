@@ -1,3 +1,4 @@
+from tabnanny import check
 from django.shortcuts import render
 from django_filters.views import FilterView
 from django.views.generic import ListView
@@ -226,11 +227,16 @@ class PrototypesList(ListView):
         propertyTypes = check_arguments(propertyTypes)
         total_units = [request.GET.get('total_units_min',''),request.GET.get('total_units_max','')]
         total_units = check_arguments(total_units)
+        sold_units = [request.GET.get('sold_units_min',''),request.GET.get('sold_units_max','')]
+        sold_units = check_arguments(sold_units)
         prototypes = Prototype.objects.project_filter(projects_id)
         prototypes = Prototype.objects.prototype_filter(prototypes,prototypes_id)
         prototypes = Prototype.objects.segment_filter(segments_id,prototypes)
         prototypes = Prototype.objects.propertyType_filter(propertyTypes,prototypes)
         prototypes = Prototype.objects.total_units_filter(total_units,prototypes)
+        prototypes = Prototype.objects.total_units(prototypes)
+        print(sold_units)
+        prototypes = Historical.objects.available_units_filter(sold_units,prototypes)
         #------------------------------------------------------------------------
         #This line needs to be at the end of the filtering section
         prototypes = Prototype.objects.get_prototypes(prototypes)

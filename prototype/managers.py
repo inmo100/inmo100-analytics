@@ -78,11 +78,7 @@ class PrototypesManager(models.Manager):
         if(total_units == [] and prototypes[0] != 'null'):
             return prototypes
         if(total_units == [] and prototypes[0] == 'null'):
-            arr = []
-            prototypes = self.all()
-            for i in prototypes:
-                arr.append(i.prototype.id)
-            return arr
+            return ['null']
         query = self.filter(
             Q(total_units__gt = (total_units[0]-1)) & Q(total_units__lt = (total_units[1]+1))
         )
@@ -101,11 +97,7 @@ class PrototypesManager(models.Manager):
         if(propertyTypes == [] and prototypes[0] != 'null'):
             return prototypes
         if(propertyTypes == [] and prototypes[0] == 'null'):
-            arr = []
-            propertyTypes = self.all()
-            for i in propertyTypes:
-                arr.append(i.prototype.id)
-            return arr
+            return ['null']
         for i in propertyTypes:
             helper = []
             query = self.filter(
@@ -166,11 +158,7 @@ class PrototypesManager(models.Manager):
         if(segments == [] and prototypes[0] != 'null'):
             return prototypes
         if(segments == [] and prototypes[0] == 'null'):
-            arr = []
-            prototypes = self.all()
-            for i in prototypes:
-                arr.append(i.prototype.id)
-            return arr
+            return ['null']
         helper = []
         for i in segments:
             query = self.filter(
@@ -217,6 +205,15 @@ class PrototypesManager(models.Manager):
         for i in ids:
             prototypes.append(self.get(id=i))
         return prototypes
+    #This returns all total units from the prototypes given
+    def total_units(self,prototypes):
+        if (prototypes[0] == 'null'):
+            return ['null']
+        dictionary = dict()
+        for prototype in prototypes:
+            dictionary[prototype] = self.get(id=prototype).total_units
+        return dictionary
+    
 class EquipmentQuantityManager(models.Manager):
     #Managers for equipment quantity
 
@@ -286,15 +283,19 @@ class HistoricalManager(models.Manager):
         return arr
     
     def available_units_filter(self,units,prototypes):
-        if(units == []):
+        if((units == [] and prototypes[0] != 'null')):
             arr = []
-            for prototype in prototypes:
-                historical = self.filter(prototype=prototype).latest('date')
-                arr.append(historical.available_units)
+            for clave in prototypes:
+                arr.append(clave)
             return arr
+        if(units == [] and prototypes[0] == 'null'):
+            return ['null']
         arr = []
-        for prototype in prototypes:
-            historical = self.filter(prototype=prototype).latest('date')
-            if(historical.available_units >= units[0] and historical.available_units <= units[1]):
-                arr.append(historical.available_units)
+        for clave in prototypes:
+            historical = self.filter(prototype=clave).latest('date')
+            sold_units = prototypes[clave]-historical.available_units
+            if(sold_units >= units[0] and sold_units <= units[1]):
+                arr.append(clave)
+        if(arr==[]):
+            return ['null']
         return arr
