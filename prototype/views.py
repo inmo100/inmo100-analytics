@@ -235,7 +235,6 @@ class PrototypesList(ListView):
         prototypes = Prototype.objects.propertyType_filter(propertyTypes,prototypes)
         prototypes = Prototype.objects.total_units_filter(total_units,prototypes)
         prototypes = Prototype.objects.total_units(prototypes)
-        print(sold_units)
         prototypes = Historical.objects.available_units_filter(sold_units,prototypes)
         #------------------------------------------------------------------------
         #This line needs to be at the end of the filtering section

@@ -82,13 +82,12 @@ class PrototypesManager(models.Manager):
         query = self.filter(
             Q(total_units__gt = (total_units[0]-1)) & Q(total_units__lt = (total_units[1]+1))
         )
-        print(query)
         helper = []
         for j in query:
-                helper.append(j.prototype.id)
+            helper.append(j.prototype.id)
         if(helper==[]):
             helper = ['null']
-        if((prototypes != [] and helper != []) or (prototypes!= [] and helper != ['null'])):
+        if(prototypes!= [] and helper != ['null']):
             helper2 = list(set(prototypes) & set(helper))
             return helper2
         return helper
@@ -207,6 +206,10 @@ class PrototypesManager(models.Manager):
         return prototypes
     #This returns all total units from the prototypes given
     def total_units(self,prototypes):
+        if(prototypes == []):
+            query = self.all()
+            for prototype in query:
+                prototypes.append(prototype.id)
         if (prototypes[0] == 'null'):
             return ['null']
         dictionary = dict()
@@ -283,14 +286,19 @@ class HistoricalManager(models.Manager):
         return arr
     
     def available_units_filter(self,units,prototypes):
-        if((units == [] and prototypes[0] != 'null')):
-            arr = []
+        if (isinstance(prototypes,dict) == False):
+            if((units == [] and prototypes[0] != 'null')):
+                arr = []
+                for clave in prototypes:
+                    arr.append(clave)
+                return arr
+            if(units == [] and prototypes[0] == 'null'):
+                return ['null']
+        arr = []
+        if(units == []):
             for clave in prototypes:
                 arr.append(clave)
             return arr
-        if(units == [] and prototypes[0] == 'null'):
-            return ['null']
-        arr = []
         for clave in prototypes:
             historical = self.filter(prototype=clave).latest('date')
             sold_units = prototypes[clave]-historical.available_units
