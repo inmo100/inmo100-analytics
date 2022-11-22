@@ -9,6 +9,62 @@
     <h1 class="h1">Proyectos</h1>
       {% include 'components/filters.html' %}
       {% include 'components/projects-table.html' %}
+      <figure class="canvas-container">
+          <canvas id="chart-canvas" aria-label="Gráfica de proyectos" role="img">
+          <p>Tu buscador no tiene soporte para la gráfica</p>
+        </canvas>
+      </figure>
+        
+      <button id="chart-levels">levels</button>
+      <button id="chart-latitude">latitude</button>
   </div>
 </main>
 {% endblock content %}
+
+{% block js %}
+<script>
+  const levelsChart = () =>  createChart({
+    type: 'bar',
+    datasets: 
+    [
+      {
+        label: 'Grafica de niveles',
+        data: 
+        [{% for project in projects_list %}
+          {
+            x: '{{ project.name }}',
+            y: {{ project.levels }},
+          },
+        {% endfor %}]
+      }
+    ]
+  });
+
+  const latitudeChart = () =>  createChart({
+    type: 'bar',
+    datasets: 
+    [
+      {
+        label: 'Grafica de latitudes',
+        data: 
+        [{% for project in projects_list %}
+          {
+            x: '{{ project.name }}',
+            y: parseFloat('{{ project.latitude }}'.replace(',','.').replace(' ','')),
+          },
+        {% endfor %}]
+      }
+    ]
+  });
+
+  const setupChartButtons = () => {
+    const levelsChartButton = document.querySelector('#chart-levels');
+    const latitudeChartButton = document.querySelector('#chart-latitude');
+
+    levelsChartButton.onclick = levelsChart;
+    latitudeChartButton.onclick = latitudeChart;
+  }
+
+  window.addEventListener('DOMContentLoaded', setupChartButtons);
+</script>
+{% endblock js %}
