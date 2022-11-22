@@ -565,5 +565,5 @@ def check_arguments(argument):
         return []
     arr = []
     for i in argument:
-        arr.append(int(i))
+        arr.append(float(i))
     return arr

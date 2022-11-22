@@ -6,30 +6,30 @@ import numpy
 class PrototypesManager(models.Manager):
     #Managers for prtotoypes
     
-    def floors_filter(self,floors):
-        if(floors == []):
-            arr = []
-            prototypes = self.all()
-            for i in prototypes:
-                arr.append(i.prototype.id)
-            return arr
+    def floors_filter(self,floors,prototypes):
+        if(floors == [] and prototypes[0]!= 'null'):
+            return prototypes
+        if(floors == [] and prototypes[0] == 'null'):
+            return ['null']
+        print(floors)
         query = self.filter(
-            floors = floors[0]
+            Q(floors__gt = (floors[0])-1) & Q(floors__lt = (floors[1])+1)
         )
         helper = []
         for j in query:
                 helper.append(j.prototype.id)
         if(helper==[]):
             helper = ['null']
-        return helper.sort()
+        if(prototypes!= [] and helper != ['null']):
+            helper2 = list(set(prototypes) & set(helper))
+            return helper2
+        return helper
 
-    def m2_habitable_filter(self,m2_habitable):
-        if(m2_habitable == []):
-            arr = []
-            prototypes = self.all()
-            for i in prototypes:
-                arr.append(i.prototype.id)
-            return arr
+    def m2_habitable_filter(self,m2_habitable,prototypes):
+        if(m2_habitable == [] and prototypes[0]!= 'null'):
+            return prototypes
+        if(m2_habitable == [] and prototypes[0] == 'null'):
+            return ['null']
         query = self.filter(
             Q(m2_habitable__gt = (m2_habitable[0]-1)) & Q(m2_habitable__lt = (m2_habitable[1]+1))
         )
@@ -38,40 +38,45 @@ class PrototypesManager(models.Manager):
                 helper.append(j.prototype.id)
         if(helper==[]):
             helper = ['null']
+        if(prototypes!= [] and helper != ['null']):
+            helper2 = list(set(prototypes) & set(helper))
+            return helper2
         return helper
 
-    def m2_constructed_filter(self,m2_constructed):
-        if(m2_constructed == []):
-            arr = []
-            prototypes = self.all()
-            for i in prototypes:
-                arr.append(i.prototype.id)
-            return arr
+    def m2_constructed_filter(self,m2_constructed,prototypes):
+        if(m2_constructed == [] and prototypes[0]!= 'null'):
+            return prototypes
+        if(m2_constructed == [] and prototypes[0] == 'null'):
+            return ['null']
         query = self.filter(
-            Q(m2_constructed__gt = (m2_constructed[0]-1)) & Q(m2_constructed__lt = (m2_constructed[1]+1))
+            Q(m2_constructed__gt = (m2_constructed[0])) & Q(m2_constructed__lt = (m2_constructed[1]))
         )
         helper = []
         for j in query:
                 helper.append(j.prototype.id)
         if(helper==[]):
             helper = ['null']
+        if(prototypes!= [] and helper != ['null']):
+            helper2 = list(set(prototypes) & set(helper))
+            return helper2
         return helper
 
-    def m2_terrain_filter(self,m2_terrain):
-        if(m2_terrain == []):
-            arr = []
-            prototypes = self.all()
-            for i in prototypes:
-                arr.append(i.prototype.id)
-            return arr
+    def m2_terrain_filter(self,m2_terrain,prototypes):
+        if(m2_terrain == [] and prototypes[0]!= 'null'):
+            return prototypes
+        if(m2_terrain == [] and prototypes[0] == 'null'):
+            return ['null']
         query = self.filter(
-            Q(m2_terrain_gt = (m2_terrain[0]-1)) & Q(m2_terrain_lt = (m2_terrain[1]+1))
+            Q(m2_terrain__gt = (m2_terrain[0])) & Q(m2_terrain__lt = (m2_terrain[1]))
         )
         helper = []
         for j in query:
                 helper.append(j.prototype.id)
         if(helper==[]):
             helper = ['null']
+        if(prototypes!= [] and helper != ['null']):
+            helper2 = list(set(prototypes) & set(helper))
+            return helper2
         return helper
 
     def total_units_filter(self,total_units,prototypes):

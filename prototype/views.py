@@ -229,6 +229,14 @@ class PrototypesList(ListView):
         total_units = check_arguments(total_units)
         sold_units = [request.GET.get('sold_units_min',''),request.GET.get('sold_units_max','')]
         sold_units = check_arguments(sold_units)
+        m2_terrain = [request.GET.get('m2_terrain_min',''),request.GET.get('m2_terrain_max','')]
+        m2_terrain = check_arguments(m2_terrain)
+        m2_constructed = [request.GET.get('m2_constructed_min',''),request.GET.get('m2_constructed_max','')]
+        m2_constructed = check_arguments(m2_constructed)
+        m2_habitable = [request.GET.get('m2_habitable_min',''),request.GET.get('m2_habitable_max','')]
+        m2_habitable = check_arguments(m2_habitable)
+        floors = [request.GET.get('floors_min',''),request.GET.get('floors_max','')]
+        floors = check_arguments(floors)
         prototypes = Prototype.objects.project_filter(projects_id)
         prototypes = Prototype.objects.prototype_filter(prototypes,prototypes_id)
         prototypes = Prototype.objects.segment_filter(segments_id,prototypes)
@@ -236,6 +244,10 @@ class PrototypesList(ListView):
         prototypes = Prototype.objects.total_units_filter(total_units,prototypes)
         prototypes = Prototype.objects.total_units(prototypes)
         prototypes = Historical.objects.available_units_filter(sold_units,prototypes)
+        prototypes = Prototype.objects.m2_terrain_filter(m2_terrain,prototypes)
+        prototypes = Prototype.objects.m2_constructed_filter(m2_constructed,prototypes)
+        prototypes = Prototype.objects.m2_habitable_filter(m2_habitable,prototypes)
+        prototypes = Prototype.objects.floors_filter(floors,prototypes)
         #------------------------------------------------------------------------
         #This line needs to be at the end of the filtering section
         prototypes = Prototype.objects.get_prototypes(prototypes)
