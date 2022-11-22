@@ -573,3 +573,12 @@ body {
 .inner-page .h1 {
   margin-bottom: 4.5rem;
 }
+
+.canvas-container {
+  padding: 3.5rem 0;
+}
+
+#chart-canvas {
+  width: 100%;
+  max-height: 50vh;
+}
