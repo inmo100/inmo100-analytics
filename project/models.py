@@ -7,13 +7,13 @@ from location.models import Colony
 class Amenity(BaseModel):
     description = models.TextField(verbose_name=_("Description"))
 
-
+# Use Case: 16, 17, 18, 19
 class Developer(BaseModel):
     description = models.TextField(verbose_name=_("Description"))
     image = models.ImageField(verbose_name=_("Image"), null=True, blank=True)
     social_networks = models.JSONField(verbose_name=_("Social networks"))
 
-
+# Use Case: 8, 9, 10, 11
 class Project(BaseModel):
     colony_field = models.ForeignKey(Colony, on_delete=models.PROTECT)
     developer_field = models.ForeignKey(Developer, on_delete=models.PROTECT)

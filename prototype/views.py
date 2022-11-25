@@ -206,7 +206,8 @@ class FixPrototype(ListView):
     template_name: str = 'pages/prototypes/home.html'
     filterset_class = PrototypeFilter
     context_object_name = 'prototypes_list'"""
-
+# List prototypes class view
+# Use Case: 12, 24, 25, 26, 27, 28, 29, 30
 class PrototypesList(ListView):
     template_name = 'pages/prototypes/home.html'
     def get(self, request, *args, **kwargs):

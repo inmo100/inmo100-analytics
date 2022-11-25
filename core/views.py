@@ -7,7 +7,7 @@ from .forms import RegisterUserForm, LoginForm
 def home(request):
     return render(request, 'pages/home.html')
 
-#class based view for login of user
+# Use Case: 1
 class LoginUser(View):
     template_name = "pages/login.html"
     form_class = LoginForm
@@ -39,7 +39,7 @@ class LoginUser(View):
         }
         return render(request, self.template_name, context)
 
-# logout and redirect
+# Use Case: 2
 def logout_user(request):
     logout(request)
     messages.success(request, ("You were logged out"))

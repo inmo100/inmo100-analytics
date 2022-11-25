@@ -12,6 +12,7 @@ from prototype.helpers import *
 class ProjectAdmin(admin.ModelAdmin):
     list_display = ('name', 'developer_field', 'colony_field', 'address', 'datos')
 
+    # add custom urls to admin panel
     def get_urls(self):
         urls = super().get_urls()
         my_urls = [
@@ -21,6 +22,7 @@ class ProjectAdmin(admin.ModelAdmin):
         ]
         return my_urls + urls
 
+    # add custom buttons to project admin view
     def datos(self, obj):
         return format_html(
             '<a class="button" href={}>crear</a>&nbsp;'
@@ -30,7 +32,9 @@ class ProjectAdmin(admin.ModelAdmin):
             reverse('admin:actualizar', args=[obj.pk]),
             reverse('admin:arreglar', args=[obj.pk]),
         )
-
+    
+    # create prototypes for project
+    # Use Case: 32
     def create_csv(self, request, id):
         if request.method == "POST":
             csv_import = CSV_Form(request.POST, request.FILES)
@@ -64,6 +68,8 @@ class ProjectAdmin(admin.ModelAdmin):
         data = {"form":form}
         return render(request, 'admin/create_upload.html', data)
     
+    # update prototypes information
+    # Use Case: 31
     def update_csv(self, request, id):
         if request.method == "POST":
             csv_import = CSV_Form(request.POST, request.FILES)
@@ -98,6 +104,8 @@ class ProjectAdmin(admin.ModelAdmin):
         data = {"form":form, 'file_name': 'plantilla_prototipos_'+project.name+'.csv'}
         return render(request, 'admin/update_upload.html', data)
 
+    # fix recent mistake in data upload
+    # Use Case: 23
     def fix_csv(self, request, id):
         if request.method == "POST":
             csv_import = CSV_Form(request.POST, request.FILES)
@@ -132,6 +140,6 @@ class ProjectAdmin(admin.ModelAdmin):
         data = {"form":form, 'file_name': 'plantilla_prototipos_'+project.name+'.csv'}
         return render(request, 'admin/fix_upload.html', data)
 
+# register models
 admin.site.register(Amenity)
 admin.site.register(Developer)
-#admin.site.register(Project)
