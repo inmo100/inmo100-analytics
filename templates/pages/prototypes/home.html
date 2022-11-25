@@ -19,11 +19,13 @@
         <p>Tu buscador no tiene soporte para la gráfica</p>
         </canvas>
        </figure>
-      
+    
     <button id="chart-units" class="btn-primary" >Unidades Totales</button>
     <button id="chart-sales" class="btn-primary" >Unidades Vendidas</button>
     <button id="chart-stock" class="btn-primary" >Inventario</button>
     <button id="chart-price" class="btn-primary" >Precio</button>
+    <button id="chart-surface" class="btn-primary" >Superficies</button>
+    <button id="chart-pricem2" class="btn-primary" >Precios por m2</button>
 
   </div>
 </main>
@@ -31,12 +33,83 @@
 
 {% block js %}
 <script>
+  const pricem2Chart = () =>  createChart({
+    type: 'line',
+    datasets: 
+    [
+      {
+        label: 'Precios por m2',
+        backgroundColor: cssVar('--color-primary'),
+        borderColor:  cssVar('--color-primary'),
+        borderWidth: 4,
+
+        data: 
+        [{% for prototype in prototypes_list %}
+          {
+            x: '{{ prototype.name }}',
+            y: {{ prototype.price }},
+          },
+        {% endfor %}]
+      },
+      {
+        label: 'Superficie de terreno en m2',
+        backgroundColor: cssVar('--color-accent'),
+        borderColor:  cssVar('--color-accent'),
+        borderWidth: 4,
+        data: 
+        [{% for prototype in prototypes_list %}
+          {
+            x: '{{ prototype.name }}',
+            y: parseFloat('{{ prototype.m2_terrain }}'.replace(',','.').replace(' ','')),
+            r: 5,
+          },
+        {% endfor %}]
+      }
+    ]
+  });
+
+  const surfaceChart = () =>  createChart({
+    type: 'line',
+    datasets: 
+    [
+      {
+        label: 'Superficie de terreno en m2',
+        backgroundColor: cssVar('--color-primary'),
+        borderColor:  cssVar('--color-primary'),
+        borderWidth: 4,
+        data: 
+        [{% for prototype in prototypes_list %}
+          {
+            x: '{{ prototype.name }}',
+            y: parseFloat('{{ prototype.m2_terrain }}'.replace(',','.').replace(' ','')),
+            r: 5,
+          },
+        {% endfor %}]
+      },
+      {
+        label: 'Superficie de construcción en m2',
+        backgroundColor: cssVar('--color-accent'),
+        borderColor:  cssVar('--color-accent'),
+        borderWidth: 4,
+        data: 
+        [{% for prototype in prototypes_list %}
+          {
+            x: '{{ prototype.name }}',
+            y: parseFloat('{{ prototype.m2_constructed }}'.replace(',','.').replace(' ','')),
+            r: 5
+          },
+        {% endfor %}]
+      }
+    ]
+  });
+
+
   const priceChart = () =>  createChart({
     type: 'bar',
     datasets: 
     [
       {
-        label: 'Grafica de precios',
+        label: 'Precios',
         backgroundColor: cssVar('--color-primary'),
         data: 
         [{% for prototype in prototypes_list %}
@@ -54,7 +127,7 @@
     datasets: 
     [
       {
-        label: 'Grafica de unidades totales',
+        label: 'Unidades totales',
         backgroundColor: cssVar('--color-primary'),
         data: 
         [{% for prototype in prototypes_list %}
@@ -72,7 +145,7 @@
     datasets: 
     [
       {
-        label: 'Grafica de unidades vendidas',
+        label: 'Unidades vendidas',
         backgroundColor: cssVar('--color-primary'),
         data: 
         [{% for prototype in prototypes_list %}
@@ -90,7 +163,7 @@
     datasets: 
     [
       {
-        label: 'Grafica de inventario',
+        label: 'Inventario',
         backgroundColor: cssVar('--color-primary'),
         data: 
         [{% for prototype in prototypes_list %}
@@ -108,11 +181,15 @@
     const salesChartButton = document.querySelector('#chart-sales');
     const stockChartButton = document.querySelector('#chart-stock');
     const priceChartButton = document.querySelector('#chart-price');
+    const surfaceChartButton = document.querySelector('#chart-surface');
+    const pricem2ChartButton = document.querySelector('#chart-pricem2');
 
     unitsChartButton.onclick = unitsChart;
     salesChartButton.onclick = salesChart;
     stockChartButton.onclick = stockChart;
     priceChartButton.onclick = priceChart;
+    surfaceChartButton.onclick = surfaceChart;
+    pricem2ChartButton.onclick = pricem2Chart;
 
   }
 
