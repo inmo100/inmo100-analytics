@@ -13,6 +13,109 @@
       {% else %}
       {% include 'components/prototypes-table.html' %}
       {% endif %}
+
+      <figure class="canvas-container">
+        <canvas id="chart-canvas" aria-label="Gráfica de prototipos" role="img">
+        <p>Tu buscador no tiene soporte para la gráfica</p>
+        </canvas>
+       </figure>
+      
+    <button id="chart-units" class="btn-primary" >Unidades Totales</button>
+    <button id="chart-sales" class="btn-primary" >Unidades Vendidas</button>
+    <button id="chart-stock" class="btn-primary" >Inventario</button>
+    <button id="chart-price" class="btn-primary" >Precio</button>
+
   </div>
 </main>
 {% endblock content %}
+
+{% block js %}
+<script>
+  const priceChart = () =>  createChart({
+    type: 'bar',
+    datasets: 
+    [
+      {
+        label: 'Grafica de precios',
+        backgroundColor: cssVar('--color-primary'),
+        data: 
+        [{% for prototype in prototypes_list %}
+          {
+            x: '{{ prototype.name }}',
+            y: {{ prototype.price }},
+          },
+        {% endfor %}]
+      }
+    ]
+  });
+
+  const unitsChart = () =>  createChart({
+    type: 'bar',
+    datasets: 
+    [
+      {
+        label: 'Grafica de unidades totales',
+        backgroundColor: cssVar('--color-primary'),
+        data: 
+        [{% for prototype in prototypes_list %}
+          {
+            x: '{{ prototype.name }}',
+            y: {{ prototype.total_units }},
+          },
+        {% endfor %}]
+      }
+    ]
+  });
+
+  const salesChart = () =>  createChart({
+    type: 'bar',
+    datasets: 
+    [
+      {
+        label: 'Grafica de unidades vendidas',
+        backgroundColor: cssVar('--color-primary'),
+        data: 
+        [{% for prototype in prototypes_list %}
+          {
+            x: '{{ prototype.name }}',
+            y: {{ prototype.units_sold}},
+          },
+        {% endfor %}]
+      }
+    ]
+  });
+
+  const stockChart = () =>  createChart({
+    type: 'bar',
+    datasets: 
+    [
+      {
+        label: 'Grafica de inventario',
+        backgroundColor: cssVar('--color-primary'),
+        data: 
+        [{% for prototype in prototypes_list %}
+          {
+            x: '{{ prototype.name }}',
+            y: {{ prototype.total_units }} - {{ prototype.units_sold}},
+          },
+        {% endfor %}]
+      }
+    ]
+  });
+
+  const setupChartButtons = () => {
+    const unitsChartButton = document.querySelector('#chart-units');
+    const salesChartButton = document.querySelector('#chart-sales');
+    const stockChartButton = document.querySelector('#chart-stock');
+    const priceChartButton = document.querySelector('#chart-price');
+
+    unitsChartButton.onclick = unitsChart;
+    salesChartButton.onclick = salesChart;
+    stockChartButton.onclick = stockChart;
+    priceChartButton.onclick = priceChart;
+
+  }
+
+  window.addEventListener('DOMContentLoaded', setupChartButtons);
+</script>
+{% endblock js %}

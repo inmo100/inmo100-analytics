@@ -7,6 +7,8 @@ document.addEventListener("click", (e) => {
   if (closest) closest.classList.add('active');
 });
 
+const cssVar = (item) => getComputedStyle(document.querySelector(':root')).getPropertyValue(item);
+
 const createChart = ({type, datasets}) => {
   const canvas = document.querySelector("#chart-canvas").getContext('2d');
   if (!canvas) return console.log('Make sure that the element is a canvas');
