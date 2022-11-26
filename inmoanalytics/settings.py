@@ -16,7 +16,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Initialize the environment variables
 env = environ.Env(
-    DEBUG=(bool, False)
+    DEBUG=(bool, False),
+    CSRF_COOKIE_SECURE=(bool, True),
+    SESSION_COOKIE_SECURE=(bool, True),
+    SECURE_SSL_REDIRECT=(bool, True),
 )
 
 environ.Env.read_env(str(BASE_DIR / '.env'))
