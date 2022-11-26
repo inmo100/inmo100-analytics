@@ -35,7 +35,7 @@ CSRF_COOKIE_SECURE = env('CSRF_COOKIE_SECURE')
 SESSION_COOKIE_SECURE = env('SESSION_COOKIE_SECURE')
 
 
-ALLOWED_HOSTS = "127.0.0.1,localhost".split(",")
+ALLOWED_HOSTS = ['sea-turtle-app-k7fbz.ondigitalocean.app', '127.0.0.1', 'localhost']
 
 # Application definition
 
