@@ -28,6 +28,7 @@
     <button id="chart-pricem2" class="btn-primary" >Precios por m2</button>
     <button id="chart-histabs" class="btn-primary" >Absorción Histórica</button>
     <button id="chart-mesesinv" class="btn-primary" >Meses Inventario</button>
+    <button id="chart-sellflow" class="btn-primary" >Ritmo de Venta</button>
 
   </div>
 </main>
@@ -214,6 +215,24 @@
     ]
   });
 
+  const sellflowChart = () =>  createChart({
+    type: 'bar',
+    datasets: 
+    [
+      {
+        label: 'Meses Inventario',
+        backgroundColor: cssVar('--color-primary'),
+        data: 
+        [{% for prototype in prototypes_list %}
+          {
+            x: '{{ prototype.name }}',
+            y: parseFloat('{{ prototype.sell_flow }}'.replace(',','.').replace(' ','')),
+          },
+        {% endfor %}]
+      }
+    ]
+  });
+
   const setupChartButtons = () => {
     const unitsChartButton = document.querySelector('#chart-units');
     const salesChartButton = document.querySelector('#chart-sales');
@@ -223,6 +242,7 @@
     const pricem2ChartButton = document.querySelector('#chart-pricem2');
     const histabsChartButton = document.querySelector('#chart-histabs');
     const mesesinvChartButton = document.querySelector('#chart-mesesinv');
+    const sellflowChartButton = document.querySelector('#chart-sellflow');
 
     unitsChartButton.onclick = unitsChart;
     salesChartButton.onclick = salesChart;
@@ -232,6 +252,7 @@
     pricem2ChartButton.onclick = pricem2Chart;
     histabsChartButton.onclick = histabsChart;
     mesesinvChartButton.onclick = mesesinvChart;
+    sellflowChartButton.onclick = sellflowChart;
 
   }
 
