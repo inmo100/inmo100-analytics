@@ -551,19 +551,29 @@ def bring_prototypes(prototypes):
         historical = Historical.objects.filter(prototype=prototype).latest('date')
         price = historical.price
         units_sold = prototype.total_units - historical.available_units
+        absorcion_historica = units_sold/diff_month(Historical.objects.filter(prototype=prototype).earliest('date').date)
         setattr(prototype,'price',price)
         setattr(prototype,'units_sold',units_sold)
         setattr(prototype,'materials',materials)
         setattr(prototype,'equipments_q',equipments_q)
+        setattr(prototype,'histabs',absorcion_historica)
     return prototypes
 
 
 def check_arguments(argument):
     if(argument == []):
         return argument
-    if argument[0] == '':
+    if (argument[0] == '' or argument[1] == ''):
         return []
     arr = []
     for i in argument:
         arr.append(float(i))
     return arr
+
+
+def diff_month(d2):
+    d1 = datetime.today()
+    dif = (d1.year - d2.year) * 12 + d1.month - d2.month
+    if(dif == 0):
+        dif = dif+1
+    return dif
