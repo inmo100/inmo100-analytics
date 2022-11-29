@@ -552,11 +552,13 @@ def bring_prototypes(prototypes):
         price = historical.price
         units_sold = prototype.total_units - historical.available_units
         absorcion_historica = units_sold/diff_month(Historical.objects.filter(prototype=prototype).earliest('date').date)
+        meses_inventario = historical.available_units/absorcion_historica
         setattr(prototype,'price',price)
         setattr(prototype,'units_sold',units_sold)
         setattr(prototype,'materials',materials)
         setattr(prototype,'equipments_q',equipments_q)
         setattr(prototype,'histabs',absorcion_historica)
+        setattr(prototype,'meses_inventario',meses_inventario)
     return prototypes
 
 
