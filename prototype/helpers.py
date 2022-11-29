@@ -561,10 +561,11 @@ def bring_prototypes(prototypes):
 
 
 def check_arguments(argument):
+    if(len(argument) == 2):
+        if (argument[0] == '' or argument[1] == ''):
+            return []
     if(argument == []):
         return argument
-    if (argument[0] == '' or argument[1] == ''):
-        return []
     arr = []
     for i in argument:
         arr.append(float(i))
