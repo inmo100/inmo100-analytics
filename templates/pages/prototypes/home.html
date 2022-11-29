@@ -7,6 +7,7 @@
 <main class="inner-page">
   <div class="container-wide">
     <h1 class="h1">Prototipos</h1>
+    {% if prototypes_list %}
       {% include 'components/filters_new.html' %}
       {% if prototypes_list == 'null' %}
       {{"No se encontraron resultados"}}
@@ -27,11 +28,16 @@
     <button id="chart-surface" class="btn-primary" >Superficies</button>
     <button id="chart-pricem2" class="btn-primary" >Precios por m2</button>
 
+    {% else %}
+      <h3 class="h3">No existen prototipos en tu base de datos</h3>
+    {% endif %}
   </div>
 </main>
 {% endblock content %}
 
 {% block js %}
+
+{% if prototypes_list %}
 <script>
   const pricem2Chart = () =>  createChart({
     type: 'line',
@@ -195,4 +201,5 @@
 
   window.addEventListener('DOMContentLoaded', setupChartButtons);
 </script>
+{% endif %}
 {% endblock js %}

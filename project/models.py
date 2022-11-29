@@ -2,7 +2,8 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from core.models import BaseModel
 from location.models import Colony
-
+from django.db.models import CheckConstraint, Q
+from django.core.validators import MinValueValidator
 
 class Amenity(BaseModel):
     description = models.TextField(verbose_name=_("Description"))
@@ -28,4 +29,11 @@ class Project(BaseModel):
     phone = models.CharField(verbose_name=_("Phone"), max_length=100)
     brochure = models.FileField(verbose_name=_("Brochure"))
     social_networks = models.JSONField(verbose_name=_("Social networks"))
-    levels = models.SmallIntegerField(verbose_name=("Niveles"), default=1)
+    levels = models.SmallIntegerField(validators=[MinValueValidator(0)],verbose_name=("Niveles"), default=1)
+
+    class Meta:
+        constraints = (
+            CheckConstraint(
+                check=Q(levels__gte=0),
+                name='Levels_constraint'),
+            )

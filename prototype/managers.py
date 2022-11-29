@@ -137,27 +137,30 @@ class PrototypesManager(models.Manager):
         return helper
     
     def prototype_filter(self,prototypes,prototypes2):
-        if(prototypes[0] != 'null'  and prototypes2 != []):
-            response = list(set(prototypes) & set(prototypes2))
-            return response
-        if(prototypes[0] == 'null'):
-            return ['null']
-        if(prototypes == []):
-            arr = []
-            prototypes = self.all()
+        try:
+            if(prototypes[0] != 'null'  and prototypes2 != []):
+                response = list(set(prototypes) & set(prototypes2))
+                return response
+            if(prototypes[0] == 'null'):
+                return ['null']
+            if(prototypes == []):
+                arr = []
+                prototypes = self.all()
+                for i in prototypes:
+                    arr.append(i.prototype.id)
+                return arr
+            helper = []
             for i in prototypes:
-                arr.append(i.prototype.id)
-            return arr
-        helper = []
-        for i in prototypes:
-            query = self.filter(
-                id = i
-            )
-            for j in query:
-                helper.append(j.prototype.id)
-        if(helper==[]):
-            helper = ['null']
-        return helper
+                query = self.filter(
+                    id = i
+                )
+                for j in query:
+                    helper.append(j.prototype.id)
+            if(helper==[]):
+                helper = ['null']
+            return helper
+        except:
+            return 1
     def segment_filter(self,segments,prototypes):
         if(segments == [] and prototypes[0] != 'null'):
             return prototypes
