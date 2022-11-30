@@ -7,12 +7,276 @@
 <main class="inner-page">
   <div class="container-wide">
     <h1 class="h1">Prototipos</h1>
+    {% if prototypes_list %}
       {% include 'components/filters_new.html' %}
       {% if prototypes_list == 'null' %}
       {{"No se encontraron resultados"}}
       {% else %}
       {% include 'components/prototypes-table.html' %}
       {% endif %}
+
+      <figure class="canvas-container">
+        <canvas id="chart-canvas" aria-label="Gráfica de prototipos" role="img">
+        <p>Tu buscador no tiene soporte para la gráfica</p>
+        </canvas>
+       </figure>
+    
+       <div class="screen-container">
+    <button id="chart-units" class="btn-primary" >Unidades Totales</button>
+    <button id="chart-sales" class="btn-primary" >Unidades Vendidas</button>
+    <button id="chart-stock" class="btn-primary" >Inventario</button>
+    <button id="chart-price" class="btn-primary" >Precio</button>
+    <button id="chart-surface" class="btn-primary" >Superficies</button>
+    <button id="chart-pricem2" class="btn-primary" >Precios por m2</button>
+    <button id="chart-histabs" class="btn-primary" >Absorción Histórica</button>
+    <button id="chart-mesesinv" class="btn-primary" >Meses Inventario</button>
+    <button id="chart-sellflow" class="btn-primary" >Ritmo de Venta</button>
+       </div>
+
+
+    {% else %}
+      <h2 class="h2">Ocurrio un error con la base de datos</h2>
+      </br>
+      </br>
+      <h3 class="h3">Errores posibles:</h3>
+      <ul class="h3">
+        <li class="h3">No existen prototipos en tu base de datos</li>
+        <li class="h3">No se subio correctamente un prototipo a la base de datos</li>
+      </ul>
+      </br>
+      </br>
+      <h3 class="h3">Favor de contactar un administrador para arreglar el error</h3>
+
+    {% endif %}
   </div>
 </main>
 {% endblock content %}
+
+{% block js %}
+
+{% if prototypes_list %}
+<script>
+  const pricem2Chart = () =>  createChart({
+    type: 'line',
+    datasets: 
+    [
+      {
+        label: 'Precios por m2',
+        backgroundColor: cssVar('--color-primary'),
+        borderColor:  cssVar('--color-primary'),
+        borderWidth: 4,
+
+        data: 
+        [{% for prototype in prototypes_list %}
+          {
+            x: '{{ prototype.name }}',
+            y: {{ prototype.price }},
+          },
+        {% endfor %}]
+      },
+      {
+        label: 'Superficie de terreno en m2',
+        backgroundColor: cssVar('--color-accent'),
+        borderColor:  cssVar('--color-accent'),
+        borderWidth: 4,
+        data: 
+        [{% for prototype in prototypes_list %}
+          {
+            x: '{{ prototype.name }}',
+            y: parseFloat('{{ prototype.m2_terrain }}'.replace(',','.').replace(' ','')),
+            r: 5,
+          },
+        {% endfor %}]
+      }
+    ]
+  });
+
+  const surfaceChart = () =>  createChart({
+    type: 'line',
+    datasets: 
+    [
+      {
+        label: 'Superficie de terreno en m2',
+        backgroundColor: cssVar('--color-primary'),
+        borderColor:  cssVar('--color-primary'),
+        borderWidth: 4,
+        data: 
+        [{% for prototype in prototypes_list %}
+          {
+            x: '{{ prototype.name }}',
+            y: parseFloat('{{ prototype.m2_terrain }}'.replace(',','.').replace(' ','')),
+            r: 5,
+          },
+        {% endfor %}]
+      },
+      {
+        label: 'Superficie de construcción en m2',
+        backgroundColor: cssVar('--color-accent'),
+        borderColor:  cssVar('--color-accent'),
+        borderWidth: 4,
+        data: 
+        [{% for prototype in prototypes_list %}
+          {
+            x: '{{ prototype.name }}',
+            y: parseFloat('{{ prototype.m2_constructed }}'.replace(',','.').replace(' ','')),
+            r: 5
+          },
+        {% endfor %}]
+      }
+    ]
+  });
+
+
+  const priceChart = () =>  createChart({
+    type: 'bar',
+    datasets: 
+    [
+      {
+        label: 'Precios',
+        backgroundColor: cssVar('--color-primary'),
+        data: 
+        [{% for prototype in prototypes_list %}
+          {
+            x: '{{ prototype.name }}',
+            y: {{ prototype.price }},
+          },
+        {% endfor %}]
+      }
+    ]
+  });
+
+  const unitsChart = () =>  createChart({
+    type: 'bar',
+    datasets: 
+    [
+      {
+        label: 'Unidades totales',
+        backgroundColor: cssVar('--color-primary'),
+        data: 
+        [{% for prototype in prototypes_list %}
+          {
+            x: '{{ prototype.name }}',
+            y: {{ prototype.total_units }},
+          },
+        {% endfor %}]
+      }
+    ]
+  });
+
+  const salesChart = () =>  createChart({
+    type: 'bar',
+    datasets: 
+    [
+      {
+        label: 'Unidades vendidas',
+        backgroundColor: cssVar('--color-primary'),
+        data: 
+        [{% for prototype in prototypes_list %}
+          {
+            x: '{{ prototype.name }}',
+            y: {{ prototype.units_sold}},
+          },
+        {% endfor %}]
+      }
+    ]
+  });
+
+  const stockChart = () =>  createChart({
+    type: 'bar',
+    datasets: 
+    [
+      {
+        label: 'Inventario',
+        backgroundColor: cssVar('--color-primary'),
+        data: 
+        [{% for prototype in prototypes_list %}
+          {
+            x: '{{ prototype.name }}',
+            y: {{ prototype.total_units }} - {{ prototype.units_sold}},
+          },
+        {% endfor %}]
+      }
+    ]
+  });
+
+  const histabsChart = () =>  createChart({
+    type: 'bar',
+    datasets: 
+    [
+      {
+        label: 'Absorción Histórica',
+        backgroundColor: cssVar('--color-primary'),
+        data: 
+        [{% for prototype in prototypes_list %}
+          {
+            x: '{{ prototype.name }}',
+            y: parseFloat('{{ prototype.histabs }}'.replace(',','.').replace(' ','')),
+          },
+        {% endfor %}]
+      }
+    ]
+  });
+
+  const mesesinvChart = () =>  createChart({
+    type: 'bar',
+    datasets: 
+    [
+      {
+        label: 'Meses Inventario',
+        backgroundColor: cssVar('--color-primary'),
+        data: 
+        [{% for prototype in prototypes_list %}
+          {
+            x: '{{ prototype.name }}',
+            y: parseFloat('{{ prototype.meses_inventario }}'.replace(',','.').replace(' ','')),
+          },
+        {% endfor %}]
+      }
+    ]
+  });
+
+  const sellflowChart = () =>  createChart({
+    type: 'bar',
+    datasets: 
+    [
+      {
+        label: 'Meses Inventario',
+        backgroundColor: cssVar('--color-primary'),
+        data: 
+        [{% for prototype in prototypes_list %}
+          {
+            x: '{{ prototype.name }}',
+            y: parseFloat('{{ prototype.sell_flow }}'.replace(',','.').replace(' ','')),
+          },
+        {% endfor %}]
+      }
+    ]
+  });
+
+  const setupChartButtons = () => {
+    const unitsChartButton = document.querySelector('#chart-units');
+    const salesChartButton = document.querySelector('#chart-sales');
+    const stockChartButton = document.querySelector('#chart-stock');
+    const priceChartButton = document.querySelector('#chart-price');
+    const surfaceChartButton = document.querySelector('#chart-surface');
+    const pricem2ChartButton = document.querySelector('#chart-pricem2');
+    const histabsChartButton = document.querySelector('#chart-histabs');
+    const mesesinvChartButton = document.querySelector('#chart-mesesinv');
+    const sellflowChartButton = document.querySelector('#chart-sellflow');
+
+    unitsChartButton.onclick = unitsChart;
+    salesChartButton.onclick = salesChart;
+    stockChartButton.onclick = stockChart;
+    priceChartButton.onclick = priceChart;
+    surfaceChartButton.onclick = surfaceChart;
+    pricem2ChartButton.onclick = pricem2Chart;
+    histabsChartButton.onclick = histabsChart;
+    mesesinvChartButton.onclick = mesesinvChart;
+    sellflowChartButton.onclick = sellflowChart;
+
+  }
+
+  window.addEventListener('DOMContentLoaded', setupChartButtons);
+</script>
+{% endif %}
+{% endblock js %}

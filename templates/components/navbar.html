@@ -1,4 +1,5 @@
 {% load static %}
+{% block content %}
 <nav class="navbar">
   <a href="" class="nav-logo"><img src="{% static 'img/logo-white.svg' %}" alt="Inmo100"></a>
   <ul class="nav-menu">
@@ -6,7 +7,12 @@
     <li class="nav-link icon-grid"><a href="{% url 'projects' %}">Proyectos</a></li>
     <li class="nav-link icon-home"><a href="{% url 'prototypes' %}">Prototipos</a></li>
     <div class="nav-divider"></div>
-    <li class="nav-link icon-user"><a href="">Tu Perfil</a></li>
-    <li class="nav-link icon-logout"><a href="">Cerrar sesión</a></li>
+    {% if user.is_authenticated %}
+      <li class="nav-link icon-user"><a href="">Tu Perfil</a></li>
+      <li class="nav-link icon-logout"><a href="{% url 'logout' %}">Cerrar sesión</a></li>
+    {% else %}
+      <li class="nav-link icon-login"><a href="{% url 'login' %}">Iniciar sesión</a></li>
+    {% endif %}
   </ul>
 </nav>
+{% endblock %}

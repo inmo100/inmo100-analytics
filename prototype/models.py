@@ -4,7 +4,8 @@ from datetime import datetime
 from core.models import BaseModel, AbstractModel
 from project.models import Project
 from .managers import PrototypesManager,EquipmentQuantityManager,TrianguloManager,HistoricalManager
-
+from django.db.models import CheckConstraint, Q
+from django.core.validators import MinValueValidator
 # arreglar el MER y MR
 
 
@@ -56,22 +57,38 @@ class Prototype(BaseModel):
         PropertyType, on_delete=models.PROTECT, null=True)
     equipments = models.ManyToManyField(Equipment, through='EquipmentQuantity')
 
-    total_units = models.IntegerField(verbose_name=_("Total units"), null=True)
-    m2_terrain = models.FloatField(verbose_name=(
+    total_units = models.PositiveIntegerField (verbose_name=_("Total units"), null=True)
+    m2_terrain = models.FloatField(validators=[MinValueValidator(0.0)],verbose_name=(
         "Terrain in square meters"), null=True)
-    m2_constructed = models.FloatField(verbose_name=(
+    m2_constructed = models.FloatField(validators=[MinValueValidator(0.0)],verbose_name=(
         "Constructed area in square meters"), null=True)
-    m2_habitable = models.FloatField(verbose_name=(
+    m2_habitable = models.FloatField(validators=[MinValueValidator(0.0)],verbose_name=(
         "Habiable area in square meters"), null=True)
-    floors = models.SmallIntegerField(
+    floors = models.SmallIntegerField(validators=[MinValueValidator(0)],
         verbose_name=("Pisos"), default=1, null=True)
     objects = PrototypesManager()
+
+    class Meta:
+        constraints = (
+            CheckConstraint(
+                check=Q(m2_terrain__gte=0.0),
+                name='Terrain_constraint'),
+            CheckConstraint(
+                check=Q(m2_constructed__gte=0.0),
+                name='Constraint_constraint'),
+            CheckConstraint(
+                check=Q(m2_habitable__gte=0.0),
+                name='Habitable_constraint'),
+            CheckConstraint(
+                check=Q(floors__gte=0),
+                name='Floors_constraint'),
+            )
 
 
 class EquipmentQuantity(AbstractModel):
     equipment = models.ForeignKey(Equipment, on_delete=models.PROTECT)
     prototype = models.ForeignKey(Prototype, on_delete=models.PROTECT)
-    quantity = models.IntegerField(verbose_name=(
+    quantity = models.PositiveIntegerField(verbose_name=(
         "Equipment quantity per prototype"), null=True)
     objects = EquipmentQuantityManager()
 
@@ -95,7 +112,7 @@ class Historical(models.Model):  # Historical only needs abstract model
     prototype = models.ForeignKey(Prototype, on_delete=models.PROTECT)
 
     date = models.DateTimeField(verbose_name=_("Date"), default=datetime.now)
-    price = models.IntegerField(verbose_name=_("Price"), null=True)
-    available_units = models.IntegerField(
+    price = models.PositiveIntegerField(verbose_name=_("Price"), null=True)
+    available_units = models.PositiveIntegerField(
         verbose_name=_("Available Units"), null=True)
     objects = HistoricalManager()

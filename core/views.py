@@ -32,7 +32,7 @@ class LoginUser(View):
                     if remember_me:
                         request.session.set_expiry(259200)
                     messages.success(request, ("Login Successful"))
-                    return redirect('home')
+                    return redirect('prototypes')
         messages.success(request, ("We could not authenticate you with the given credentials"))
         context = {
             'login_form': form,
@@ -43,7 +43,7 @@ class LoginUser(View):
 def logout_user(request):
     logout(request)
     messages.success(request, ("You were logged out"))
-    return redirect('home')
+    return redirect('prototypes')
 
 # process the registration form, create the new user and authenticate them
 class RegisterUser(View):
