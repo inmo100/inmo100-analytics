@@ -21,12 +21,18 @@
         </canvas>
        </figure>
     
+       <div class="screen-container">
     <button id="chart-units" class="btn-primary" >Unidades Totales</button>
     <button id="chart-sales" class="btn-primary" >Unidades Vendidas</button>
     <button id="chart-stock" class="btn-primary" >Inventario</button>
     <button id="chart-price" class="btn-primary" >Precio</button>
     <button id="chart-surface" class="btn-primary" >Superficies</button>
     <button id="chart-pricem2" class="btn-primary" >Precios por m2</button>
+    <button id="chart-histabs" class="btn-primary" >Absorción Histórica</button>
+    <button id="chart-mesesinv" class="btn-primary" >Meses Inventario</button>
+    <button id="chart-sellflow" class="btn-primary" >Ritmo de Venta</button>
+       </div>
+
 
     {% else %}
       <h3 class="h3">No existen prototipos en tu base de datos</h3>
@@ -182,6 +188,60 @@
     ]
   });
 
+  const histabsChart = () =>  createChart({
+    type: 'bar',
+    datasets: 
+    [
+      {
+        label: 'Absorción Histórica',
+        backgroundColor: cssVar('--color-primary'),
+        data: 
+        [{% for prototype in prototypes_list %}
+          {
+            x: '{{ prototype.name }}',
+            y: parseFloat('{{ prototype.histabs }}'.replace(',','.').replace(' ','')),
+          },
+        {% endfor %}]
+      }
+    ]
+  });
+
+  const mesesinvChart = () =>  createChart({
+    type: 'bar',
+    datasets: 
+    [
+      {
+        label: 'Meses Inventario',
+        backgroundColor: cssVar('--color-primary'),
+        data: 
+        [{% for prototype in prototypes_list %}
+          {
+            x: '{{ prototype.name }}',
+            y: parseFloat('{{ prototype.meses_inventario }}'.replace(',','.').replace(' ','')),
+          },
+        {% endfor %}]
+      }
+    ]
+  });
+
+  const sellflowChart = () =>  createChart({
+    type: 'bar',
+    datasets: 
+    [
+      {
+        label: 'Meses Inventario',
+        backgroundColor: cssVar('--color-primary'),
+        data: 
+        [{% for prototype in prototypes_list %}
+          {
+            x: '{{ prototype.name }}',
+            y: parseFloat('{{ prototype.sell_flow }}'.replace(',','.').replace(' ','')),
+          },
+        {% endfor %}]
+      }
+    ]
+  });
+
   const setupChartButtons = () => {
     const unitsChartButton = document.querySelector('#chart-units');
     const salesChartButton = document.querySelector('#chart-sales');
@@ -189,6 +249,9 @@
     const priceChartButton = document.querySelector('#chart-price');
     const surfaceChartButton = document.querySelector('#chart-surface');
     const pricem2ChartButton = document.querySelector('#chart-pricem2');
+    const histabsChartButton = document.querySelector('#chart-histabs');
+    const mesesinvChartButton = document.querySelector('#chart-mesesinv');
+    const sellflowChartButton = document.querySelector('#chart-sellflow');
 
     unitsChartButton.onclick = unitsChart;
     salesChartButton.onclick = salesChart;
@@ -196,6 +259,9 @@
     priceChartButton.onclick = priceChart;
     surfaceChartButton.onclick = surfaceChart;
     pricem2ChartButton.onclick = pricem2Chart;
+    histabsChartButton.onclick = histabsChart;
+    mesesinvChartButton.onclick = mesesinvChart;
+    sellflowChartButton.onclick = sellflowChart;
 
   }
 

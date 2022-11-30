@@ -285,17 +285,15 @@ class TrianguloManager(models.Manager):
 
 class HistoricalManager(models.Manager):
     def price_filter(self,price,prototypes):
-        if(price == []):
-            arr = []
-            for prototype in prototypes:
-                historical = self.filter(prototype=prototype).latest('date')
-                arr.append(historical.price)
-            return arr
+        if(price == [] and prototypes[0] == 'null'):
+            return ['null']
+        if(price == [] and prototypes[0]!='null'):
+            return prototypes
         arr = []
         for prototype in prototypes:
             historical = self.filter(prototype=prototype).latest('date')
             if(historical.price >= price[0] and historical.price <= price[1]):
-                arr.append(historical.price)
+                arr.append(prototype)
         return arr
     
     def available_units_filter(self,units,prototypes):

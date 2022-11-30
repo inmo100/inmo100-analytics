@@ -47,6 +47,8 @@ class PrototypesList(ListView):
         equipments_id = check_arguments(equipments_id)
         materials_id = request.GET.getlist('material')
         materials_id = check_arguments(materials_id)
+        price = [request.GET.get('price_min',''),request.GET.get('price_min_max','')]
+        price = check_arguments(price)
         #------------------------------------------------------------------------
         # This are the filters
         prototypes = Prototype.objects.project_filter(projects_id)
@@ -64,6 +66,7 @@ class PrototypesList(ListView):
         prototypes = Prototype.objects.floors_filter(floors,prototypes)
         prototypes = EquipmentQuantity.objects.equipment_filter(equipments_id,prototypes)
         prototypes = Triangulo.objects.triangulo_filter(materials_id,prototypes)
+        prototypes = Historical.objects.price_filter(price,prototypes)
         #------------------------------------------------------------------------
         #This line needs to be at the end of the filtering section
         prototypes = Prototype.objects.get_prototypes(prototypes)
