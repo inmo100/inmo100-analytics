@@ -5,6 +5,7 @@ from .models import Developer, Project
 import json
 from django_filters.views import FilterView
 from .filter import ProjectFilter
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 # Función para guardar los datos de la desarrolladora
 
@@ -14,7 +15,6 @@ class DeveloperView(ListView):
     model = Developer
     queryset: Developer.objects.all()
     context_object_name = 'list_developers'
-
 
 class CreateDeveloper(TemplateView):
     template_name = 'form_desarrolladora.html'
@@ -55,12 +55,14 @@ class CreateProject(CreateView):
     success_url = 'projects'
 
 
-class DevelopersList(ListView):
+class DevelopersList(LoginRequiredMixin, ListView):
     paginate_by = 15
     template_name = 'pages/developers/home.html'
     model = Developer
     queryset = Developer.objects.all()
     context_object_name = 'developers_list'
+    login_url = 'login'
+    redirect_field_name = 'redirect_to'
 
 
 class ProjectDetail(DetailView):
@@ -74,11 +76,13 @@ class ProjectDetail(DetailView):
         return context
 
 
-class ProjectsList(FilterView):
+class ProjectsList(LoginRequiredMixin, FilterView):
     model = Project
     template_name: str = 'pages/projects/home.html'
     filterset_class = ProjectFilter
     context_object_name = 'projects_list'
+    login_url = 'login'
+    redirect_field_name = 'redirect_to'
 
 
 def is_valid_queryparam(param):

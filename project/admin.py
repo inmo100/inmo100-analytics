@@ -28,14 +28,14 @@ class ProjectAdmin(admin.ModelAdmin):
         #only allow to create prototypes if none already exist
         if Prototype.objects.filter(project_field=obj.id).exists():
             return format_html(
-                '<a class="button" href={}>actualizar</a>&nbsp;'
-                '<a class="button" href={}>arreglar</a>',
+                '<a class="button" href={}>Actualizar Prototipos</a>&nbsp;'
+                '<a class="button" href={}>Arreglar Errores</a>',
                 reverse('admin:actualizar', args=[obj.pk]),
                 reverse('admin:arreglar', args=[obj.pk]),
             )
         else:
             return format_html(
-                '<a class="button" href={}>crear</a>&nbsp;',
+                '<a class="button" href={}>Agregar Prototipos</a>&nbsp;',
                 reverse('admin:crear', args=[obj.pk]),
             )
     

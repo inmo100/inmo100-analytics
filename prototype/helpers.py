@@ -548,7 +548,10 @@ def bring_prototypes(prototypes):
         else:
             equipments_q = EquipmentQuantity.objects.filter(prototype = prototype).order_by('id')
         materials = Triangulo.objects.filter(prototype = prototype).order_by('id')
-        historical = Historical.objects.filter(prototype=prototype).latest('date')
+        try:
+            historical = Historical.objects.filter(prototype=prototype).latest('date')
+        except:
+            return None
         price = historical.price
         units_sold = prototype.total_units - historical.available_units
         absorcion_historica = units_sold/diff_month(Historical.objects.filter(prototype=prototype).earliest('date').date)

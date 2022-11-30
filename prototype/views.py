@@ -1,10 +1,5 @@
-from tabnanny import check
-from django.shortcuts import render
-from django_filters.views import FilterView
+from django.shortcuts import render, redirect
 from django.views.generic import ListView
-from django.contrib import messages
-from django.shortcuts import redirect
-from .filter import PrototypeFilter
 from .forms import *
 from .models import *
 from .helpers import *
@@ -14,6 +9,8 @@ from .helpers import *
 class PrototypesList(ListView):
     template_name = 'pages/prototypes/home.html'
     def get(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('login')
         #------------------------------------------------------------------------
         # This is for the select form
         prototypes_form = Prototype.objects.all().order_by('name')
