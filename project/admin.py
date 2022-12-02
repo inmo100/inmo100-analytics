@@ -148,4 +148,10 @@ class ProjectAdmin(admin.ModelAdmin):
 
 # register models
 admin.site.register(Amenity)
-admin.site.register(Developer)
+
+class DeveloperAdmin(admin.ModelAdmin):
+    ordering = ['name']
+admin.site.register(Developer, DeveloperAdmin)
+
+
+    
