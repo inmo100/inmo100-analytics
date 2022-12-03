@@ -28,7 +28,7 @@ class Project(BaseModel):
     address = models.CharField(verbose_name=_("Address"), max_length=100)
     phone = models.CharField(verbose_name=_("Phone"), max_length=100)
     brochure = models.FileField(verbose_name=_("Brochure"))
-    social_networks = models.CharField(verbose_name=_("Social networks"),max_length=200)
+    social_networks = models.TextField(verbose_name=_("Social networks"),max_length=200)
     levels = models.SmallIntegerField(validators=[MinValueValidator(0)],verbose_name=("Niveles"), default=1)
 
     class Meta:
