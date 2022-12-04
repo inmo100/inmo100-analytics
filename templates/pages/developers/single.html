@@ -1,0 +1,43 @@
+{% extends 'innerPage.html' %}
+{% load static %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/pages/projects/single.css' %}" />
+{% endblock css %}
+
+{% block title %} Detalle de desarrolladora {% endblock title %}
+
+{% block content %}
+<header class="hero" style="background-image: url('/media/{{developer.image}}')">
+  <div class="container-slim">
+    <p class="h3 icon-grid">Desarrolladora</p>
+    <h1 class="h1">{{ developer.name }}</h1>
+  </div>
+</header>
+<main class="inner-page">
+  <section class="project-info">
+    <div class="container-slim">
+      <div class="project-info_row">
+        <div class="project-info_half">
+          <p class="project-info_title">Descripción:</p>
+          <p>
+            {{ developer.description }}
+          </p>
+        </div>
+        <ul class="project-info_half">
+          <li class="project-info_item">
+            <span class="weight-bold">Red Social:</span> {{ developer.social_networks }}
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+  <section class="project-prototypes">
+    <div class="container-wide">
+      <h2 class="h2">
+        Proyectos de {{project.name}}
+      </h2>
+      {% include 'components/projects-table.html' %}
+    </div>
+  </section>
+</main>
+{% endblock content %}
