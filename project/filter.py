@@ -3,6 +3,7 @@ from .models import Developer, Project, Colony
 from django.forms import NumberInput, CheckboxSelectMultiple
 from django_filters.widgets import DateRangeWidget, RangeWidget
 from django.db.models import Q
+from django import forms
 
 
 class ProjectFilter(django_filters.FilterSet):

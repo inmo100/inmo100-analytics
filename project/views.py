@@ -64,6 +64,15 @@ class DevelopersList(LoginRequiredMixin, ListView):
     login_url = 'login'
     redirect_field_name = 'redirect_to'
 
+class DevDetail(DetailView):
+    template_name = 'pages/developers/single.html'
+    model = Developer
+    context_object_name = 'developer'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['project'] = context['developer'].project_set.all()
+        return context
 
 class ProjectDetail(DetailView):
     template_name = 'pages/projects/single.html'
