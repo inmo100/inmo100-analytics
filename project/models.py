@@ -12,7 +12,7 @@ class Amenity(BaseModel):
 class Developer(BaseModel):
     description = models.TextField(verbose_name=_("Description"))
     image = models.ImageField(verbose_name=_("Image"), null=True, blank=True)
-    social_networks = models.JSONField(verbose_name=_("Social networks"))
+    social_networks = models.TextField(verbose_name=_("Social networks"))
 
 # Use Case: 8, 9, 10, 11
 class Project(BaseModel):
@@ -28,7 +28,7 @@ class Project(BaseModel):
     address = models.CharField(verbose_name=_("Address"), max_length=100)
     phone = models.CharField(verbose_name=_("Phone"), max_length=100)
     brochure = models.FileField(verbose_name=_("Brochure"))
-    social_networks = models.TextField(verbose_name=_("Social networks"),max_length=200)
+    social_networks = models.TextField(verbose_name=_("Social networks"))
     levels = models.SmallIntegerField(validators=[MinValueValidator(0)],verbose_name=("Niveles"), default=1)
 
     class Meta:
