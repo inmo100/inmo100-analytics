@@ -125,8 +125,8 @@ class PrototypesManager(models.Manager):
             for i in projects:
                 arr.append(i.prototype.id)
             return arr
+        helper = []
         for i in projects:
-            helper = []
             query = self.filter(
                 project_field = i
             )
