@@ -122,15 +122,16 @@ To run this project, you will need to add the following environment variables to
 
 SECRET_KEY=
 
-DATABASE_NAME=
+DATABASE_URL=
 
-DATABASE_USERNAME=
+DEBUG=
 
-DATABASE_PASSWORD=
+CSRF_COOKIE_SECURE=
 
-DATABASE_LOCAL=
+SESSION_COOKIE_SECURE=
 
-DEVELOPMENT_MODE=
+SECURE_SSL_REDIRECT=
+
 
 .env file has to be inside /inmoanalytics folder
 

@@ -535,6 +535,8 @@ def bring_prototypes(prototypes):
     equipments_count = Equipment.objects.count()
     for prototype in prototypes:
         equipments_q_count = EquipmentQuantity.objects.filter(prototype = prototype).count()
+        hsitorical_count = Historical.objects.filter(prototype=prototype).count()
+        triangulo_count = Triangulo.objects.filter(prototype=prototype).count()
         if(equipments_count>equipments_q_count):
             limit = equipments_count-equipments_q_count
             equipments_ids = Equipment.objects.all().order_by("-id")[:limit]

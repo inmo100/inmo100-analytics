@@ -8,4 +8,7 @@ from location.models import *
 admin.site.register(State)
 admin.site.register(Corridor)
 admin.site.register(Municipality)
-admin.site.register(Colony)
+
+class ColonyrAdmin(admin.ModelAdmin):
+    ordering = ['-id']
+admin.site.register(Colony, ColonyrAdmin)
