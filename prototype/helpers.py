@@ -437,7 +437,7 @@ def download_csv():
     equipments = Equipment.objects.all().order_by('id')
     finishings = Finishing.objects.all().order_by('id')
 #Read the template
-    template = pd.read_csv("media/plantilla_prototipos.csv")
+    template = pd.read_csv("plantilla_prototipos.csv")
 #Create a variable arr that contains nothing
     arr = [""]
 #Iterate all equipments
