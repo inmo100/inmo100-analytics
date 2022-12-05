@@ -4,9 +4,6 @@ from django.contrib import messages
 from django.views.generic import View
 from .forms import RegisterUserForm, LoginForm
 
-def home(request):
-    return render(request, 'pages/home.html')
-
 # Use Case: 1
 class LoginUser(View):
     template_name = "pages/login.html"

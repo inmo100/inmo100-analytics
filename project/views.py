@@ -6,6 +6,7 @@ import json
 from django_filters.views import FilterView
 from .filter import ProjectFilter
 from django.contrib.auth.mixins import LoginRequiredMixin
+from prototype.helpers import *
 
 # Función para guardar los datos de la desarrolladora
 
@@ -71,7 +72,9 @@ class DevDetail(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['project'] = context['developer'].project_set.all()
+        projects_list = Project.objects.filter(developer_field=self.kwargs['pk'])
+        print(projects_list)
+        context['projects_list'] = projects_list
         return context
 
 class ProjectDetail(DetailView):
@@ -81,7 +84,15 @@ class ProjectDetail(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['prototypes'] = context['project'].prototype_set.all()
+        project = [ self.kwargs['pk'] ]
+        prototypes = Prototype.objects.project_filter(project)
+        prototypes = Prototype.objects.get_prototypes(prototypes)
+        prototypes_list = bring_prototypes(prototypes)
+        equipments = Equipment.objects.all().order_by('id')
+        finishings = Finishing.objects.all().order_by('id')
+        context['prototypes_list'] = prototypes_list
+        context['equipments'] = equipments
+        context['finishings'] = finishings
         return context
 
 

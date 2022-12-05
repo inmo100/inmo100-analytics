@@ -1,18 +1,18 @@
 <div class="table-container">
-  <table class="table">
+  <table class="table" id="sortMe">
     <thead>
       <tr>
         <th>Nombre</th>
-        <th>Unidades Totales</th>
-        <th>Unidades Vendidas</th>
-        <th>Precio</th>
-        <th>Absorción Histórica</th>
-        <th>Meses Inventario</th>
+        <th data-type="number">Unidades Totales</th>
+        <th data-type="number">Unidades Vendidas</th>
+        <th data-type="number">Precio</th>
+        <th data-type="number">Absorción Histórica</th>
+        <th data-type="number">Meses Inventario</th>
         <th>Ritmo de Ventas</th>
-        <th>M<sub>2</sub> de Terreno</th>
-        <th>M<sub>2</sub> Construidos</th>
-        <th>M<sub>2</sub> Habitables</th>
-        <th>Número de Pisos</th>
+        <th data-type="number">M<sub>2</sub> de Terreno</th>
+        <th data-type="number">M<sub>2</sub> Construidos</th>
+        <th data-type="number">M<sub>2</sub> Habitables</th>
+        <th data-type="number">Número de Pisos</th>
         <th>Proyecto</th>
         <th>Tipo de Propiedad</th>
         <th>Segmento</th>
@@ -57,3 +57,83 @@
     </tfoot>
   </table>
 </div>
+
+
+{% block js %}
+<script>
+  // Query the table
+  const table = document.getElementById('sortMe');
+  // Query the headers
+  const headers = table.querySelectorAll('th');
+
+  // Track sort directions
+  const directions = Array.from(headers).map(function (header) {
+      return '';
+  });
+
+
+  // Query all rows
+  const tableBody = table.querySelector('tbody');
+  const rows = tableBody.querySelectorAll('tr');
+
+  const sortColumn = function (index) {
+      // Get the current direction
+      const direction = directions[index] || 'asc';
+
+      // A factor based on the direction
+      const multiplier = (direction === 'asc') ? 1 : -1;
+
+      // Clone the rows
+      const newRows = Array.from(rows);
+
+      // Sort rows by the content of cells
+      newRows.sort(function (rowA, rowB) {
+          // Get the content of cells
+          const cellA = rowA.querySelectorAll('td')[index].innerHTML;
+          const cellB = rowB.querySelectorAll('td')[index].innerHTML;
+
+          // Transform the content of cells
+          const a = transform(index, cellA);
+          const b = transform(index, cellB);
+
+          switch (true) {
+            case a > b: return 1 * multiplier;
+            case a < b: return -1 * multiplier;
+            case a === b: return 0;
+        }
+      });
+
+      // Remove old rows
+      [].forEach.call(rows, function (row) {
+          tableBody.removeChild(row);
+      });
+
+      // Reverse the direction
+      directions[index] = direction === 'asc' ? 'desc' : 'asc';
+
+      // Append new row
+      newRows.forEach(function (newRow) {
+          tableBody.appendChild(newRow);
+      });
+  };
+
+    // Transform the content of given cell in given column
+    const transform = function (index, content) {
+        // Get the data type of column
+        const type = headers[index].getAttribute('data-type');
+        switch (type) {
+            case 'number':
+                return parseFloat(content);
+            case 'string':
+            default:
+                return content;
+        }
+    };
+    //Loop over the headers
+    [].forEach.call(headers, function (header, index) {
+      header.addEventListener('click', function() {
+        sortColumn(index);
+      })
+    });
+</script>
+{% endblock js %}
