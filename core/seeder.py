@@ -9,12 +9,12 @@ import random
 
 seeder = Seed.seeder()
 #no dependencies
-amenities = ['Acceso Controlado', 'Áreas Verdes/Jardinadas', 'Alberca', 'Carril de Nado', 'Chapoteadero', 'Jacuzzi', 'Gimnasio', 'Aparatos de Ejercicio al aire libre', 'Cancha Deportiva', 'Juegos Infantiles', 'Área para mascotas', 'Asador', 'Fogatero', 'Cowork', 'Ludoteca', 'Sauna', 'Vapor', 'Terraza Común', 'Ciclopista', 'Vitapista(Jogging)', 'Salón de usos múltiples', 'Salón de eventos', 'Salón de juegos', 'Cine', 'Spa']
+amenities = ['Acceso Controlado', 'Areas Verdes/Jardinadas', 'Alberca', 'Carril de Nado', 'Chapoteadero', 'Jacuzzi', 'Gimnasio', 'Aparatos de Ejercicio al aire libre', 'Cancha Deportiva', 'Juegos Infantiles', 'Area para mascotas', 'Asador', 'Fogatero', 'Cowork', 'Ludoteca', 'Sauna', 'Vapor', 'Terraza Común', 'Ciclopista', 'Vitapista(Jogging)', 'Salón de usos múltiples', 'Salón de eventos', 'Salón de juegos', 'Cine', 'Spa']
 
 for amenity in amenities:
     seeder.add_entity(Amenity, 1, {
         'name': amenity,
-        'description': 'Áreas comunes',
+        'description': 'Areas comunes',
     })
 #no dependencies
 property_types = ['Loft', 'Casa', 'Duplex', 'Departamento','No existe']
