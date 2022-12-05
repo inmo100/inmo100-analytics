@@ -49,7 +49,7 @@ for segment_name in segment_names:
         'description': 'Tipo de Segmento'
     })
 #no dependencies
-df = pd.read_csv('devs')
+df = pd.read_csv('static/devs')
 developers = df['Devs'].to_list()
 
 for developer in developers:
