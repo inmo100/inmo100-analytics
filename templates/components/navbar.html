@@ -7,7 +7,7 @@
     <li class="nav-link icon-grid"><a href="{% url 'projects' %}">Proyectos</a></li>
     <li class="nav-link icon-home"><a href="{% url 'prototypes' %}">Prototipos</a></li>
     <div class="nav-divider"></div>
-    {% if user.is_superuser %}
+    {% if user.is_staff %}
       <li class="nav-link icon-user"><a href="{% url 'admin:index' %}">Panel de Administrador</a></li>
       <li class="nav-link icon-logout"><a href="{% url 'logout' %}">Cerrar sesión</a></li>
     {% elif user.is_authenticated %}
